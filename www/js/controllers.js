@@ -10,13 +10,6 @@ angular.module('starter.controllers', [])
   //
   //$scope.$on('$ionicView.enter', function(e) {
   //});
-  /*$http.get("http://localhost:8000/api/photos")
-    .success(function(data) {
-        console.log(data);
-    })
-    .error(function(data) {
-        console.log("ERROR");
-    });*/
     var chats = Chats.all();
     chats.then(function(result){
       $scope.chats = result;

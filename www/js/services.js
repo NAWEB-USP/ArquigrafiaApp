@@ -1,7 +1,6 @@
 angular.module('starter.services', [])
 
 .factory('Chats', function($http) {
-  // Might use a resource here that returns a JSON array
   return {
     all: function() {
       return $http.get("http://localhost:8000/api/photos").then(function(result){
