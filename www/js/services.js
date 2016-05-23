@@ -1,16 +1,17 @@
 angular.module('starter.services', [])
 
-.factory('LoginService', function($q) {
+.factory('LoginService', function($q, $http) {
     return {
         loginUser: function(name, pw) {
             var deferred = $q.defer();
             var promise = deferred.promise;
- 
-            if (name == 'user' && pw == 'secret') {
-                deferred.resolve('Welcome ' + name + '!');
-            } else {
-                deferred.reject('Wrong credentials.');
-            }
+            $http.post("http://localhost:8000/api/login", {login : name, password : pw}).then(function(result){
+              if (result.data.valid == 'true') {
+                deferred.resolve();
+              } else {
+                deferred.reject();
+              }
+            });
             promise.success = function(fn) {
                 promise.then(fn);
                 return promise;
@@ -19,7 +20,7 @@ angular.module('starter.services', [])
                 promise.then(null, fn);
                 return promise;
             }
-            return promise;
+            return promise; 
         }
     }
 })
