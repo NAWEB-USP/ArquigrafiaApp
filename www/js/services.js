@@ -6,11 +6,10 @@ angular.module('starter.services', [])
             var deferred = $q.defer();
             var promise = deferred.promise;
             $http.post("http://localhost:8000/api/login", {login : name, password : pw}).then(function(result){
-              //adicionar aviso de carregando
               if (result.data.valid == 'true') {
-                deferred.resolve('Welcome ' + name + '!');
+                deferred.resolve();
               } else {
-                deferred.reject('Wrong credentials.');
+                deferred.reject();
               }
             });
             promise.success = function(fn) {
