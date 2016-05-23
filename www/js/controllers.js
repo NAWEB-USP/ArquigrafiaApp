@@ -15,10 +15,10 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('DashCtrl', function($scope, User, $http) {
-  var user = User.get(1);
+.controller('FeedCtrl', function($scope, Feed, $http) {
+  var user = Feed.get(1);
   user.then(function(result){
-    $scope.user = result;
+    $scope.photos = result;
   });
 })
 

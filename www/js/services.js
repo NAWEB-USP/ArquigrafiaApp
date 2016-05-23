@@ -24,7 +24,7 @@ angular.module('starter.services', [])
     }
 })
 
-.factory('User', function($http){
+.factory('Feed', function($http){
   return {
     all: function() {
       return $http.get("http://localhost:8000/api/users").then(function(result){
@@ -35,7 +35,7 @@ angular.module('starter.services', [])
       //
     },
     get: function(userId){
-      return $http.get("http://localhost:8000/api/users/" + userId).then(function(result){
+      return $http.get("http://localhost:8000/api/feed/" + userId).then(function(result){
         return result.data;
       });
     }
