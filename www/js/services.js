@@ -7,9 +7,9 @@ angular.module('starter.services', [])
             var promise = deferred.promise;
             $http.post("http://localhost:8000/api/login", {login : name, password : pw}).then(function(result){
               if (result.data.valid == 'true') {
-                deferred.resolve();
+                deferred.resolve(result.data);
               } else {
-                deferred.reject();
+                deferred.reject(result.data);
               }
             });
             promise.success = function(fn) {

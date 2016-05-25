@@ -15,6 +15,8 @@ angular.module('starter.controllers', [])
     $scope.login = function() {
         $scope.show($ionicLoading);
         LoginService.loginUser($scope.data.username, $scope.data.password).success(function(data) {
+            window.localStorage.setItem("logged_user", data.login);
+            window.localStorage.setItem(data.login, data.token);
             $state.go('tab.dash');
         }).error(function(data) {
             var alertPopup = $ionicPopup.alert({
@@ -27,16 +29,20 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('DashCtrl', function($scope) {})
+.controller('DashCtrl', function($scope, $state) {
+  $scope.$on('$ionicView.enter', function() {
+    if(window.localStorage.getItem("logged_user") == null) {
+      $state.go('login');
+    }
+  })
+})
 
 .controller('ChatsCtrl', function($scope, Chats, $http) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
+  $scope.$on('$ionicView.enter', function() {
+    if(window.localStorage.getItem("logged_user") == null) {
+      $state.go('login');
+    }
+  })
     var chats = Chats.all();
     chats.then(function(result){
       $scope.chats = result;
@@ -51,6 +57,11 @@ angular.module('starter.controllers', [])
 })
 
 .controller('AccountCtrl', function($scope) {
+  $scope.$on('$ionicView.enter', function() {
+    if(window.localStorage.getItem("logged_user") == null) {
+      $state.go('login');
+    }
+  })
   $scope.settings = {
     enableFriends: true
   };
