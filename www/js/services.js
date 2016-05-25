@@ -25,6 +25,24 @@ angular.module('starter.services', [])
     }
 })
 
+.factory('Feed', function($http){
+  return {
+    all: function() {
+      return $http.get("http://localhost:8000/api/users").then(function(result){
+        return result.data;
+      });
+    },
+    remove: function(){
+      //
+    },
+    get: function(userId){
+      return $http.get("http://localhost:8000/api/feed/" + userId).then(function(result){
+        return result.data;
+      });
+    }
+  };
+})
+
 .factory('Chats', function($http) {
   return {
     all: function() {

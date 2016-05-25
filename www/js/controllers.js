@@ -29,12 +29,16 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('DashCtrl', function($scope, $state) {
+.controller('FeedCtrl', function($scope, Feed, $http) {
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
       $state.go('login');
     }
   })
+  var user = Feed.get(1);
+  user.then(function(result){
+    $scope.photos = result;
+  });
 })
 
 .controller('ChatsCtrl', function($scope, Chats, $http) {
