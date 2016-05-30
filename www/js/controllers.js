@@ -72,4 +72,41 @@ angular.module('starter.controllers', [])
   $scope.settings = {
     enableFriends: true
   };
+})
+
+.controller('CameraCtrl', function($scope) {
+  var destinationType;
+  var pictureSource;
+  $scope.data = {};
+  $scope.obj;
+
+  ionic.Platform.ready(function(){
+    if(!navigator.camera){
+      return;
+    }
+    destinationType = navigator.camera.DestinationType.CAMERA;
+    pictureSource = navigator.camera.PictureSourceType.FILE_URI;
+  });
+
+  $scope.takePicture = function(){
+    var options = {
+      quality: 50,
+      destinatonType: destinationType,
+      sourceType: pictureSource,
+      encodingType: 0
+    };
+    //error
+    if(!navigator.camera){
+      return;
+    }
+    console.log("camera entrou");
+
+    navigator.camera.getPicture(
+      function(imageURI){
+        $scope.myPicture = image.URI;
+      },
+      function(error){
+
+      }, options);
+  };
 });
