@@ -5,7 +5,7 @@ angular.module('starter.services', [])
         loginUser: function(name, pw) {
             var deferred = $q.defer();
             var promise = deferred.promise;
-            $http.post("http://localhost:8000/api/login", {login : name, password : pw}).then(function(result){
+            $http.post("http://valinhos.ime.usp.br:51080/api/login", {login : name, password : pw}).then(function(result){
               if (result.data.valid == 'true') {
                 deferred.resolve(result.data);
               } else {

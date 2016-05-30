@@ -29,7 +29,7 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('FeedCtrl', function($scope, Feed, $http) {
+.controller('FeedCtrl', function($scope, Feed, $http, $state) {
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
       $state.go('login');
@@ -41,7 +41,7 @@ angular.module('starter.controllers', [])
   });
 })
 
-.controller('ChatsCtrl', function($scope, Chats, $http) {
+.controller('ChatsCtrl', function($scope, Chats, $http, $state) {
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
       $state.go('login');
@@ -60,12 +60,15 @@ angular.module('starter.controllers', [])
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function($scope) {
+.controller('AccountCtrl', function($scope, $state) {
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
       $state.go('login');
     }
+    window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
+  window.localStorage.removeItem("logged_user");
   })
+  
   $scope.settings = {
     enableFriends: true
   };
