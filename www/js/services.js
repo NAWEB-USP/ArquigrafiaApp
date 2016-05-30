@@ -62,4 +62,16 @@ angular.module('starter.services', [])
       return null;
     }
   };
+})
+
+.factory('Profiles', function($http){
+  return {
+    all: function() {},
+    remove: function(id) {},
+    get: function(userName) { //endereco precisa que servidor seja atualizado
+      return $http.get("http://valinhos.ime.usp.br:51080/api/users/" + userName).then(function(result){
+        return result.data;
+      })
+    }
+  }
 });

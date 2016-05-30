@@ -60,13 +60,18 @@ angular.module('starter.controllers', [])
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function($scope, $state) {
+.controller('AccountCtrl', function($scope, $http, $state, Profiles) {
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
       $state.go('login');
     }
-    window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
-  window.localStorage.removeItem("logged_user");
+    var account = Profiles.get(window.localStorage.getItem("logged_user"));
+    account.then(function(result){
+      $scope.account = result;
+    });
+
+    // window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
+    // window.localStorage.removeItem("logged_user");
   })
   
   $scope.settings = {
