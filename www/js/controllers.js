@@ -15,8 +15,10 @@ angular.module('starter.controllers', [])
     $scope.login = function() {
         $scope.show($ionicLoading);
         LoginService.loginUser($scope.data.username, $scope.data.password).success(function(data) {
+            console.log(data);
             window.localStorage.setItem("logged_user", data.login);
             window.localStorage.setItem(data.login, data.token);
+            window.localStorage.setItem("user_id", data.id);
             $state.go('tab.dash');
         }).error(function(data) {
             var alertPopup = $ionicPopup.alert({
@@ -60,16 +62,17 @@ angular.module('starter.controllers', [])
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function($scope, $state) {
+.controller('AccountCtrl', function($scope, $state, User) {
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
       $state.go('login');
     }
-    window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
-  window.localStorage.removeItem("logged_user");
+    //window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
+    //window.localStorage.removeItem("logged_user");
   })
-  
-  $scope.settings = {
-    enableFriends: true
-  };
+  console.log(window.localStorage.getItem(window.localStorage.getItem("user_id")));
+  var user_photos = User.allPhotos();
+  user_photos.then(function(result){
+    $scope.user_photos = result;
+  });
 });

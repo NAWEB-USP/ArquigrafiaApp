@@ -43,6 +43,24 @@ angular.module('starter.services', [])
   };
 })
 
+.factory('User', function($http) {
+  return {
+    allPhotos: function(userId) {
+      return $http.get("http://valinhos.ime.usp.br:51080/api/photos").then(function(result){
+        var user_photos = [];
+        var i;
+        for(i = 0; i < result.data.length; i++){
+          if(result.data[i].user_id == userId) {
+            user_photos.push(result.data[i]);
+
+          }
+        }
+        return user_photos;
+      });
+    }
+  };
+})
+
 .factory('Chats', function($http) {
   return {
     all: function() {
