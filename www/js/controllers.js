@@ -62,17 +62,60 @@ angular.module('starter.controllers', [])
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function($scope, $state, User) {
+.controller('AccountCtrl', function($scope, $http, $state, Profiles) {
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
       $state.go('login');
     }
-    //window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
-    //window.localStorage.removeItem("logged_user");
+    // window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
+    // window.localStorage.removeItem("logged_user");
   })
+  
+  var account = Profiles.get(window.localStorage.getItem("logged_user"));
+  account.then(function(result){
+    $scope.account = result;
+  });
+  
   console.log(window.localStorage.getItem(window.localStorage.getItem("user_id")));
   var user_photos = User.allPhotos();
   user_photos.then(function(result){
     $scope.user_photos = result;
   });
+})
+
+.controller('CameraCtrl', function($scope) {
+  var destinationType;
+  var pictureSource;
+  $scope.data = {};
+  $scope.obj;
+
+  ionic.Platform.ready(function(){
+    if(!navigator.camera){
+      return;
+    }
+    destinationType = navigator.camera.DestinationType.CAMERA;
+    pictureSource = navigator.camera.PictureSourceType.FILE_URI;
+  });
+
+  $scope.takePicture = function(){
+    var options = {
+      quality: 50,
+      destinatonType: destinationType,
+      sourceType: pictureSource,
+      encodingType: 0
+    };
+    //error
+    if(!navigator.camera){
+      return;
+    }
+    console.log("camera entrou");
+
+    navigator.camera.getPicture(
+      function(imageURI){
+        $scope.myPicture = image.URI;
+      },
+      function(error){
+
+      }, options);
+  };
 });

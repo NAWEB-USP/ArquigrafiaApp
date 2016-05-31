@@ -28,7 +28,7 @@ angular.module('starter.services', [])
 .factory('Feed', function($http){
   return {
     all: function() {
-      return $http.get("http://localhost:8000/api/users").then(function(result){
+      return $http.get("http://valinhos.ime.usp.br:51080/api/users").then(function(result){
         return result.data;
       });
     },
@@ -36,7 +36,7 @@ angular.module('starter.services', [])
       //
     },
     get: function(userId){
-      return $http.get("http://localhost:8000/api/feed/" + userId).then(function(result){
+      return $http.get("http://valinhos.ime.usp.br:51080/api/feed/" + userId).then(function(result){
         return result.data;
       });
     }
@@ -64,7 +64,7 @@ angular.module('starter.services', [])
 .factory('Chats', function($http) {
   return {
     all: function() {
-      return $http.get("http://localhost:8000/api/photos").then(function(result){
+      return $http.get("http://valinhos.ime.usp.br:51080/api/photos").then(function(result){
         return result.data;
       });
     },
@@ -80,4 +80,16 @@ angular.module('starter.services', [])
       return null;
     }
   };
+})
+
+.factory('Profiles', function($http){
+  return {
+    all: function() {},
+    remove: function(id) {},
+    get: function(userName) { //endereco precisa que servidor seja atualizado
+      return $http.get("http://valinhos.ime.usp.br:51080/api/users/" + userName).then(function(result){
+        return result.data;
+      })
+    }
+  }
 });

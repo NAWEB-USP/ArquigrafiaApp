@@ -1,9 +1,19 @@
 <ion-view view-title="Account">
   <ion-content>
-    <ion-list>
-    <ion-toggle  ng-model="settings.enableFriends">
-        Enable Friends
-    </ion-toggle>
-    </ion-list>
+    <div id="personalInfo">
+    	<h3>Personal Information</h3>
+    	<img src="http://localhost:8000{{account.photo}}" style="float:right">
+    	<p>Name: {{account.name}}</p>
+    	<p>Last Name: {{account.lastName}}</p>
+    	<p>E-mail: {{account.email}}</p>
+    	<p>Site: {{account.site}}</p>
+    	<p>Login: {{account.login}}</p>
+    	<p>Gender: {{account.gender}}</p>
+    	<p>Birthday: {{account.birthday}}</p>
+    	<p>Address: {{account.address}}</p>
+    	<p>City: {{account.city}}</p>
+    	<p>State: {{account.state}}</p>
+    	<p>Country: {{account.country}}</p>
+    </div>
   </ion-content>
 </ion-view>
