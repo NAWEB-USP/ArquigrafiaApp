@@ -1,11 +1,20 @@
 angular.module('starter.services', [])
 
-.factory('LoginService', function($q, $http) {
+.factory('ServerName', function(){
+  var serverName = "http://localhost:8000"; //http://valinhos.ime.usp.br:51080
+  return {
+    get: function () { 
+      return serverName; 
+    }
+  }
+})
+
+.factory('LoginService', function($q, $http, ServerName) {
     return {
         loginUser: function(name, pw) {
             var deferred = $q.defer();
             var promise = deferred.promise;
-            $http.post("http://valinhos.ime.usp.br:51080/api/login", {login : name, password : pw}).then(function(result){
+            $http.post(ServerName.get() + "/api/login", {login : name, password : pw}).then(function(result){
               if (result.data.valid == 'true') {
                 deferred.resolve(result.data);
               } else {
@@ -25,10 +34,10 @@ angular.module('starter.services', [])
     }
 })
 
-.factory('Feed', function($http){
+.factory('Feed', function($http, ServerName){
   return {
     all: function() {
-      return $http.get("http://valinhos.ime.usp.br:51080/api/users").then(function(result){
+      return $http.get(ServerName.get() + "/api/users").then(function(result){
         return result.data;
       });
     },
@@ -36,40 +45,37 @@ angular.module('starter.services', [])
       //
     },
     get: function(userId){
-      return $http.get("http://valinhos.ime.usp.br:51080/api/feed/" + userId).then(function(result){
+      return $http.get(ServerName.get() + "/api/feed/" + userId).then(function(result){
         return result.data;
       });
     }
   };
 })
 
-.factory('Chats', function($http) {
+.factory('Photos', function($http, ServerName) {
   return {
     all: function() {
-      return $http.get("http://valinhos.ime.usp.br:51080/api/photos").then(function(result){
+      return $http.get(ServerName.get() + "/api/photos").then(function(result){
         return result.data;
       });
     },
-    remove: function(chat) {
+    remove: function(photo) {
       //chats.splice(chats.indexOf(chat), 1);
     },
-    get: function(chatId) {
-      /*for (var i = 0; i < chats.length; i++) {
-        if (chats[i].id === parseInt(chatId)) {
-          return chats[i];
-        }
-      }*/
-      return null;
+    get: function(photoId) {
+      return $http.get(ServerName.get() + "/api/photos/" + photoId).then(function(result){
+        return result.data;
+      });
     }
   };
 })
 
-.factory('Profiles', function($http){
+.factory('Profiles', function($http, ServerName){
   return {
     all: function() {},
     remove: function(id) {},
     get: function(userName) { //endereco precisa que servidor seja atualizado
-      return $http.get("http://valinhos.ime.usp.br:51080/api/users/" + userName).then(function(result){
+      return $http.get(ServerName.get() + "/api/users/" + userName).then(function(result){
         return result.data;
       })
     }
