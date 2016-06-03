@@ -52,6 +52,24 @@ angular.module('starter.services', [])
   };
 })
 
+.factory('User', function($http, ServerName) {
+  return {
+    allPhotos: function(userId) {
+      return $http.get(ServerName.get() + "/api/photos").then(function(result){
+        var user_photos = [];
+        var i;
+        for(i = 0; i < result.data.length; i++){
+          if(result.data[i].user_id == userId) {
+            user_photos.push(result.data[i]);
+
+          }
+        }
+        return user_photos;
+      });
+    }
+  };
+})
+
 .factory('Photos', function($http, ServerName) {
   return {
     all: function() {
