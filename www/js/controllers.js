@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('LoginCtrl', function($scope, LoginService, $ionicPopup, $state, $ionicLoading) {
+.controller('LoginCtrl', function($scope, LoginService, ServerName, $ionicPopup, $state, $ionicLoading) {
     $scope.show = function() {
     $ionicLoading.show({
         template: '<p>Carregando...</p><ion-spinner></ion-spinner>'
@@ -10,6 +10,8 @@ angular.module('starter.controllers', [])
     $scope.hide = function(){
       $ionicLoading.hide();
     };
+
+    $scope.serverName = ServerName.get();
 
     $scope.data = {};
     $scope.login = function() {
@@ -31,7 +33,7 @@ angular.module('starter.controllers', [])
     }
 })
 
-.controller('FeedCtrl', function($scope, Feed, $http, $state) {
+.controller('FeedCtrl', function($scope, Feed, ServerName, $http, $state) {
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
       $state.go('login');
@@ -41,28 +43,34 @@ angular.module('starter.controllers', [])
   user.then(function(result){
     $scope.photos = result;
   });
+  $scope.serverName = ServerName.get();
 })
 
-.controller('ChatsCtrl', function($scope, Chats, $http, $state) {
+.controller('PhotosCtrl', function($scope, Photos, ServerName, $http, $state) {
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
       $state.go('login');
     }
   })
-    var chats = Chats.all();
-    chats.then(function(result){
-      $scope.chats = result;
+    var photos = Photos.all();
+    photos.then(function(result){
+      $scope.photos = result;
     });
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
+  $scope.remove = function(photo) {
+    Photos.remove(photo);
   };
+  $scope.serverName = ServerName.get();
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
+.controller('PhotoDetailCtrl', function($scope, $http, $stateParams, Photos, ServerName) {
+  $scope.serverName = ServerName.get();
+  var photo = Photos.get($stateParams.photoId);
+  photo.then(function(result){
+    $scope.photo = result;
+  })
 })
 
-.controller('AccountCtrl', function($scope, $http, $state, Profiles, User) {
+.controller('AccountCtrl', function($scope, $http, $state, User, Profiles, ServerName) {
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
       $state.go('login');
@@ -70,6 +78,8 @@ angular.module('starter.controllers', [])
     // window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
     // window.localStorage.removeItem("logged_user");
   })
+
+  $scope.serverName = ServerName.get();
   
   var account = Profiles.get(window.localStorage.getItem("logged_user"));
   account.then(function(result){
@@ -80,9 +90,10 @@ angular.module('starter.controllers', [])
   user_photos.then(function(result){
     $scope.user_photos = result;
   });
+
 })
 
-.controller('CameraCtrl', function($scope) {
+.controller('CameraCtrl', function($scope, ServerName) {
   var destinationType;
   var pictureSource;
   $scope.data = {};

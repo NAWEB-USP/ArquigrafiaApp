@@ -1,21 +1,20 @@
 <ion-view view-title="Account">
   <ion-content>
     <div id="personalInfo">
-    <div class="row">
-        <div class="col col-40">
-            <h4 id="account-name">{{account.name}}</h4>
-            <img id="user-avatar" src="http://valinhos.ime.usp.br:51080/{{account.photo}}" style="width: inherit">
+        <div class="row">
+            <div class="col col-40">
+                <h4 id="account-name">{{account.name}}</h4>
+                <img id="user-avatar" src="{{serverName + account.photo}}" style="width: inherit">
+            </div>
+            <div id="user-info" class="col col-60">
+                <h4>Fotos publicadas: {{account.photos}}</h4>
+                <h4>Seguindo: {{account.following}}</h4>
+                <h4>Seguidores: {{account.followers}}</h4>
+                <button id="logout-button" class="button-block button button-positive">
+                    Logout
+                </button>
+            </div>
         </div>
-        <div id="user-info" class="col col-60">
-            <h4>Fotos publicadas: {{account.photos}}</h4>
-            <h4>Seguindo: {{account.following}}</h4>
-            <h4>Seguidores: {{account.followers}}</h4>
-            <button id="logout-button" class="button-block button button-positive">
-                Logout
-            </button>
-        </div>
-    </div>
-    	
     </div>
   </ion-content>
 </ion-view>
