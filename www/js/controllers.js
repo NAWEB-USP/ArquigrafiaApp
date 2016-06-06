@@ -40,7 +40,6 @@ angular.module('starter.controllers', [])
   })
   var user = Feed.get(window.localStorage.getItem("user_id"));
   user.then(function(result){
-    console.log(result);
     $scope.photos = result;
   });
   $scope.serverName = ServerName.get();
