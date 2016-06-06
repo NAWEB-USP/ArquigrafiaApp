@@ -1,1 +1,17 @@
 /* Empty. Add your own CSS if you like */
+#account-name {
+	text-align: center;
+}
+
+#user-avatar {
+	width: inherit;
+}
+
+#user-info h4 {
+	text-align: center;
+	font-weight: normal;
+}
+
+#logout-button {
+	text-align: center;
+}

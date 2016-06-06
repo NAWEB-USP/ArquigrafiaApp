@@ -37,7 +37,7 @@ angular.module('starter.controllers', [])
       $state.go('login');
     }
   })
-  var user = Feed.get(1);
+  var user = Feed.get(window.localStorage.getItem("user_id"));
   user.then(function(result){
     $scope.photos = result;
   });
@@ -62,7 +62,7 @@ angular.module('starter.controllers', [])
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function($scope, $http, $state, Profiles) {
+.controller('AccountCtrl', function($scope, $http, $state, Profiles, User) {
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
       $state.go('login');
@@ -76,8 +76,7 @@ angular.module('starter.controllers', [])
     $scope.account = result;
   });
   
-  console.log(window.localStorage.getItem(window.localStorage.getItem("user_id")));
-  var user_photos = User.allPhotos();
+  var user_photos = User.allPhotos(window.localStorage.getItem("user_id"));
   user_photos.then(function(result){
     $scope.user_photos = result;
   });
