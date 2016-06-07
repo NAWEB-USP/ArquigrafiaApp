@@ -1,7 +1,7 @@
 angular.module('starter.services', [])
 
 .factory('ServerName', function(){
-  var serverName = "http://localhost:8000"; //http://valinhos.ime.usp.br:51080
+  var serverName = "http://valinhos.ime.usp.br:51080";
   return {
     get: function () { 
       return serverName; 
@@ -88,7 +88,7 @@ angular.module('starter.services', [])
   };
 })
 
-.factory('Profiles', function($http, ServerName){
+.factory('Profiles', function($http, ServerName) {
   return {
     all: function() {},
     remove: function(id) {},
@@ -96,6 +96,22 @@ angular.module('starter.services', [])
       return $http.get(ServerName.get() + "/api/users/" + userName).then(function(result){
         return result.data;
       })
+    }
+  }
+})
+
+.factory("Camera", function($q) {
+  return {
+    getPicture: function(options){
+      var q = $q.defer();
+
+      navigator.camera.getPicture(function(result) {
+        q.resolve(result);
+      }, function (error) {
+        q.reject(error);
+      }, options);
+      
+      return q.promise;
     }
   }
 });

@@ -93,39 +93,36 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('CameraCtrl', function($scope, ServerName) {
-  var destinationType;
-  var pictureSource;
-  $scope.data = {};
-  $scope.obj;
+.controller('CameraCtrl', function($scope, ServerName, Camera) {
 
-  ionic.Platform.ready(function(){
-    if(!navigator.camera){
-      return;
-    }
-    destinationType = navigator.camera.DestinationType.CAMERA;
-    pictureSource = navigator.camera.PictureSourceType.FILE_URI;
-  });
-
-  $scope.takePicture = function(){
+  $scope.takePicture = function(options) {
     var options = {
       quality: 50,
-      destinatonType: destinationType,
-      sourceType: pictureSource,
-      encodingType: 0
+      targetWidth: 200,
+      targetHeight: 200,
+      sourceType: 1
     };
-    //error
-    if(!navigator.camera){
-      return;
-    }
-    console.log("camera entrou");
 
-    navigator.camera.getPicture(
-      function(imageURI){
-        $scope.myPicture = image.URI;
-      },
-      function(error){
+    Camera.getPicture(options).then(function(imageData) {
+      $scope.picture = imageData;
+    }, function(error) {
+      console.log(error) 
+    });
+  };
 
-      }, options);
+  $scope.getPicture = function(options) {
+    var options = {
+      quality: 50,
+      targetWidth: 200,
+      targetHeight: 200,
+      sourceType: 0
+    };
+
+    Camera.getPicture(options).then(function(imageData) {
+      $scope.picture = imageData;
+      console.log(imageData);
+    }, function(error) {
+      console.log(error);
+    });
   };
 });

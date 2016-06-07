@@ -4,8 +4,10 @@
 			<form name="cameraForm">
 				<div class="item">
 					<button class="button button-block button-positive icon-left ion-camera" ng-click="takePicture()">
-						Camera
+						Take Picture
 					</button>
+					<button class="button button-block button-positive icon-left ion-images" ng-click="getPicture()">Get Picture</button>
+					<img src="{{$scope.picture}}">
 				</div>
 			</form>
 		</div>
