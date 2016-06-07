@@ -17,7 +17,6 @@ angular.module('starter.controllers', [])
     $scope.login = function() {
         $scope.show($ionicLoading);
         LoginService.loginUser($scope.data.username, $scope.data.password).success(function(data) {
-            console.log(data);
             window.localStorage.setItem("logged_user", data.login);
             window.localStorage.setItem(data.login, data.token);
             window.localStorage.setItem("user_id", data.id);
