@@ -7,7 +7,7 @@
 						Take Picture
 					</button>
 					<button class="button button-block button-positive icon-left ion-images" ng-click="getPicture()">Get Picture</button>
-					<img src="{{$scope.picture}}">
+					<img ng-show="{{pictureURI !== undefined}}" ng-src="{{pictureURI}}">
 				</div>
 			</form>
 		</div>

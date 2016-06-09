@@ -103,7 +103,7 @@ angular.module('starter.controllers', [])
     };
 
     Camera.getPicture(options).then(function(imageData) {
-      $scope.picture = imageData;
+      $scope.pictureURI = imageData;
     }, function(error) {
       console.log(error) 
     });
@@ -118,8 +118,8 @@ angular.module('starter.controllers', [])
     };
 
     Camera.getPicture(options).then(function(imageData) {
-      $scope.picture = imageData;
-      console.log(imageData);
+      $scope.pictureURI = "data:image/jpeg;base64," + imageData;
+      console.log($scope.pictureURI);
     }, function(error) {
       console.log(error);
     });
