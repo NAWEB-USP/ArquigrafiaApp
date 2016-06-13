@@ -11,7 +11,8 @@
       		<ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/photos/{{photo.photo_id}}">
       			<div class="row">
       				<div class="col item item-avatar">
-      					<img src="{{serverName + '/arquigrafia-avatars/' + photo.user_id}}">
+      					<img src="{{serverName + '/' + photo.avatar}}" ng-if="!!photo.avatar">
+      					<img src="img/avatar-60.png" ng-if="!photo.avatar">
       				</div>
       			</div>
       			<img src="{{serverName + '/arquigrafia-images/' + photo.photo_id + '_home.jpg'}}">
