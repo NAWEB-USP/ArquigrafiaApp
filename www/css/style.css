@@ -15,3 +15,12 @@
 #logout-button {
 	text-align: center;
 }
+
+.feed-item a {
+	text-align: center;
+}
+
+.feed-item a img {
+	width: 95vw;
+	height: 75vh;
+}
