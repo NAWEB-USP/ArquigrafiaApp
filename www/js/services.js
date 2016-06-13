@@ -1,7 +1,7 @@
 angular.module('starter.services', [])
 
 .factory('ServerName', function(){
-  var serverName = "http://valinhos.ime.usp.br:51080";
+  var serverName = "http://valinhos.ime.usp.br:51080"; //http://localhost:8000
   return {
     get: function () { 
       return serverName; 
@@ -48,6 +48,11 @@ angular.module('starter.services', [])
       return $http.get(ServerName.get() + "/api/feed/" + userId).then(function(result){
         return result.data;
       });
+    },
+    more: function(userId, maxId){
+      return $http.get(ServerName.get() + "/api/loadMore/" + userId, { params: {max_id : maxId} }).then(function(result){
+        return result.data;
+      })
     }
   };
 })
