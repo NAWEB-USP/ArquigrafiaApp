@@ -1,19 +1,20 @@
 angular.module('starter.controllers', [])
 
 .controller('LoginCtrl', function($scope, LoginService, ServerName, $ionicPopup, $state, $ionicLoading) {
+    /* Mostra spinner */
     $scope.show = function() {
     $ionicLoading.show({
         template: '<p>Carregando...</p><ion-spinner></ion-spinner>'
       });
     };
-
+    /* Esconde o spinner */
     $scope.hide = function(){
       $ionicLoading.hide();
     };
 
     $scope.serverName = ServerName.get();
-
     $scope.data = {};
+    /* Faz o login */
     $scope.login = function() {
         $scope.show($ionicLoading);
         LoginService.loginUser($scope.data.username, $scope.data.password).success(function(data) {
@@ -33,16 +34,49 @@ angular.module('starter.controllers', [])
 })
 
 .controller('FeedCtrl', function($scope, Feed, ServerName, $http, $state) {
+  /* Verifica se o usuário está logado */
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
       $state.go('login');
     }
   })
-  var user = Feed.get(window.localStorage.getItem("user_id"));
-  user.then(function(result){
-    $scope.photos = result;
-  });
+  /* Definição de variáveis */
   $scope.serverName = ServerName.get();
+  $scope.moreDataCanBeLoaded = true;
+  var maxId = 0;
+  /* Carrega o feed inicial */
+  Feed.get(window.localStorage.getItem("user_id")).then(function(result){
+    $scope.photos = result;
+    maxId = result[result.length-1].photo_id;
+    if (result.length < 20) {
+      $scope.moreDataCanBeLoaded = false;
+    }
+  });
+  /* Adiciona mais fotos ao feed */
+  $scope.loadMoreData = function() {
+    Feed.more(window.localStorage.getItem("user_id"), maxId).then(function(result){
+      maxId = result[result.length-1].photo_id;
+      $scope.photos = $scope.photos.concat(result);
+      if (result.length < 20) {
+        $scope.moreDataCanBeLoaded = false;
+      }
+      $scope.$broadcast('scroll.infiniteScrollComplete');
+    });
+  }
+  /* Atualiza o feed */
+  $scope.doRefresh = function() {
+    $scope.moreDataCanBeLoaded = true;
+    Feed.get(window.localStorage.getItem("user_id")).then(function(result){
+      $scope.photos = result;
+      maxId = result[result.length-1].photo_id;
+      if (result.length < 20) {
+        $scope.moreDataCanBeLoaded = false;
+      }
+    })
+    .finally(function() {
+      $scope.$broadcast('scroll.refreshComplete');
+    });;
+  }
 })
 
 .controller('PhotosCtrl', function($scope, Photos, ServerName, $http, $state) {

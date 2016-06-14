@@ -1,11 +1,29 @@
+<div class="bar bar-header bar-stable">
+  	<h1 class="title"><img class="title-image" src="img/logo-mini.png" height="18"/>  Arquigrafia</h1>
+</div>
 <ion-view view-title="Feed">
-  <ion-content>
-    <h2>Welcome to Arquigrafia</h2>
-    <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/photos/{{photo.photo_id}}">
-      	<img src="{{serverName + '/arquigrafia-images/' + photo.photo_id}}_home.jpg">
-        <h3>{{photo.name}}</h3>
-      </ion-item>
-    </ion-list>
-  </ion-content>
+	<ion-content class="has-header">
+		<ion-refresher
+    		pulling-text="Solte para atualizar..."
+    		on-refresh="doRefresh()">
+  		</ion-refresher>
+    	<ion-list>
+      		<ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/photos/{{photo.photo_id}}">
+      			<div class="row">
+      				<div class="col item item-avatar">
+      					<img src="{{serverName + '/' + photo.avatar}}" ng-if="!!photo.avatar">
+      					<img src="img/avatar-60.png" ng-if="!photo.avatar">
+      				</div>
+      			</div>
+      			<img src="{{serverName + '/arquigrafia-images/' + photo.photo_id + '_home.jpg'}}">
+        		<h4>{{photo.name}}</h4>
+      		</ion-item>
+    	</ion-list>
+    	<ion-infinite-scroll
+  			on-infinite="loadMoreData()"
+  			distance="5%"
+  			immediate-check="false"
+  			ng-if="moreDataCanBeLoaded">
+		</ion-infinite-scroll>
+  	</ion-content>
 </ion-view>
