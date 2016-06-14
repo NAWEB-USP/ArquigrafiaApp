@@ -95,33 +95,44 @@ angular.module('starter.controllers', [])
 .controller('CameraCtrl', function($scope, ServerName, Camera) {
 
   $scope.takePicture = function(options) {
-    var options = {
+    var optionsTake = {
       quality: 50,
       targetWidth: 200,
       targetHeight: 200,
-      sourceType: 1
+      destinationType: navigator.camera.DestinationType.NATIVE_URI,
+      sourceType: navigator.camera.PictureSourceType.CAMERA,
+      encodingType: navigator.camera.EncodingType.JPEG,
+      saveToPhotoAlbum: false //para testes nao ocuparem mta memoria, para release colocar true
     };
 
-    Camera.getPicture(options).then(function(imageData) {
-      $scope.pictureURI = imageData;
+    navigator.camera.getPicture(function (imageURI) {
+      $scope.$apply(function() {
+        $scope.imageURI = imageURI;
+      });
+
     }, function(error) {
       console.log(error) 
-    });
+    }, optionsTake);
   };
 
   $scope.getPicture = function(options) {
-    var options = {
+    var optionsGet = {
       quality: 50,
       targetWidth: 200,
       targetHeight: 200,
-      sourceType: 0
+      destinationType: navigator.camera.DestinationType.NATIVE_URI,
+      sourceType: navigator.camera.PictureSourceType.SAVEDPHOTOALBUM,
+      encodingType: navigator.camera.EncodingType.JPEG,
+      saveToPhotoAlbum: false
     };
 
-    Camera.getPicture(options).then(function(imageData) {
-      $scope.pictureURI = "data:image/jpeg;base64," + imageData;
-      console.log($scope.pictureURI);
+    navigator.camera.getPicture(function (imageURI) {
+      $scope.$apply(function() {
+        $scope.imageURI = imageURI;
+      });
+
     }, function(error) {
       console.log(error);
-    });
+    }, optionsGet);
   };
 });

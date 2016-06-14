@@ -2,13 +2,13 @@
 	<ion-content class="has-header padding scroll">
 		<div class="list">
 			<form name="cameraForm">
-				<div class="item">
+				
 					<button class="button button-block button-positive icon-left ion-camera" ng-click="takePicture()">
 						Take Picture
 					</button>
 					<button class="button button-block button-positive icon-left ion-images" ng-click="getPicture()">Get Picture</button>
-					<img ng-show="{{pictureURI !== undefined}}" ng-src="{{pictureURI}}">
-				</div>
+					<img width="200" height="200" style="text-align: center" ng-if="!!imageURI" ng-src="{{imageURI}}">
+				
 			</form>
 		</div>
 	</ion-content> 
