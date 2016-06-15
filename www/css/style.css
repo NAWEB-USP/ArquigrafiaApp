@@ -1,4 +1,5 @@
-/* Empty. Add your own CSS if you like */
+/* Account tab */
+
 #account-name {
 	text-align: center;
 }
@@ -16,11 +17,30 @@
 	text-align: center;
 }
 
-.feed-item a {
+/* Feed tab */
+
+.img-row .img-col img {
+	width: inherit;
+}
+
+.avatar-row .avatar-col img {
+	border-radius: 100%;
+}
+
+/*.feed-item h4 {
 	text-align: center;
 }
 
-.feed-item a img {
-	width: 95vw;
+.feed-item img {
+	width: 92vw;
 	height: 75vh;
 }
+
+.avatar-bar {
+	width: 92vw;
+	height: 55px;
+	padding: 5px;
+	border-top: solid black 1px;
+	border-left: solid black 1px;
+	border-right: solid black 1px;
+}*/
