@@ -21,26 +21,28 @@
 
 .img-row .img-col img {
 	width: inherit;
+	height: 60vh;
 }
 
 .avatar-row .avatar-col img {
 	border-radius: 100%;
+	float: left;
+	height: inherit;
+	width: 60px;
 }
 
-/*.feed-item h4 {
+.avatar-col {
+	position: relative;
+}
+
+.avatar-row .avatar-col h4 {
+	position: absolute;
+    bottom: 40%;
+    left: 30%;
+    font-size: medium;
+}
+
+.img-row .img-col h3 {
 	text-align: center;
+	padding: 10px; 
 }
-
-.feed-item img {
-	width: 92vw;
-	height: 75vh;
-}
-
-.avatar-bar {
-	width: 92vw;
-	height: 55px;
-	padding: 5px;
-	border-top: solid black 1px;
-	border-left: solid black 1px;
-	border-right: solid black 1px;
-}*/
