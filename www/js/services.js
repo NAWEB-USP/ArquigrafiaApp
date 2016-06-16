@@ -30,6 +30,9 @@ angular.module('starter.services', [])
                 return promise;
             }
             return promise; 
+        }, 
+        logoutUser: function(name) {
+            
         }
     }
 })

@@ -1,6 +1,24 @@
 angular.module('starter.controllers', [])
 
+.controller('WelcomeCtrl', function($scope, $state) {
+    /* Verifica se o usuário está logado */
+    $scope.$on('$ionicView.enter', function() {
+      if(window.localStorage.getItem("logged_user") != null) {
+        $state.go('tab.dash');
+      }
+      else {
+        $state.go('login');
+      }
+    })
+})
+
 .controller('LoginCtrl', function($scope, LoginService, ServerName, $ionicPopup, $state, $ionicLoading) {
+    /* Verifica se o usuário já está logado */
+    $scope.$on('$ionicView.enter', function() {
+      if(window.localStorage.getItem("logged_user") != null) {
+        $state.go('tab.dash');
+      }
+    })
     /* Mostra spinner */
     $scope.show = function() {
     $ionicLoading.show({
@@ -103,27 +121,35 @@ angular.module('starter.controllers', [])
   })
 })
 
-.controller('AccountCtrl', function($scope, $http, $state, User, Profiles, ServerName) {
+.controller('AccountCtrl', function($scope, $http, $state, User, Profiles, ServerName, LoginService) {
+  /* Verifica se o usuário está logado */
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
       $state.go('login');
     }
-    // window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
-    // window.localStorage.removeItem("logged_user");
   })
 
+  /* Definição de variáveis */
   $scope.serverName = ServerName.get();
   
+  /* Pega os dados do usuário */
   var account = Profiles.get(window.localStorage.getItem("logged_user"));
   account.then(function(result){
     $scope.account = result;
   });
   
+  /* Pega as fotos do usuário */
   var user_photos = User.allPhotos(window.localStorage.getItem("user_id"));
   user_photos.then(function(result){
     $scope.user_photos = result;
   });
 
+  /* Desloga o usuário */
+  $scope.logout = function() {
+    window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
+    window.localStorage.removeItem("logged_user");
+    $state.go('login');
+  }
 })
 
 .controller('CameraCtrl', function($scope, ServerName, Camera) {
