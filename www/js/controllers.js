@@ -156,12 +156,11 @@ angular.module('starter.controllers', [])
 
   $scope.takePicture = function(options) {
     var optionsTake = {
-      quality: 50,
-      targetWidth: 200,
-      targetHeight: 200,
+      quality: 70,
       destinationType: navigator.camera.DestinationType.NATIVE_URI,
       sourceType: navigator.camera.PictureSourceType.CAMERA,
       encodingType: navigator.camera.EncodingType.JPEG,
+      correctOrientation: true,
       saveToPhotoAlbum: false //para testes nao ocuparem mta memoria, para release colocar true
     };
 
@@ -177,12 +176,11 @@ angular.module('starter.controllers', [])
 
   $scope.getPicture = function(options) {
     var optionsGet = {
-      quality: 50,
-      targetWidth: 200,
-      targetHeight: 200,
+      quality: 70,
       destinationType: navigator.camera.DestinationType.NATIVE_URI,
       sourceType: navigator.camera.PictureSourceType.SAVEDPHOTOALBUM,
       encodingType: navigator.camera.EncodingType.JPEG,
+      correctOrientation: true,
       saveToPhotoAlbum: false
     };
 
