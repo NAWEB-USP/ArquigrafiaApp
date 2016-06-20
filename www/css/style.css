@@ -20,8 +20,8 @@
 /* Feed tab */
 
 .img-row .img-col img {
-	width: inherit;
-	height: 60vh;
+	width: 100vw;
+	height: 100vw;
 }
 
 .avatar-row .avatar-col img {
@@ -45,4 +45,14 @@
 .img-row .img-col h3 {
 	text-align: center;
 	padding: 10px; 
+}
+
+.img-row, .img-col, .avatar-row, .avatar-col {
+	padding-left: inherit;
+	padding-right: inherit;
+}
+
+a.item-content { 
+    padding-left: 0px !important;
+    padding-right: 0px !important;
 }
