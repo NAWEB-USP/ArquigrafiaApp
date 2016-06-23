@@ -148,6 +148,7 @@ angular.module('starter.controllers', [])
   $scope.logout = function() {
     window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
     window.localStorage.removeItem("logged_user");
+    window.localStorage.removeItem("user_id");
     $state.go('login');
   }
 })
