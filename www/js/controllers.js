@@ -39,7 +39,7 @@ angular.module('starter.controllers', [])
             window.localStorage.setItem("logged_user", data.login);
             window.localStorage.setItem(data.login, data.token);
             window.localStorage.setItem("user_id", data.id);
-            $state.go('tab.dash');
+            $state.go('tab.dash', {}, {reload: true});
         }).error(function(data) {
             var alertPopup = $ionicPopup.alert({
                 title: 'Falha no login!',
@@ -64,6 +64,7 @@ angular.module('starter.controllers', [])
   var maxId = 0;
   /* Carrega o feed inicial */
   Feed.get(window.localStorage.getItem("user_id")).then(function(result){
+    console.log(result);
     $scope.photos = result;
     maxId = result[result.length-1].photo_id;
     if (result.length < 20) {
@@ -121,7 +122,7 @@ angular.module('starter.controllers', [])
   })
 })
 
-.controller('AccountCtrl', function($scope, $http, $state, User, Profiles, ServerName, LoginService) {
+.controller('AccountCtrl', function($scope, $http, $state, $timeout, $ionicHistory, User, Profiles, ServerName, LoginService) {
   /* Verifica se o usuário está logado */
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
@@ -149,7 +150,8 @@ angular.module('starter.controllers', [])
     window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
     window.localStorage.removeItem("logged_user");
     window.localStorage.removeItem("user_id");
-    $state.go('login');
+    $ionicHistory.clearHistory();
+    $ionicHistory.clearCache().then(function(){ $state.go('login', {}, {reload: true}) });
   }
 })
 
