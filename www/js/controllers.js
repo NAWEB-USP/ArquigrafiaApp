@@ -156,6 +156,14 @@ angular.module('starter.controllers', [])
 .controller('CameraCtrl', function($scope, $http, ServerName, Camera) {
   $scope.hideData = true;
 
+  $scope.forward = function() {
+    $scope.hideData = false;
+  }
+
+  $scope.back = function() {
+    $scope.hideData = true;
+  }
+
   $scope.takePicture = function(options) {
     var optionsTake = {
       quality: 70,
@@ -169,7 +177,6 @@ angular.module('starter.controllers', [])
     navigator.camera.getPicture(function (imageURI) {
       $scope.$apply(function() {
         $scope.imageURI = imageURI;
-        $scope.hideData = false;
       });
 
     }, function(error) {
@@ -190,7 +197,6 @@ angular.module('starter.controllers', [])
     navigator.camera.getPicture(function (imageURI) {
       $scope.$apply(function() {
         $scope.imageURI = imageURI;
-        $scope.hideData = false;
       });
 
     }, function(error) {
