@@ -1,14 +1,83 @@
+<div class="bar bar-header bar-stable">
+	<button class="button button-positive" ng-click="back()" ng-show="!hideData">Voltar</button>
+	<button class="button button-positive" ng-click="forward()" ng-show="hideData">Continuar Cadastro</button>
+</div>
+
 <ion-view view-title="Camera">
-	<ion-content class="has-header padding scroll">
+	<ion-content class="has-header padding" scroll="true">
 		<div class="list">
-			<form name="cameraForm">
+			<form name="submitPhoto" ng-submit="postPhoto()">
+				<div id="photoArea" ng-show="hideData">
+					<div class="padding" align="center">
+						<img style="max-height:150px" ng-if="!!imageURI" ng-src="{{imageURI}}">
+					</div>
 				
-					<button class="button button-block button-positive icon-left ion-camera" ng-click="takePicture()">
-						Tirar Foto
-					</button>
-					<button class="button button-block button-positive icon-left ion-images" ng-click="getPicture()">Escolher Foto</button>
-					<img width="200" height="200" style="text-align: center" ng-if="!!imageURI" ng-src="{{imageURI}}">
+					<div class="padding">
+						<button class="button button-block button-positive icon-left ion-camera " ng-click="takePicture()">
+							Tirar Foto
+						</button>
+						<button class="button button-block button-positive icon-left ion-images" ng-click="getPicture()">Escolher Foto</button>
+					</div>
+				</div>
 				
+				<div id="data" ng-show="!hideData">
+					<input id="photo" name="photo" type="hidden" ng-value="imageURI" ng-minlength="10" required/>
+
+					<label for="title" class="item item-input">
+						<span class="input-label">Titulo*:</span>
+						<input id="title" name="title" ng-model="data.title" type="text" ng-minlength="5" required/>
+					</label>
+
+					<label for="author" class="item item-input">
+						<span class="input-label">Autor*:</span>
+						<input id="author" name="author" ng-model="data.author" type="text" ng-minlength="5" required/>
+					</label>
+
+					<label for="country" class="item item-input">
+						<span class="input-label">País*:</span>
+						<input id="country" name="country" ng-model="data.country" type="text" ng-minlength="5" required/> 
+					</label>
+
+					<label for="tags" class="item item-input">
+						<span class="input-label">Tags*:</span>
+						<input id="tags" name="tags" ng-model="data.tags" type="text" ng-minlength="5" required/>
+					</label>
+
+					<ion-checkbox class="item-text-wrap" ng-model="data.licenca" required>* Sou o autor da imagem ou possuo permissão expressa do autor para disponibilizá-la no Arquigrafia</ion-checkbox>
+
+					<div class="padding" style="color:#F00;">
+						<p>* Campos obrigatorios</p>
+
+						<p ng-show="submitPhoto.title.$error.minlength && submitPhoto.title.$touched">
+							<i class="ion-information-circled"></i>
+							Titulo precisa ter 5 ou mais caracteres
+						</p>
+
+						<p ng-show="submitPhoto.author.$error.minlength && submitPhoto.author.$touched">
+							<i class="ion-information-circled"></i>
+							Nome do autor precisa ter 5 ou mais caracteres
+						</p>
+
+						<p ng-show="submitPhoto.country.$error.minlength && submitPhoto.country.$touched">
+							<i class="ion-information-circled"></i>
+							Pais precisa ter 5 ou mais caracteres
+						</p>
+
+						<p ng-show="submitPhoto.tags.$error.minlength && submitPhoto.tags.$touched">
+							<i class="ion-information-circled"></i>
+							Tags precisam ter 5 ou mais caracteres
+						</p>
+
+						<p ng-show="!(!!imageURI)">
+							<i class="ion-information-circled"></i>
+							Selecione uma imagem
+						</p>
+					</div>
+
+					<div class="padding">
+						<button class="button button-block button-positive" type="submit" ng-disabled="submitPhoto.$invalid || !(!!imageURI)">Enviar</button>
+					</div>
+				</div>
 			</form>
 		</div>
 	</ion-content> 

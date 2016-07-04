@@ -154,7 +154,16 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('CameraCtrl', function($scope, ServerName, Camera) {
+.controller('CameraCtrl', function($scope, $http, ServerName, Camera) {
+  $scope.hideData = true;
+
+  $scope.forward = function() {
+    $scope.hideData = false;
+  }
+
+  $scope.back = function() {
+    $scope.hideData = true;
+  }
 
   $scope.takePicture = function(options) {
     var optionsTake = {
@@ -194,5 +203,21 @@ angular.module('starter.controllers', [])
     }, function(error) {
       console.log(error);
     }, optionsGet);
+  };
+  $scope.data = {};
+  $scope.postPhoto = function(){
+    
+    var address = ServerName.get() + "/photos";
+
+    console.log($scope.data.title);
+
+    // $http.post(address, {
+    //   photo_name:  $scope.data.title,
+    //   photo_imageAuthor: $scope.data.author,
+    //   tags: $scope.data.tags,
+    //   photo_country: $scope.data.country
+    // }).then(function(response){
+    //   $scope.response = response;
+    // });
   };
 });
