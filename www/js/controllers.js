@@ -64,9 +64,8 @@ angular.module('starter.controllers', [])
   var maxId = 0;
   /* Carrega o feed inicial */
   Feed.get(window.localStorage.getItem("user_id")).then(function(result){
-    console.log(result);
     $scope.photos = result;
-    maxId = result[result.length-1].photo_id;
+    maxId = result[result.length-1]['photo'].id;
     if (result.length < 20) {
       $scope.moreDataCanBeLoaded = false;
     }
@@ -74,7 +73,7 @@ angular.module('starter.controllers', [])
   /* Adiciona mais fotos ao feed */
   $scope.loadMoreData = function() {
     Feed.more(window.localStorage.getItem("user_id"), maxId).then(function(result){
-      maxId = result[result.length-1].photo_id;
+      maxId = result[result.length-1]['photo'].id;
       $scope.photos = $scope.photos.concat(result);
       if (result.length < 20) {
         $scope.moreDataCanBeLoaded = false;
@@ -87,7 +86,7 @@ angular.module('starter.controllers', [])
     $scope.moreDataCanBeLoaded = true;
     Feed.get(window.localStorage.getItem("user_id")).then(function(result){
       $scope.photos = result;
-      maxId = result[result.length-1].photo_id;
+      maxId = result[result.length-1]['photo'].id;
       if (result.length < 20) {
         $scope.moreDataCanBeLoaded = false;
       }
