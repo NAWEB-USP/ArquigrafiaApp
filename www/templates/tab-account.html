@@ -1,5 +1,8 @@
+<div class="bar bar-header bar-stable">
+    <h1 class="title"><img class="title-image" src="img/logo-mini.png" height="18"/>  {{account.login}}</h1>
+</div>
 <ion-view view-title="Perfil">
-  <ion-content>
+  <ion-content class="has-header">
     <ion-refresher
         pulling-text="Puxe e solte para atualizar..."
         on-refresh="doRefresh()">
@@ -22,7 +25,7 @@
         </div>
         <div class="row" id="photos-container">
             <ion-list>
-                <ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="">
+                <ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/photos/{{photo.id}}">
                     <img src="{{serverName + '/arquigrafia-images/' + photo.id + '_home.jpg'}}">
                 </ion-item>
             </ion-list>

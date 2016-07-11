@@ -117,6 +117,7 @@ angular.module('starter.controllers', [])
   $scope.serverName = ServerName.get();
   var photo = Photos.get($stateParams.photoId);
   photo.then(function(result){
+    console.log(result);
     $scope.photo = result;
   })
 })

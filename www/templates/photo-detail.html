@@ -1,14 +1,22 @@
-<!--
-  This template loads for the 'tab.friend-detail' state (app.js)
-  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
-  The FriendsCtrl pulls data from the Friends service (service.js)
-  The Friends service returns an array of friend data
--->
-<ion-view view-title="{{photo.name}}">
-  <ion-content class="padding">
-    <img ng-src="{{serverName + '/arquigrafia-images/' + photo.id}}_view.jpg" style="width: 64px; height: 64px">
-    <p>
-      {{photo.description}}
-    </p>
+<div class="bar bar-header">
+  <a class="button icon-left ion-chevron-left button-clear button-dark" href="#/tab/account">Voltar</a>
+  <div class="h1 title"></div>
+</div>
+<ion-view view-title="{{photo['photo'].name}}">
+  <ion-content class="padding has-header">
+    <div class="row avatar-row">
+      <div class="col avatar-col">
+        <img src="{{serverName + photo['sender'].photo}}" ng-if="!!photo['sender'].photo">
+        <img src="img/avatar-60.png" ng-if="!photo['sender'].photo&&!photo['photo'].institution_id">
+        <img src="img/avatar-institution.png" ng-if="!photo['sender'].photo&&!!photo['photo'].institution_id">
+        <h4>{{photo['sender'].name}}</h4>
+      </div>
+    </div>
+    <div class="row img-row">
+      <div class="col img-col">
+        <img src="{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_home.jpg'}}">
+        <h3>{{photo['photo'].name}}</h3>
+      </div>
+    </div>
   </ion-content>
 </ion-view>

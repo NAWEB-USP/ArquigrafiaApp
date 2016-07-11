@@ -75,6 +75,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   .state('tab.photo-detail', {
     url: '/photos/:photoId',
     views: {
+      'tab-account': {
+        templateUrl: 'templates/photo-detail.html',
+        controller: 'PhotoDetailCtrl'
+      }, 
       'tab-photos': {
         templateUrl: 'templates/photo-detail.html',
         controller: 'PhotoDetailCtrl'
