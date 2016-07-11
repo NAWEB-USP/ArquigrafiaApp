@@ -11,15 +11,16 @@
       		<ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="">
       			<div class="row avatar-row">
       				<div class="col avatar-col">
-      					<img src="{{serverName + '/' + photo.avatar}}" ng-if="!!photo.avatar">
-      					<img src="img/avatar-60.png" ng-if="!photo.avatar">
-      					<h4>{{photo.user_name}}</h4>
+      					<img src="{{serverName + photo['sender'].photo}}" ng-if="!!photo['sender'].photo">
+      					<img src="img/avatar-60.png" ng-if="!photo['sender'].photo&&!photo['photo'].institution_id">
+                <img src="img/avatar-institution.png" ng-if="!photo['sender'].photo&&!!photo['photo'].institution_id">
+      					<h4>{{photo['sender'].name}}</h4>
       				</div>
       			</div>
       			<div class="row img-row">
       				<div class="col img-col">
-      					<img src="{{serverName + '/arquigrafia-images/' + photo.photo_id + '_home.jpg'}}">
-        				<h3>{{photo.name}}</h3>
+      					<img src="{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_home.jpg'}}">
+        				<h3>{{photo['photo'].name}}</h3>
         			</div>
         		</div>
       		</ion-item>
