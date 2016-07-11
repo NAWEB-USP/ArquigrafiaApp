@@ -4,8 +4,17 @@
 	text-align: center;
 }
 
-#user-avatar {
+#personal-info div #user-avatar img {
 	width: inherit;
+}
+
+#user-info {
+	display: flex;
+    flex-direction: column;
+}
+
+#user-info * {
+	flex: 1;
 }
 
 #user-info h4 {
@@ -15,6 +24,23 @@
 
 #logout-button {
 	text-align: center;
+}
+
+#photos-container ion-list {
+	width: 100%;
+}
+
+#photos-container ion-list .list ion-item {
+	width: 33%;
+    display: inline-block;
+}
+
+#photos-container ion-list .list ion-item .item-content {
+	padding: 0px;
+}
+
+#photos-container ion-list .list ion-item img {
+	width: 100%;
 }
 
 /* Feed tab */

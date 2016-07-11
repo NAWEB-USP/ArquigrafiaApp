@@ -1,7 +1,7 @@
 angular.module('starter.services', [])
 
 .factory('ServerName', function(){
-  var serverName = "http://valinhos.ime.usp.br:51080"; //http://localhost:8000
+  var serverName = "http://localhost:8000"; //http://valinhos.ime.usp.br:51080
   return {
     get: function () { 
       return serverName; 
@@ -44,35 +44,14 @@ angular.module('starter.services', [])
         return result.data;
       });
     },
-    remove: function(){
-      //
-    },
-    get: function(userId){
+    get: function(userId) {
       return $http.get(ServerName.get() + "/api/feed/" + userId).then(function(result){
         return result.data;
       });
     },
-    more: function(userId, maxId){
+    more: function(userId, maxId) {
       return $http.get(ServerName.get() + "/api/loadMore/" + userId, { params: {max_id : maxId} }).then(function(result){
         return result.data;
-      })
-    }
-  };
-})
-
-.factory('User', function($http, ServerName) {
-  return {
-    allPhotos: function(userId) {
-      return $http.get(ServerName.get() + "/api/photos").then(function(result){
-        var user_photos = [];
-        var i;
-        for(i = 0; i < result.data.length; i++){
-          if(result.data[i].user_id == userId) {
-            user_photos.push(result.data[i]);
-
-          }
-        }
-        return user_photos;
       });
     }
   };
@@ -98,12 +77,20 @@ angular.module('starter.services', [])
 
 .factory('Profiles', function($http, ServerName) {
   return {
-    all: function() {},
-    remove: function(id) {},
-    get: function(userName) { //endereco precisa que servidor seja atualizado
-      return $http.get(ServerName.get() + "/api/users/" + userName).then(function(result){
+    getProfile: function(userId) {
+      return $http.get(ServerName.get() + "/api/profile/" + userId).then(function(result){
         return result.data;
-      })
+      });
+    }, 
+    getPhotos: function(userId) {
+      return $http.get(ServerName.get() + "/api/userPhotos/" + userId).then(function(result){
+        return result.data;
+      });
+    }, 
+    getMorePhotos: function(userId, maxId) {
+      return $http.get(ServerName.get() + "/api/moreUserPhotos/" + userId, { params: {max_id : maxId} }).then(function(result){
+        return result.data;
+      });
     }
   }
 })

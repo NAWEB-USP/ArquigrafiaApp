@@ -121,7 +121,7 @@ angular.module('starter.controllers', [])
   })
 })
 
-.controller('AccountCtrl', function($scope, $http, $state, $timeout, $ionicHistory, User, Profiles, ServerName, LoginService) {
+.controller('AccountCtrl', function($scope, $http, $state, $timeout, $ionicHistory, Profiles, ServerName, LoginService) {
   /* Verifica se o usuário está logado */
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
@@ -131,18 +131,51 @@ angular.module('starter.controllers', [])
 
   /* Definição de variáveis */
   $scope.serverName = ServerName.get();
+  $scope.moreDataCanBeLoaded = true;
+  var maxId = 0;
   
   /* Pega os dados do usuário */
-  var account = Profiles.get(window.localStorage.getItem("logged_user"));
+  var account = Profiles.getProfile(window.localStorage.getItem("user_id"));
   account.then(function(result){
     $scope.account = result;
   });
   
   /* Pega as fotos do usuário */
-  var user_photos = User.allPhotos(window.localStorage.getItem("user_id"));
+  var user_photos = Profiles.getPhotos(window.localStorage.getItem("user_id"));
   user_photos.then(function(result){
-    $scope.user_photos = result;
+    $scope.photos = result;
+    maxId = result[result.length-1].id;
+    if (result.length < 20) {
+      $scope.moreDataCanBeLoaded = false;
+    }
   });
+
+  /* Carrega mais fotos do usuário */
+  $scope.loadMorePhotos = function() {
+    Profiles.getMorePhotos(window.localStorage.getItem("user_id"), maxId).then(function(result){
+      maxId = result[result.length-1].id;
+      $scope.photos = $scope.photos.concat(result);
+      if (result.length < 20) {
+        $scope.moreDataCanBeLoaded = false;
+      }
+      $scope.$broadcast('scroll.infiniteScrollComplete');
+    });
+  }
+
+  /* Atualiza as fotos do usuário */
+  $scope.doRefresh = function() {
+    $scope.moreDataCanBeLoaded = true;
+    Profiles.getPhotos(window.localStorage.getItem("user_id")).then(function(result){
+      $scope.photos = result;
+      maxId = result[result.length-1].id;
+      if (result.length < 20) {
+        $scope.moreDataCanBeLoaded = false;
+      }
+    })
+    .finally(function() {
+      $scope.$broadcast('scroll.refreshComplete');
+    });;
+  }
 
   /* Desloga o usuário */
   $scope.logout = function() {

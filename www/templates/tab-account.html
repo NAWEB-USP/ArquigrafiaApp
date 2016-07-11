@@ -1,11 +1,15 @@
 <ion-view view-title="Perfil">
   <ion-content>
-    <div id="personalInfo">
-        <div class="row">
-            <div class="col col-40">
+    <ion-refresher
+        pulling-text="Puxe e solte para atualizar..."
+        on-refresh="doRefresh()">
+    </ion-refresher>
+    <div id="personal-info">
+        <div class="row" id="info-container">
+            <div id="user-avatar" class="col col-40">
                 <h4 id="account-name">{{account.name}}</h4>
-                <img id="user-avatar" src="{{serverName + account.photo}}" ng-if="!!photo.avatar">
-                <img id="user-avatar" src="img/avatar-60.png" ng-if="!photo.avatar">
+                <img src="{{serverName + account.photo}}" ng-if="!!account.photo">
+                <img src="img/avatar-60.png" ng-if="!account.photo">
             </div>
             <div id="user-info" class="col col-60">
                 <h4>Fotos publicadas: {{account.photos}}</h4>
@@ -16,6 +20,19 @@
                 </button>
             </div>
         </div>
+        <div class="row" id="photos-container">
+            <ion-list>
+                <ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="">
+                    <img src="{{serverName + '/arquigrafia-images/' + photo.id + '_home.jpg'}}">
+                </ion-item>
+            </ion-list>
+        </div>
     </div>
+    <ion-infinite-scroll
+        on-infinite="loadMorePhotos()"
+        distance="5%"
+        immediate-check="false"
+        ng-if="moreDataCanBeLoaded">
+    </ion-infinite-scroll>
   </ion-content>
 </ion-view>
