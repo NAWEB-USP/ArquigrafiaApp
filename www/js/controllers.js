@@ -254,10 +254,18 @@ angular.module('starter.controllers', [])
     console.log($scope.data.title);
 
     $http.post(address, {
+      photo_allowCommercialUses: $scope.data.commercialUsage,
+      photo_allowModifications: $scope.data.modifications,
       photo_name:  $scope.data.title,
       photo_imageAuthor: $scope.data.author,
       tags: $scope.data.tags,
-      photo_country: $scope.data.country
+      photo_country: $scope.data.country,
+      photo_city: $scope.data.city,
+      photo_description: $scope.data.description,
+      photo_district: $scope.data.disctrict,
+      photo_state: $scope.data.state,
+      photo_street: $scope.data.address,
+      authorized: $scope.data.authorized
     }).then(function(response){
       $scope.response = response;
     });
