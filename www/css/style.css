@@ -13,8 +13,13 @@
     flex-direction: column;
 }
 
-#user-info * {
+#user-info button {
 	flex: 1;
+	margin: 0px;
+}
+
+#user-info a {
+	text-decoration: none;
 }
 
 #user-info h4 {

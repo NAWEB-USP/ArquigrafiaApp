@@ -15,9 +15,21 @@
                 <img src="img/avatar-60.png" ng-if="!account.photo">
             </div>
             <div id="user-info" class="col col-60">
-                <h4>Fotos publicadas: {{account.photos}}</h4>
-                <h4>Seguindo: {{account.following}}</h4>
-                <h4>Seguidores: {{account.followers}}</h4>
+                <a href="#/tab/account/#">
+                    <button class="button button-full button-positive button-clear">
+                        <h4>Fotos publicadas: {{account.photos}}</h4>
+                    </button>
+                </a>
+                <a href="#/tab/account/#">
+                    <button class="button button-full button-positive button-clear">
+                        <h4>Seguindo: {{account.following}}</h4>
+                    </button>
+                </a>
+                <a href="#/tab/account/#">
+                    <button class="button button-full button-positive button-clear">
+                        <h4>Seguidores: {{account.followers}}</h4>
+                    </button>
+                </a>
                 <button id="logout-button" class="button-block button button-positive" ng-click="logout()">
                     Logout
                 </button>
