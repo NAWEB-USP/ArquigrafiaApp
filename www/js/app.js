@@ -64,6 +64,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
   .state('tab.photos', {
       url: '/photos',
+      abstract: true,
       views: {
         'tab-photos': {
           templateUrl: 'templates/tab-photos.html',
@@ -72,26 +73,55 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     })
 
-  .state('tab.photo-detail', {
-    url: '/photos/:photoId',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/photo-detail.html',
-        controller: 'PhotoDetailCtrl'
-      }, 
-      'tab-photos': {
-        templateUrl: 'templates/photo-detail.html',
-        controller: 'PhotoDetailCtrl'
-      }
-    }
-  })
-
   .state('tab.account', {
     url: '/account',
     views: {
       'tab-account': {
         templateUrl: 'templates/tab-account.html',
         controller: 'AccountCtrl'
+      }
+    }
+  })
+
+  .state('tab.photo-detail', {
+    url: '/photos/:photoId', 
+    views: {
+      'tab-account': {
+        templateUrl: 'templates/photo-detail.html',
+        controller: 'PhotoDetailCtrl'
+      }
+    }
+  })
+
+  .state('tab.users', {
+    url: '/users',
+    abstract: true,  
+    templateUrl: 'templates/users.html', 
+    controller: 'UsersCtrl'
+  })
+
+  .state('tab.user-detail', {
+    url: '/users/:userId', 
+    templateUrl: 'templates/user-detail.html', 
+    controller: 'UserDetailCtrl'
+  })
+
+  .state('tab.users-following', {
+    url: '/users/:userId/following', 
+    views: {
+      'tab-account': {
+        templateUrl: 'templates/user-following.html', 
+        controller: 'UserFollowingCtrl'
+      }
+    }
+  })
+
+  .state('tab.users-followers', {
+    url: '/users/:userId/followers', 
+    views: {
+      'tab-account': {
+        templateUrl: 'templates/user-followers.html', 
+        controller: 'UserFollowersCtrl'
       }
     }
   })

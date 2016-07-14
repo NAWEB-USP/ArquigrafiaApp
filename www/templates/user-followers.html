@@ -1,0 +1,15 @@
+<div class="bar bar-header">
+  <a class="button icon-left ion-chevron-left button-clear button-dark" href="#/tab/account">Voltar</a>
+  <div class="h1 title">Seguidores</div>
+</div>
+<ion-view view-title="{{Followers}}">
+  <ion-content class="padding has-header">
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right user-follow-list" ng-repeat="user in followers" type="item-text-wrap" href="#/tab/users/{{user.id}}">
+        <img ng-src="{{serverName + user.photo}}" ng-if="!!user.photo">
+        <img src="img/avatar-60.png" ng-if="!user.photo">
+        <h2>{{user.name}}</h2>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

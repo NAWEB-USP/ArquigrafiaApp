@@ -91,6 +91,16 @@ angular.module('starter.services', [])
       return $http.get(ServerName.get() + "/api/moreUserPhotos/" + userId, { params: {max_id : maxId} }).then(function(result){
         return result.data;
       });
+    }, 
+    getFollowers: function(userId) {
+      return $http.get(ServerName.get() + "/api/profile/" + userId + "/followers").then(function(result){
+        return result.data;
+      });
+    }, 
+    getFollowing: function(userId) {
+      return $http.get(ServerName.get() + "/api/profile/" + userId + "/following").then(function(result){
+        return result.data;
+      });
     }
   }
 })
