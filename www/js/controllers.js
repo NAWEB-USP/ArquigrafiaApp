@@ -117,7 +117,6 @@ angular.module('starter.controllers', [])
   $scope.serverName = ServerName.get();
   var photo = Photos.get($stateParams.photoId);
   photo.then(function(result){
-    console.log(result);
     $scope.photo = result;
   })
 })
@@ -186,6 +185,22 @@ angular.module('starter.controllers', [])
     $ionicHistory.clearHistory();
     $ionicHistory.clearCache().then(function(){ $state.go('login', {}, {reload: true}) });
   }
+})
+
+.controller('UserFollowersCtrl', function($scope, $http, $stateParams, ServerName, Profiles) {
+  $scope.serverName = ServerName.get();
+  var followers = Profiles.getFollowers($stateParams.userId);
+  followers.then(function(result){
+    $scope.followers = result;
+  })
+})
+
+.controller('UserFollowingCtrl', function($scope, $http, $stateParams, ServerName, Profiles) {
+  $scope.serverName = ServerName.get();
+  var following = Profiles.getFollowing($stateParams.userId);
+  following.then(function(result){
+    $scope.following = result;
+  })
 })
 
 .controller('CameraCtrl', function($scope, $http, ServerName, Tags, Camera) {

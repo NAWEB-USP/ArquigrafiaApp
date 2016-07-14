@@ -48,6 +48,13 @@
 	width: 100%;
 }
 
+/* Follow list */
+
+.user-follow-list h2 {
+	position: relative;
+	left: 5em;
+}
+
 /* Feed tab */
 
 .img-row .img-col img {
