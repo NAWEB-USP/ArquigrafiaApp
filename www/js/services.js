@@ -101,6 +101,16 @@ angular.module('starter.services', [])
       return $http.get(ServerName.get() + "/api/profile/" + userId + "/following").then(function(result){
         return result.data;
       });
+    }, 
+    getEvaluatedPhotos: function(userId) {
+      return $http.get(ServerName.get() + "/api/profile/" + userId + "/evaluatedPhotos").then(function(result){
+        return result.data;
+      });  
+    }, 
+    getMoreEvaluatedPhotos: function(userId, maxId) {
+      return $http.get(ServerName.get() + "/api/profile/" + userId + "/moreEvaluatedPhotos", { params: {max_id : maxId} }).then(function(result){
+        return result.data;
+      });
     }
   }
 })

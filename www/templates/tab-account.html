@@ -35,9 +35,18 @@
                 </button>
             </div>
         </div>
+        <div class="button-bar button-light">
+            <a class="button" ng-click="showUploads()">Fotos</a>
+            <a class="button" ng-click="showEvaluations()">Impressões</a>
+        </div>
         <div class="row" id="photos-container">
-            <ion-list>
+            <ion-list id="uploads">
                 <ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/photos/{{photo.id}}">
+                    <img src="{{serverName + '/arquigrafia-images/' + photo.id + '_home.jpg'}}">
+                </ion-item>
+            </ion-list>
+            <ion-list id="evaluations">
+                <ion-item class="item-remove-animate feed-item" ng-repeat="photo in evaluations" type="item-text-wrap" href="#/tab/photos/{{photo.id}}">
                     <img src="{{serverName + '/arquigrafia-images/' + photo.id + '_home.jpg'}}">
                 </ion-item>
             </ion-list>
@@ -47,7 +56,13 @@
         on-infinite="loadMorePhotos()"
         distance="5%"
         immediate-check="false"
-        ng-if="moreDataCanBeLoaded">
+        ng-if="moreUploadsCanBeLoaded&&uploadsShowing">
+    </ion-infinite-scroll>
+    <ion-infinite-scroll
+        on-infinite="loadMoreEvaluations()"
+        distance="5%"
+        immediate-check="false"
+        ng-if="moreEvaluationsCanBeLoaded&&evaluationsShowing">
     </ion-infinite-scroll>
   </ion-content>
 </ion-view>

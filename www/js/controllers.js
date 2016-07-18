@@ -131,50 +131,100 @@ angular.module('starter.controllers', [])
 
   /* Definição de variáveis */
   $scope.serverName = ServerName.get();
-  $scope.moreDataCanBeLoaded = true;
-  var maxId = 0;
+  $scope.moreUploadsCanBeLoaded = true;
+  $scope.moreEvaluationsCanBeLoaded = true;
+  $scope.uploadsShowing = true;
+  $scope.evaluationsShowing = false;
+  var maxIdUpload = 0;
+  var maxIdEvaluation = 0;
   
   /* Pega os dados do usuário */
   var account = Profiles.getProfile(window.localStorage.getItem("user_id"));
   account.then(function(result){
     $scope.account = result;
   });
+
+  /* Exibe avaliações */
+  $scope.showEvaluations = function() {
+    document.getElementById("evaluations").style.display = "initial";
+    document.getElementById("uploads").style.display = "none";
+    $scope.evaluationsShowing = true;
+    $scope.uploadsShowing = false;
+  }
+
+  /* Exibe uploads */
+  $scope.showUploads = function() {
+    document.getElementById("uploads").style.display = "initial";
+    document.getElementById("evaluations").style.display = "none";
+    $scope.evaluationsShowing = false;
+    $scope.uploadsShowing = true;
+  }
   
   /* Pega as fotos do usuário */
   var user_photos = Profiles.getPhotos(window.localStorage.getItem("user_id"));
   user_photos.then(function(result){
     $scope.photos = result;
-    maxId = result[result.length-1].id;
+    maxIdUpload = result[result.length-1].id;
     if (result.length < 20) {
-      $scope.moreDataCanBeLoaded = false;
+      $scope.moreUploadsCanBeLoaded = false;
+    }
+  });
+
+  /* Pega as avaliações do usuário */
+  var user_evaluated_photos = Profiles.getEvaluatedPhotos(window.localStorage.getItem("user_id"));
+  user_evaluated_photos.then(function(result){
+    $scope.evaluations = result["photos"];
+    maxIdEvaluation = result["max_id"];
+    if (result["photos"].length < 20) {
+      $scope.moreEvaluationsCanBeLoaded = false;
     }
   });
 
   /* Carrega mais fotos do usuário */
   $scope.loadMorePhotos = function() {
-    Profiles.getMorePhotos(window.localStorage.getItem("user_id"), maxId).then(function(result){
-      maxId = result[result.length-1].id;
+    Profiles.getMorePhotos(window.localStorage.getItem("user_id"), maxIdUpload).then(function(result){
+      maxIdUpload = result[result.length-1].id;
       $scope.photos = $scope.photos.concat(result);
       if (result.length < 20) {
-        $scope.moreDataCanBeLoaded = false;
+        $scope.moreUploadsCanBeLoaded = false;
       }
       $scope.$broadcast('scroll.infiniteScrollComplete');
     });
   }
 
-  /* Atualiza as fotos do usuário */
+  /* Carrega mais avaliações de usuário */
+  $scope.loadMoreEvaluations = function() {
+    Profiles.getMoreEvaluatedPhotos(window.localStorage.getItem("user_id"), maxIdEvaluation).then(function(result){
+      maxIdEvaluation = result["max_id"];
+      $scope.evaluations = $scope.evaluations.concat(result["photos"]);
+      if (result["photos"].length < 20) {
+        $scope.moreEvaluationsCanBeLoaded = false;
+      }
+      $scope.$broadcast('scroll.infiniteScrollComplete');
+    });
+  }
+
+  /* Atualiza as fotos e avaliações do usuário */
   $scope.doRefresh = function() {
-    $scope.moreDataCanBeLoaded = true;
+    $scope.moreUploadsCanBeLoaded = true;
+    $scope.moreEvaluationsCanBeLoaded = true;
     Profiles.getPhotos(window.localStorage.getItem("user_id")).then(function(result){
       $scope.photos = result;
-      maxId = result[result.length-1].id;
+      maxIdUpload = result[result.length-1].id;
       if (result.length < 20) {
-        $scope.moreDataCanBeLoaded = false;
+        $scope.moreUploadsCanBeLoaded = false;
+      }
+    });
+    Profiles.getEvaluatedPhotos(window.localStorage.getItem("user_id")).then(function(result){
+      $scope.evaluations = result["photos"];
+      maxIdEvaluation = result["max_id"];
+      if (result["photos"].length < 20) {
+        $scope.moreEvaluationsCanBeLoaded = false;
       }
     })
     .finally(function() {
       $scope.$broadcast('scroll.refreshComplete');
-    });;
+    });
   }
 
   /* Desloga o usuário */
