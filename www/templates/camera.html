@@ -21,7 +21,7 @@
 				</div>
 				
 				<div id="data" ng-show="!hideData">
-					<input id="photo" name="photo" type="file" style="display: none;" ng-value="imageURI"/>
+					<input id="photo" name="photo" type="file" ng-value="imageURI"/>
 
 					<label for="title" class="item item-input">
 						<span class="input-label">Titulo*:</span>
@@ -122,14 +122,14 @@
 						<p>Escolho a licenca <a id="creative_commons" href="http://creativecommons.org/licenses//?lang=pt-BR" target="_blank" style="text-decoration: undeline; line-height=1.em;">Creative Commons</a>, para publicar a imagem, com as seguintes permissoes:</p>
 					</div>
 					
-					<div class="row">
-						<div class="col">
+					<div class="padding">
+						<div>
 							<label>Permitir o uso comercial da imagem?</label>
 							<ion-radio name="comercialUsage" ng-model="commercialUsage" ng-value="true">Sim</ion-radio>
 							<ion-radio name="comercialUsage" ng-model="commercialUsage" ng-value="false">Nao</ion-radio>
 						</div>
 
-						<div class="col">
+						<div>
 							<label>Permitir modificacoes em sua imagem?</label>
 							<ion-radio name="modifications" ng-model="modifications" ng-value="yes">Sim</ion-radio>
 							<ion-radio name="modifications" ng-model="modifications" ng-value="yes_sa">Sim, contanto que os outros compartilhem de forma semelhante</ion-radio>
@@ -167,7 +167,7 @@
 					</div>
 
 					<div class="padding">
-						<button class="button button-block button-positive" type="submit" ng-disabled="submitPhoto.$invalid || !(!!imageURI)">Enviar</button>
+						<button class="button button-block button-positive" type="submit" ng-disabled="submitPhoto.$invalid">Enviar</button>
 					</div>
 				</div>
 			</form>

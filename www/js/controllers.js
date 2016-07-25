@@ -316,24 +316,38 @@ angular.module('starter.controllers', [])
   $scope.postPhoto = function(){
     
     var address = ServerName.get() + "/api/photos";
+    var image = $scope.imageURI;
 
     console.log($scope.data.title);
 
-    $http.post(address, {
-      photo_allowCommercialUses: $scope.data.commercialUsage,
-      photo_allowModifications: $scope.data.modifications,
-      photo_name:  $scope.data.title,
-      photo_imageAuthor: $scope.data.author,
-      tags: $scope.data.tags,
-      photo_country: $scope.data.country,
-      photo_city: $scope.data.city,
-      photo_description: $scope.data.description,
-      photo_district: $scope.data.disctrict,
-      photo_state: $scope.data.state,
-      photo_street: $scope.data.address,
-      authorized: $scope.data.authorized
-    }).then(function(response){
-      $scope.response = response;
-    });
+    var onSuccess = function(response){
+      console.log(response.response);
+    };
+
+    var onFail = function(error){
+      console.log(error.source);
+    };
+
+    var options = new FileUploadOptions();
+    options.fileKey = "POST";
+    options.params = params;
+
+    var params = {};
+    params.photo_allowCommercialUses = $scope.data.commercialUsage;
+    params.photo_allowModifications  = $scope.data.modifications;
+    params.photo_name                = $scope.data.title;
+    params.photo_imageAuthor         = $scope.data.author;
+    params.tags                      = $scope.data.tags;
+    params.photo_country             = $scope.data.country;
+    params.photo_city                = $scope.data.city;
+    params.photo_description         = $scope.data.description;
+    params.photo_district            = $scope.data.disctrict;
+    params.photo_state               = $scope.data.state;
+    params.photo_street              = $scope.data.address;
+    params.authorized                = $scope.data.authorized;
+
+
+    var transfer = new FileTransfer();
+    transfer.upload(image, address, onSuccess, onFail, options);
   };
 });
