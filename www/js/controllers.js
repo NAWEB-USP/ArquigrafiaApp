@@ -321,7 +321,9 @@ angular.module('starter.controllers', [])
     console.log($scope.data.title);
 
     var onSuccess = function(response){
-      console.log(response.response);
+      console.log("Code = " + response.responseCode);
+      console.log("Response = " + response.response);
+      console.log("Sent = " + response.bytesSent);
     };
 
     var onFail = function(error){
@@ -329,10 +331,10 @@ angular.module('starter.controllers', [])
     };
 
     var options = new FileUploadOptions();
-    options.fileKey = "POST";
     options.params = params;
 
     var params = {};
+    params.user_id                   = window.localStorage.getItem("user_id");
     params.photo_allowCommercialUses = $scope.data.commercialUsage;
     params.photo_allowModifications  = $scope.data.modifications;
     params.photo_name                = $scope.data.title;
