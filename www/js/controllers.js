@@ -327,11 +327,13 @@ angular.module('starter.controllers', [])
     };
 
     var onFail = function(error){
-      console.log(error.source);
+      console.log("Error code = " + error.responseCode);
+      console.log("Error source = " + error.source);
+      console.log("error target = " + error.target);
     };
 
     var options = new FileUploadOptions();
-    options.params = params;
+    
 
     var params = {};
     params.user_id                   = window.localStorage.getItem("user_id");
@@ -348,6 +350,7 @@ angular.module('starter.controllers', [])
     params.photo_street              = $scope.data.address;
     params.authorized                = $scope.data.authorized;
 
+    options.params = params;
 
     var transfer = new FileTransfer();
     transfer.upload(image, address, onSuccess, onFail, options);
