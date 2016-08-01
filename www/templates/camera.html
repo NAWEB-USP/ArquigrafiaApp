@@ -21,7 +21,6 @@
 				</div>
 				
 				<div id="data" ng-show="!hideData">
-					<input id="photo" name="photo" type="file" ng-value="imageURI"/>
 
 					<label for="title" class="item item-input">
 						<span class="input-label">Titulo*:</span>
@@ -41,7 +40,7 @@
 					<label for="tags" class="item item-input">
 						<span class="input-label">Tags*:</span>
 						<select id="tags" name="tags" ng-model="data.tags" ng-change="showTags(data.tags)" multiple="true" required>
-							<option ng-repeat="tag in tags" ng-value="tag">{{tag.name}}</option>
+							<option ng-repeat="tag in tags" ng-value="tag.name">{{tag.name}}</option>
 						<select>
 					</label>
 
@@ -165,7 +164,7 @@
 					</div>
 
 					<div class="padding">
-						<button class="button button-block button-positive" type="submit" ng-disabled="submitPhoto.$invalid">Enviar</button>
+						<button class="button button-block button-positive" type="submit" ng-disabled="submitPhoto.$invalid || !(!!imageURI)">Enviar</button>
 					</div>
 				</div>
 			</form>

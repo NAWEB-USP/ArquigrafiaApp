@@ -351,6 +351,7 @@ angular.module('starter.controllers', [])
     params.authorized                = $scope.data.authorized;
 
     options.params = params;
+    options.fileKey = "photo";
 
     var transfer = new FileTransfer();
     transfer.upload(image, address, onSuccess, onFail, options);
