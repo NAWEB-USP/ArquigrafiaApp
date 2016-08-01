@@ -24,29 +24,29 @@
 
 					<label for="title" class="item item-input">
 						<span class="input-label">Titulo*:</span>
-						<input id="title" name="title" ng-model="data.title" type="text" ng-minlength="5" required/>
+						<input id="title" ng-model="data.title" type="text" ng-minlength="5" required/>
 					</label>
 
 					<label for="author" class="item item-input">
 						<span class="input-label">Autor*:</span>
-						<input id="author" name="author" ng-model="data.author" type="text" ng-minlength="5" required/>
+						<input id="author" ng-model="data.author" type="text" ng-minlength="5" required/>
 					</label>
 
 					<label for="country" class="item item-input">
 						<span class="input-label">País*:</span>
-						<input id="country" name="country" ng-model="data.country" type="text" ng-minlength="5" required/> 
+						<input id="country" ng-model="data.country" type="text" ng-minlength="5" required/> 
 					</label>
 
 					<label for="tags" class="item item-input">
 						<span class="input-label">Tags*:</span>
-						<select id="tags" name="tags" ng-model="data.tags" ng-change="showTags(data.tags)" multiple="true" required>
+						<select id="tags" ng-model="data.tags" ng-change="showTags(data.tags)" multiple="true" required>
 							<option ng-repeat="tag in tags" ng-value="tag.name">{{tag.name}}</option>
 						<select>
 					</label>
 
 					<label for="state" class="item item-input">
 						<span class="input-label">Estado:</span>
-						<select id="state" name="state" ng-model="data.state">
+						<select id="state" ng-model="data.state">
 							<option value="">Escolha o Estado</option>
 							<option value="AC">Acre</option>
 							<option value="AL">Alagoas</option>
@@ -80,12 +80,12 @@
 
 					<label for="city" class="item item-input">
 						<span class="input-label">Cidade:</span>
-						<input id="city" name="city" ng-model="data.city" type="text"/> 
+						<input id="city" ng-model="data.city" type="text"/> 
 					</label>
 
 					<label for="district" class="item item-input">
 						<span class="input-label">Bairro:</span>
-						<input id="district" name="district" ng-model="data.district" type="text"/> 
+						<input id="district" ng-model="data.district" type="text"/> 
 					</label>
 
 					<label for="address" class="item item-input">
