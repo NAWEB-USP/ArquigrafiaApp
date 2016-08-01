@@ -114,11 +114,52 @@ angular.module('starter.controllers', [])
 })
 
 .controller('PhotoDetailCtrl', function($scope, $http, $stateParams, Photos, ServerName) {
+  /* Definição e variáveis */
   $scope.serverName = ServerName.get();
+  $scope.detail = {};
+  /* Carrega informações da foto */
   var photo = Photos.get($stateParams.photoId);
   photo.then(function(result){
     $scope.photo = result;
   })
+  /* Carrega avaliação do usuário atual da foto */
+  var evaluation = Photos.getEvaluation($stateParams.photoId, window.localStorage.getItem("user_id"));
+  evaluation.then(function(result){
+    $scope.binomials = result;
+    $scope.detail.personal = result[0]["knownArchitecture"];
+    $scope.detail.local = result[0]["areArchitecture"];
+  })
+  /* Envia avaliação da foto */
+  $scope.postEvaluation = function() {
+    var x;
+    var data = {};
+    for(x in $scope.binomials) {
+      data[$scope.binomials[x].id.toString()] = document.getElementById($scope.binomials[x].id.toString()).value.toString();
+    }
+    if($scope.detail.personal == "yes") {
+      data["knownArchitecture"] = "yes";
+    }
+    else {
+      data["knownArchitecture"] = "no";
+    }
+    if($scope.detail.local == "yes") {
+      data["areArchitecture"] = "yes";
+    }
+    else {
+      data["areArchitecture"] = "no";
+    }
+    var evaluation = Photos.postEvaluation($stateParams.photoId, window.localStorage.getItem("user_id"), data);
+  }
+  /* Exibe informações da foto */
+  $scope.showInformation = function() {
+    document.getElementById("info-container").style.display = "initial";
+    document.getElementById("evaluation-container").style.display = "none";
+  }
+  /* Exibe binômios para avaliação */
+  $scope.showEvaluation = function() {
+    document.getElementById("info-container").style.display = "none";
+    document.getElementById("evaluation-container").style.display = "initial";
+  }
 })
 
 .controller('AccountCtrl', function($scope, $http, $state, $timeout, $ionicHistory, Profiles, ServerName, LoginService) {

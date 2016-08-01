@@ -65,10 +65,19 @@ angular.module('starter.services', [])
       });
     },
     remove: function(photo) {
-      //chats.splice(chats.indexOf(chat), 1);
     },
     get: function(photoId) {
       return $http.get(ServerName.get() + "/api/photos/" + photoId).then(function(result){
+        return result.data;
+      });
+    }, 
+    getEvaluation: function(photoId, userId) {
+      return $http.get(ServerName.get() + "/api/photos/" + photoId + "/evaluation/" + userId).then(function(result){
+        return result.data;
+      });
+    }, 
+    postEvaluation: function(photoId, userId, data) {
+      return $http.post(ServerName.get() + "/api/photos/" + photoId + "/evaluation/" + userId, { params: {data : data} }).then(function(result){
         return result.data;
       });
     }

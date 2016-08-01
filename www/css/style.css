@@ -1,3 +1,9 @@
+/* Welcome page */
+
+#welcome-content .scroll, #welcome-content .row {
+	height: 100%;
+}
+
 /* Account tab */
 
 #account-name {
@@ -6,6 +12,11 @@
 
 #personal-info div #user-avatar img {
 	width: inherit;
+}
+
+#personal-info .row {
+	padding-left: 0px;
+	padding-right: 0px;
 }
 
 #user-info {
@@ -36,7 +47,7 @@
 }
 
 #photos-container ion-list .list ion-item {
-	width: 33%;
+	width: 33.3333%;
     display: inline-block;
 }
 
@@ -57,6 +68,16 @@
 .user-follow-list h2 {
 	position: relative;
 	left: 5em;
+}
+
+/* Photo detail */
+
+.avatar-row .avatar-col h4 {
+	margin: auto;
+}
+
+#evaluation-container {
+	display: none;
 }
 
 /* Feed tab */

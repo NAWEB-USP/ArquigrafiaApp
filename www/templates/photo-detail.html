@@ -2,9 +2,9 @@
   <a class="button icon-left ion-chevron-left button-clear button-dark" href="#/tab/account">Voltar</a>
   <div class="h1 title"></div>
 </div>
-<ion-view view-title="{{photo['photo'].name}}">
-  <ion-content class="padding has-header">
-    <div class="row avatar-row">
+<ion-view view-title="{{photo['photo'].name}}" id="photo-detail">
+  <ion-content class="has-header">
+    <div class="row avatar-row"> 
       <div class="col avatar-col">
         <img src="{{serverName + photo['sender'].photo}}" ng-if="!!photo['sender'].photo">
         <img src="img/avatar-60.png" ng-if="!photo['sender'].photo&&!photo['photo'].institution_id">
@@ -17,6 +17,58 @@
         <img src="{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_home.jpg'}}">
         <h3>{{photo['photo'].name}}</h3>
       </div>
+    </div>
+    <div class="button-bar button-light">
+      <a class="button" ng-click="showInformation()">Informações</a>
+      <a class="button" ng-click="showEvaluation()">Registro de impressões</a>
+    </div>
+    <div id="info-container">
+      <div class="list">
+        <div class="item" ng-if="!!photo['photo'].description">
+          Descrição: {{photo['photo'].description}}
+        </div>
+        <div class="item" ng-if="!!photo['photo'].collection">
+          Coleção: {{photo['photo'].collection}}
+        </div>
+        <div class="item" ng-if="!!photo['photo'].imageAuthor">
+          Autor da Imagem: {{photo['photo'].imageAuthor}}
+        </div>
+        <div class="item" ng-if="!!photo['photo'].dataCriacao">
+          Data da Imagem: {{photo['photo'].dataCriacao}}
+        </div>
+        <div class="item" ng-if="!!photo['authors'].length">
+          Autor da Obra: {{photo['authors']}}
+        </div>
+        <div class="item" ng-if="!!photo['photo'].workdate">
+          Data de conclusão da obra: {{photo['photo'].workdate}}
+        </div>
+        <div class="item" ng-if="!!photo['photo'].street">
+          Endereço: {{photo['photo'].street}}
+        </div>
+        <div class="item">
+          Licensa: <img src="{{'img/ccIcons/' + photo['license'][0] + '88x31.png'}}" title="{{photo['license'][1]}}">
+        </div>
+      </div>
+    </div>
+    <div id="evaluation-container">
+      <div class="list">
+        <div class="item range range-positive" ng-repeat="binomial in binomials">
+          <i>{{binomial["firstOption"]}}</i>
+          <input type="range" name="volume" min="0" max="100" value="{{binomial['value']}}" id="{{binomial['id']}}">
+          <i>{{binomial["secondOption"]}}</i>
+        </div>
+      </div>
+      <ion-list>
+        <ion-checkbox ng-model="detail.personal" ng-true-value="'yes'" ng-false-value="'no'">
+          Eu conheço pessoalmente esta arquitetura.
+        </ion-checkbox>
+        <ion-checkbox ng-model="detail.local" ng-true-value="'yes'" ng-false-value="'no'">
+          Estou no local.
+        </ion-checkbox>
+      </ion-list>
+      <button class="button button-block button-positive" ng-click="postEvaluation()">
+        Enviar
+      </button>
     </div>
   </ion-content>
 </ion-view>
