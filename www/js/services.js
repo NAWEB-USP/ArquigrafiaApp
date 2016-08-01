@@ -1,7 +1,8 @@
 angular.module('starter.services', [])
 
 .factory('ServerName', function(){
-  var serverName = "http://localhost:8000"; //http://valinhos.ime.usp.br:51080
+  //var serverName = "http://localhost:8000";
+  var serverName = "http://valinhos.ime.usp.br:51080";
   return {
     get: function () { 
       return serverName; 
@@ -121,6 +122,18 @@ angular.module('starter.services', [])
         return result.data;
       });
     }
+  }
+})
+
+.factory('Tags', function($http, ServerName){
+  return {
+    all: function() {
+      return $http.get(ServerName.get() + "/api/tags").then(function(result){
+        return result.data;
+      });
+    },
+    remove: function(id) {},
+    get: function(id) {}
   }
 })
 
