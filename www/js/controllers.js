@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['highcharts-ng'])
 
 .controller('WelcomeCtrl', function($scope, $state) {
     /* Verifica se o usuário está logado */
@@ -152,13 +152,118 @@ angular.module('starter.controllers', [])
   }
   /* Exibe informações da foto */
   $scope.showInformation = function() {
-    document.getElementById("info-container").style.display = "initial";
+    document.getElementById("photo-info-container").style.display = "initial";
     document.getElementById("evaluation-container").style.display = "none";
+    document.getElementById("evaluation-average-container").style.display = "none";
   }
   /* Exibe binômios para avaliação */
   $scope.showEvaluation = function() {
-    document.getElementById("info-container").style.display = "none";
+    document.getElementById("photo-info-container").style.display = "none";
     document.getElementById("evaluation-container").style.display = "initial";
+    document.getElementById("evaluation-average-container").style.display = "none";
+  }
+  /* Exibe gráfico com a média das avaliações */
+  $scope.showAverage = function() {
+    document.getElementById("photo-info-container").style.display = "none";
+    document.getElementById("evaluation-container").style.display = "none";
+    document.getElementById("evaluation-average-container").style.display = "initial";
+  }
+  /* Configuração do gráfico com as médias das avaliações */
+  var averageEvaluation = Photos.averageEvaluation($stateParams.photoId, window.localStorage.getItem("user_id"));
+  var count = 0;
+  var l1 = [];
+  var l2 = [];
+  var tickPos = [];
+  var avgData = [];
+  var userData = [];
+  averageEvaluation.then(function(result){
+    var binomials = result["binomials"];
+    var average = result["average"];
+    var user_evaluation = result["user_evaluation"];
+    for (x in binomials) {
+      l1.push(binomials[x].firstOption);
+      l2.push(binomials[x].secondOption);
+      if(typeof average[count] != 'undefined') {
+        avgData.push([parseInt(average[count].avgPosition), count]);
+      }
+      if(typeof user_evaluation[x] != 'undefined') {
+        userData.push([user_evaluation[x].evaluationPosition, count]);
+      }
+      tickPos.push(count++);
+    }
+    $scope.averageData = avgData;
+  })
+  $scope.chartConfig = {
+    options: {
+      credits: {
+        enabled: false,
+      },
+      chart: {
+        marginRight: 80,
+      },
+      tooltip: {
+        formatter: function() {
+          return ''+ l1[this.y] + '-' + l2[this.y] + ': <br>' + this.series.name + '= ' + this.x;
+        },
+        crosshairs: [true,true]
+      }
+    },
+    title: {
+      text: ''
+    },
+    xAxis: {
+      lineColor: '#000',
+      min: 0,
+      max: 100,
+    },
+    yAxis: [{
+      lineColor: '#000',
+      lineWidth: 1,
+      tickAmount: count,
+      tickPositions: tickPos,
+      title: {
+        text: ''
+      },
+      labels: {
+        formatter: function() {
+          return l1[this.value];
+        }
+      }
+    },
+    {
+      lineWidth: 1,
+      tickAmount: count,
+      tickPositions: tickPos,
+      opposite: true,
+      title: {
+        text: ''
+      },
+      labels: {
+        formatter: function() {
+          return l2[this.value];
+        }
+      },
+    }],
+    series: [{
+      data: avgData,
+      yAxis: 1,
+      name: 'Média',
+      marker: {
+        symbol: 'circle',
+        enabled: true
+      },
+      color: '#999999',
+    },
+    {
+      data: userData,
+      yAxis: 0,              
+      name: 'Sua impressão',
+      marker: {
+        symbol: 'circle',
+        enabled: true
+      },              
+      color: '#000000',
+    }]
   }
 })
 

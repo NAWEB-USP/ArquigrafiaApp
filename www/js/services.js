@@ -81,6 +81,11 @@ angular.module('starter.services', [])
       return $http.post(ServerName.get() + "/api/photos/" + photoId + "/evaluation/" + userId, { params: {data : data} }).then(function(result){
         return result.data;
       });
+    }, 
+    averageEvaluation: function(photoId, userId) {
+      return $http.get(ServerName.get() + "/api/photos/" + photoId + "/averageEvaluation/" + userId).then(function(result){
+        return result.data;
+      });
     }
   };
 })

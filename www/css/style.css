@@ -80,6 +80,10 @@
 	display: none;
 }
 
+#evaluation-average-container {
+	display: none;
+}
+
 /* Feed tab */
 
 .img-row .img-col img {
