@@ -187,10 +187,12 @@ angular.module('starter.controllers', ['highcharts-ng'])
         avgData.push([parseInt(average[count].avgPosition), count]);
       }
       if(typeof user_evaluation[x] != 'undefined') {
-        userData.push([user_evaluation[x].evaluationPosition, count]);
+        userData.push([parseInt(user_evaluation[x].evaluationPosition), count]);
       }
       tickPos.push(count++);
     }
+    console.log(avgData);
+    console.log(userData);
     $scope.averageData = avgData;
   })
   $scope.chartConfig = {
@@ -200,6 +202,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
       },
       chart: {
         marginRight: 80,
+        width: 400,
       },
       tooltip: {
         formatter: function() {
