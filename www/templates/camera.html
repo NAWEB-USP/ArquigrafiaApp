@@ -4,7 +4,7 @@
 </div>
 
 <ion-view view-title="Camera">
-	<ion-content class="has-header padding" scroll="true">
+	<ion-content class="has-header padding" scroll="true" overflow-scroll="true">
 		<div class="list">
 			<form name="submitPhoto" ng-submit="postPhoto()">
 				<div id="photoArea" ng-show="hideData">
@@ -44,74 +44,78 @@
 						<select>
 					</label>
 
-					<label for="state" class="item item-input">
-						<span class="input-label">Estado:</span>
-						<select id="state" ng-model="data.state">
-							<option value="">Escolha o Estado</option>
-							<option value="AC">Acre</option>
-							<option value="AL">Alagoas</option>
-							<option value="AM">Amazonas</option>
-							<option value="AP">Amapa</option>
-							<option value="BA">Bahia</option>
-							<option value="CE">Ceara</option>
-							<option value="DF">Distrito Federal</option>
-							<option value="ES">Espirito Santo</option>
-							<option value="GO">Goias</option>
-							<option value="MA">Maranaho</option>
-							<option value="MG">Minas Gerais</option>
-							<option value="MS">Mato Grosso do Sul</option>
-							<option value="MT">Mato Grosso</option>
-							<option value="PA">Para</option>
-							<option value="PB">Paraiba</option>
-							<option value="PE">Pernambuco</option>
-							<option value="PI">Piaui</option>
-							<option value="PR">Parana</option>
-							<option value="RJ">Rio de Janeiro</option>
-							<option value="RN">Rio Grande do Norte</option>
-							<option value="RO">Rondonia</option>
-							<option value="RR">Roraima</option>
-							<option value="RS">Rio Grande do Sul</option>
-							<option value="SC">Santa Catarina</option>
-							<option value="SE">Serguipe</option>
-							<option value="SP">Sao Paulo</option>
-							<option value="TO">Tocantins</option>
-						</select>
-					</label>
+					<label ng-show="!showAditional" ng-click="toggle()"><i class="ion-chevron-down"></i> Mostrar campos opcionais</label>
+					<label ng-show="showAditional" ng-click="toggle()"><i class="ion-chevron-up"></i> Ocultar campos adicionais</label>
+					<div id="aditionalInfo" class="slideAnimation" ng-show="showAditional">
+						<label for="state" class="item item-input">
+							<span class="input-label">Estado:</span>
+							<select id="state" ng-model="data.state">
+								<option value="">Escolha o Estado</option>
+								<option value="AC">Acre</option>
+								<option value="AL">Alagoas</option>
+								<option value="AM">Amazonas</option>
+								<option value="AP">Amapa</option>
+								<option value="BA">Bahia</option>
+								<option value="CE">Ceara</option>
+								<option value="DF">Distrito Federal</option>
+								<option value="ES">Espirito Santo</option>
+								<option value="GO">Goias</option>
+								<option value="MA">Maranaho</option>
+								<option value="MG">Minas Gerais</option>
+								<option value="MS">Mato Grosso do Sul</option>
+								<option value="MT">Mato Grosso</option>
+								<option value="PA">Para</option>
+								<option value="PB">Paraiba</option>
+								<option value="PE">Pernambuco</option>
+								<option value="PI">Piaui</option>
+								<option value="PR">Parana</option>
+								<option value="RJ">Rio de Janeiro</option>
+								<option value="RN">Rio Grande do Norte</option>
+								<option value="RO">Rondonia</option>
+								<option value="RR">Roraima</option>
+								<option value="RS">Rio Grande do Sul</option>
+								<option value="SC">Santa Catarina</option>
+								<option value="SE">Serguipe</option>
+								<option value="SP">Sao Paulo</option>
+								<option value="TO">Tocantins</option>
+							</select>
+						</label>
 
-					<label for="city" class="item item-input">
-						<span class="input-label">Cidade:</span>
-						<input id="city" ng-model="data.city" type="text"/> 
-					</label>
+						<label for="city" class="item item-input">
+							<span class="input-label">Cidade:</span>
+							<input id="city" ng-model="data.city" type="text"/> 
+						</label>
 
-					<label for="district" class="item item-input">
-						<span class="input-label">Bairro:</span>
-						<input id="district" ng-model="data.district" type="text"/> 
-					</label>
+						<label for="district" class="item item-input">
+							<span class="input-label">Bairro:</span>
+							<input id="district" ng-model="data.district" type="text"/> 
+						</label>
 
-					<label for="address" class="item item-input">
-						<span class="input-label">Endereco:</span>
-						<input id="address" name="address" ng-model="data.address" type="text"/> 
-					</label>
+						<label for="address" class="item item-input">
+							<span class="input-label">Endereco:</span>
+							<input id="address" name="address" ng-model="data.address" type="text"/> 
+						</label>
 
-					<label for="imageDate" class="item item-input">
-						<span class="input-label">Data da Imagem:</span>
-						<input id="imageDate" name="imageDate" ng-model="data.imageDate" type="date"/>
-					</label>
+						<label for="imageDate" class="item item-input">
+							<span class="input-label">Data da Imagem:</span>
+							<input id="imageDate" name="imageDate" ng-model="data.imageDate" type="date"/>
+						</label>
 
-					<label for="workAuthor" class="item item-input">
-						<span class="input-label">Autor da Obra:</span>
-						<input id="workAuthor" name="workAuthor" ng-model="data.workAuthor" type="text"/>
-					</label>
+						<label for="workAuthor" class="item item-input">
+							<span class="input-label">Autor da Obra:</span>
+							<input id="workAuthor" name="workAuthor" ng-model="data.workAuthor" type="text"/>
+						</label>
 
-					<label for="workYear" class="item item-input">
-						<span class="input-label">Ano de conclusao da obra:</span>
-						<input id="workYear" name="workYear" ng-model="data.workYear" type="text"/>
-					</label>
+						<label for="workYear" class="item item-input">
+							<span class="input-label">Ano de conclusao da obra:</span>
+							<input id="workYear" name="workYear" ng-model="data.workYear" type="text"/>
+						</label>
 
-					<label for="description" class="item item-input">
-						<span class="input-label">Descricao:</span>
-						<textarea id="description" name="description" ng-model="data.description"></textarea> 
-					</label>
+						<label for="description" class="item item-input">
+							<span class="input-label">Descricao:</span>
+							<textarea id="description" name="description" ng-model="data.description"></textarea> 
+						</label>
+					</div>
 
 					<ion-checkbox class="item-text-wrap" ng-model="data.authorized">* Sou o autor da imagem ou possuo permissão expressa do autor para disponibilizá-la no Arquigrafia</ion-checkbox>
 

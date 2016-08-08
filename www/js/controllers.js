@@ -296,10 +296,15 @@ angular.module('starter.controllers', [])
 
 .controller('CameraCtrl', function($scope, $http, ServerName, Tags, Camera) {
   $scope.hideData = true;
+  $scope.showAditional = false;
   var tags = Tags.all();
   tags.then(function(result){
     $scope.tags = result;
   });
+
+  $scope.toggle = function() {
+    $scope.showAditional = !$scope.showAditional;
+  }
 
   $scope.forward = function() {
     $scope.hideData = false;
