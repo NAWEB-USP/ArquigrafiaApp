@@ -202,7 +202,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
       },
       chart: {
         marginRight: 80,
-        width: 400,
       },
       tooltip: {
         formatter: function() {
