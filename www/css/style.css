@@ -80,6 +80,15 @@
 	display: none;
 }
 
+#evaluation-average-container {
+	display: none;
+}
+
+#evaluation-average-chart {
+	width: 100vw;
+    height: 100vw;
+}
+
 /* Feed tab */
 
 .img-row .img-col img {
