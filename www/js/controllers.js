@@ -326,7 +326,20 @@ angular.module('starter.controllers', [])
 
     navigator.camera.getPicture(function (imageURI) {
       $scope.$apply(function() {
+        var geoImage = new Image();
+        geoImage.onload = function(){
+          EXIF.getData(geoImage, function(){
+            var longitude = EXIF.getTag(geoImage, "GPSLongitude");
+            var latitude = EXIF.getTag(geoImage, "GPSLatitude");
+            if(!latitude || !longitude)
+              console.log("Bleh");
+            else
+              console.log(latitude + "; " + longitude);
+          });
+        }
+
         $scope.imageURI = imageURI;
+        geoImage.src = imageURI;
       });
 
     }, function(error) {
@@ -346,16 +359,25 @@ angular.module('starter.controllers', [])
 
     navigator.camera.getPicture(function (imageURI) {
       $scope.$apply(function() {
+        var geoImage = new Image();
+        geoImage.onload = function(){
+          EXIF.getData(geoImage, function(){
+            var longitude = EXIF.getTag(geoImage, "GPSLongitude");
+            var latitude = EXIF.getTag(geoImage, "GPSLatitude");
+            if(!latitude || !longitude)
+              console.log("Bleh");
+            else
+              console.log(latitude + "; " + longitude);
+          });
+        }
+
         $scope.imageURI = imageURI;
+        geoImage.src = imageURI;
       });
 
     }, function(error) {
       console.log(error);
     }, optionsGet);
-  };
-
-  $scope.showTags - function(select){
-    console.log(select);
   };
 
   $scope.data = {};

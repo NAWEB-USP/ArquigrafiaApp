@@ -37,15 +37,22 @@
 						<input id="country" ng-model="data.country" type="text" ng-minlength="5" required/> 
 					</label>
 
-					<label for="tags" class="item item-input">
+					<!-- <label for="tags" class="item item-input">
 						<span class="input-label">Tags*:</span>
 						<select id="tags" ng-model="data.tags" ng-change="showTags(data.tags)" multiple="true" required>
 							<option ng-repeat="tag in tags" ng-value="tag.name">{{tag.name}}</option>
 						<select>
-					</label>
+					</label> -->
 
-					<label ng-show="!showAditional" ng-click="toggle()"><i class="ion-chevron-down"></i> Mostrar campos opcionais</label>
-					<label ng-show="showAditional" ng-click="toggle()"><i class="ion-chevron-up"></i> Ocultar campos adicionais</label>
+					<ui-select multiple ng-model="data.tags" theme="bootstrap" ng-disabled="ctrl.disabled" close-on-select="true" style="width: 300px;" title="Tags">
+					    <ui-select-match placeholder="Selecione Tags...">{{$item}}</ui-select-match>
+					    <ui-select-choices repeat="tag in tags | filter:$select.search">
+					      {{color}}
+					    </ui-select-choices>
+					</ui-select>
+
+					<div class="item item-divider" ng-show="!showAditional" ng-click="toggle()"><i class="ion-chevron-down"></i> Mostrar campos opcionais</div>
+					<div class="item item-divider" ng-show="showAditional" ng-click="toggle()"><i class="ion-chevron-up"></i> Ocultar campos adicionais</div>
 					<div id="aditionalInfo" class="slideAnimation" ng-show="showAditional">
 						<label for="state" class="item item-input">
 							<span class="input-label">Estado:</span>
