@@ -401,9 +401,11 @@ angular.module('starter.controllers', ['highcharts-ng'])
   })
 })
 
-.controller('CameraCtrl', function($scope, $http, ServerName, Tags, Camera) {
+.controller('CameraCtrl', function($scope, $http, ServerName, Tags, Camera, Geolocation) {
   $scope.hideData = true;
   $scope.showAditional = false;
+  var longitude = null;
+  var latitude = null;
   var tags = Tags.all();
   tags.then(function(result){
     $scope.tags = result;
@@ -431,20 +433,32 @@ angular.module('starter.controllers', ['highcharts-ng'])
       saveToPhotoAlbum: false //para testes nao ocuparem mta memoria, para release colocar true
     };
 
-    navigator.camera.getPicture(function (imageURI) {
-      $scope.$apply(function() {
-        var geoImage = new Image();
-        geoImage.onload = function(){
-          EXIF.getData(geoImage, function(){
-            var longitude = EXIF.getTag(geoImage, "GPSLongitude");
-            var latitude = EXIF.getTag(geoImage, "GPSLatitude");
-            if(!latitude || !longitude)
-              console.log("Bleh");
-            else
-              console.log(latitude + "; " + longitude);
-          });
-        }
+    var onSuccess = function(position){
+      latitude = position.coords.latitude;
+      longitude = position.coords.longitude;
+    };
+    var onFail = function(error) {
+      alert("Code: " + error.code + " Message: " + error.message);
+    };
 
+    navigator.camera.getPicture(function (imageURI) {
+      
+      var geoImage = new Image();
+      geoImage.onload = function(){
+        navigator.geolocation.getCurrentPosition(onSuccess, onFail);
+        if(latitude != null || longitude != null){
+          var result = Geolocation.getAddress(latitude, longitude);
+          result.then(function(address){
+            $scope.data.country   = address.country;
+            $scope.data.city      = address.city;
+            $scope.data.disctrict = address.disctrict;
+            $scope.data.state     = address.state;
+            $scope.data.address   = addres.address;
+          }); 
+        }
+      }
+
+      $scope.$apply(function() {
         $scope.imageURI = imageURI;
         geoImage.src = imageURI;
       });
@@ -464,20 +478,32 @@ angular.module('starter.controllers', ['highcharts-ng'])
       saveToPhotoAlbum: false
     };
 
+    var onSuccess = function(position){
+      alert("Latitude: " + position.coords.latitude + " Longitude: " + position.coords.longitude);
+    };
+    var onFail = function(error) {
+      alert("Code: " + error.code + " Message: " + error.message);
+    };
+
     navigator.camera.getPicture(function (imageURI) {
       $scope.$apply(function() {
         var geoImage = new Image();
         geoImage.onload = function(){
           EXIF.getData(geoImage, function(){
-            var longitude = EXIF.getTag(geoImage, "GPSLongitude");
-            var latitude = EXIF.getTag(geoImage, "GPSLatitude");
-            if(!latitude || !longitude)
-              console.log("Bleh");
-            else
-              console.log(latitude + "; " + longitude);
+            longitude = EXIF.getTag(geoImage, "GPSLongitude");
+            latitude = EXIF.getTag(geoImage, "GPSLatitude");
           });
+          if(latitude != null || longitude != null){
+            var result = Geolocation.getAddress(latitude, longitude);
+            result.then(function(address){
+              $scope.data.country   = address.country;
+              $scope.data.city      = address.city;
+              $scope.data.disctrict = address.disctrict;
+              $scope.data.state     = address.state;
+              $scope.data.address   = addres.address;
+            }); 
+          }
         }
-
         $scope.imageURI = imageURI;
         geoImage.src = imageURI;
       });
@@ -492,8 +518,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
     
     var address = ServerName.get() + "/api/photos";
     var image = $scope.imageURI;
-
-    console.log($scope.data.title);
 
     var onSuccess = function(response){
       console.log("Code = " + response.responseCode);
