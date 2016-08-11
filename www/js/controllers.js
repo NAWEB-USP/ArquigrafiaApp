@@ -97,20 +97,12 @@ angular.module('starter.controllers', ['highcharts-ng'])
   }
 })
 
-.controller('PhotosCtrl', function($scope, Photos, ServerName, $http, $state) {
+.controller('SearchCtrl', function($scope, Photos, ServerName, $http, $state) {
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
       $state.go('login');
     }
   })
-    var photos = Photos.all();
-    photos.then(function(result){
-      $scope.photos = result;
-    });
-  $scope.remove = function(photo) {
-    Photos.remove(photo);
-  };
-  $scope.serverName = ServerName.get();
 })
 
 .controller('PhotoDetailCtrl', function($scope, $http, $stateParams, Photos, ServerName) {
