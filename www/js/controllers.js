@@ -393,7 +393,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   })
 })
 
-.controller('CameraCtrl', function($scope, $http, ServerName, Tags, Camera, Geolocation) {
+.controller('CameraCtrl', function($scope, $http, $state, ServerName, Tags, Camera, Geolocation) {
   $scope.hideData = true;
   $scope.showAditional = false;
   var longitude = null;
@@ -443,9 +443,9 @@ angular.module('starter.controllers', ['highcharts-ng'])
           result.then(function(address){
             $scope.data.country   = address.country;
             $scope.data.city      = address.city;
-            $scope.data.disctrict = address.disctrict;
+            $scope.data.district  = address.district;
             $scope.data.state     = address.state;
-            $scope.data.address   = addres.address;
+            $scope.data.address   = address.address;
           }); 
         }
       }
@@ -470,13 +470,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
       saveToPhotoAlbum: false
     };
 
-    var onSuccess = function(position){
-      alert("Latitude: " + position.coords.latitude + " Longitude: " + position.coords.longitude);
-    };
-    var onFail = function(error) {
-      alert("Code: " + error.code + " Message: " + error.message);
-    };
-
     navigator.camera.getPicture(function (imageURI) {
       $scope.$apply(function() {
         var geoImage = new Image();
@@ -490,9 +483,9 @@ angular.module('starter.controllers', ['highcharts-ng'])
             result.then(function(address){
               $scope.data.country   = address.country;
               $scope.data.city      = address.city;
-              $scope.data.disctrict = address.disctrict;
+              $scope.data.district  = address.district;
               $scope.data.state     = address.state;
-              $scope.data.address   = addres.address;
+              $scope.data.address   = address.address;
             }); 
           }
         }
@@ -515,12 +508,14 @@ angular.module('starter.controllers', ['highcharts-ng'])
       console.log("Code = " + response.responseCode);
       console.log("Response = " + response.response);
       console.log("Sent = " + response.bytesSent);
+      $state.go('tab.photo-detail', {'photoId': response.response});
     };
 
     var onFail = function(error){
       console.log("Error code = " + error.responseCode);
       console.log("Error source = " + error.source);
       console.log("error target = " + error.target);
+      alert("Houve um erro, tente novamente mais tarde");
     };
 
     var options = new FileUploadOptions();
@@ -536,7 +531,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     params.photo_country             = $scope.data.country;
     params.photo_city                = $scope.data.city;
     params.photo_description         = $scope.data.description;
-    params.photo_district            = $scope.data.disctrict;
+    params.photo_district            = $scope.data.district;
     params.photo_state               = $scope.data.state;
     params.photo_street              = $scope.data.address;
     params.authorized                = $scope.data.authorized;

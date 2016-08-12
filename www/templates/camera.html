@@ -43,13 +43,12 @@
 							<option ng-repeat="tag in tags" ng-value="tag.name">{{tag.name}}</option>
 						<select>
 					</label> -->
-
-					<ui-select multiple ng-model="data.tags" theme="bootstrap" ng-disabled="ctrl.disabled" close-on-select="true" style="width: 300px;" title="Tags">
-					    <ui-select-match placeholder="Selecione Tags...">{{$item}}</ui-select-match>
-					    <ui-select-choices repeat="tag in tags | filter:$select.search">
-					      {{color}}
-					    </ui-select-choices>
-					</ui-select>
+					<label for="tags" class="item item-input">
+						<span class="input-label">Tags*:</span>
+						<select id="tags" multiple ng-model="data.tags" title="Tags">
+						    <option ng-repeat="tag in tags" ng-value="tag.name">{{tag.name}}</option>
+						</select>
+					</label>
 
 					<div class="item item-divider" ng-show="!showAditional" ng-click="toggle()"><i class="ion-chevron-down"></i> Mostrar campos opcionais</div>
 					<div class="item item-divider" ng-show="showAditional" ng-click="toggle()"><i class="ion-chevron-up"></i> Ocultar campos adicionais</div>
