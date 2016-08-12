@@ -43,11 +43,21 @@
 							<option ng-repeat="tag in tags" ng-value="tag.name">{{tag.name}}</option>
 						<select>
 					</label> -->
-					<label for="tags" class="item item-input">
-						<span class="input-label">Tags*:</span>
-						<select id="tags" multiple ng-model="data.tags" title="Tags">
-						    <option ng-repeat="tag in tags" ng-value="tag.name">{{tag.name}}</option>
-						</select>
+					<label class="item item-input">
+						<div>
+							<span class="input-label">Tags*:</span>
+							<button class="button button-positive" modal-select ng-model="teste" options="tags" modal-title="Seelcione uma Tag" has-search="true" on-select="getTag(newValue, oldValue)">
+							    Selecionar
+							    <div class="option">
+							        {{option.name}}
+							    </div>
+							</button>
+
+							<button class="button button-positive" ng-click="addTag()">Adicionar</button>
+						</div>
+						<div>
+							<button class="button button-small button-assertive icon-right ion-close" ng-repeat="tag in data.tags" ng-click="removeTag(tag)">{{tag}}</button>
+						</div>
 					</label>
 
 					<div class="item item-divider" ng-show="!showAditional" ng-click="toggle()"><i class="ion-chevron-down"></i> Mostrar campos opcionais</div>

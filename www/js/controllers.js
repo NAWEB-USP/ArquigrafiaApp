@@ -394,15 +394,41 @@ angular.module('starter.controllers', ['highcharts-ng'])
 })
 
 .controller('CameraCtrl', function($scope, $http, $state, ServerName, Tags, Camera, Geolocation) {
+  /* Declaracao de variavel */
   $scope.hideData = true;
   $scope.showAditional = false;
   var longitude = null;
   var latitude = null;
+  $scope.data = {};
+  $scope.data.tags = [];
+
+  /* Tags */
   var tags = Tags.all();
   tags.then(function(result){
     $scope.tags = result;
   });
 
+  $scope.getTag = function(newValue, oldValue){
+    if($scope.data.tags.indexOf(newValue.name) == -1)
+      $scope.data.tags.push(newValue.name);
+    console.log($scope.data.tags);
+  }
+
+  $scope.addTag = function(){
+    var tag = prompt("Digite o nome da tag:");
+    tag = tag.trim().toLowerCase();
+    if($scope.data.tags.indexOf(tag) == -1)
+      $scope.data.tags.push(tag);
+    console.log($scope.data.tags);
+  }
+
+  $scope.removeTag = function(tag){
+    var position = $scope.data.tags.indexOf(tag);
+    $scope.data.tags.splice(position, 1);
+    console.log($scope.data.tags);
+  }
+
+  /* Controle de tela */
   $scope.toggle = function() {
     $scope.showAditional = !$scope.showAditional;
   }
@@ -415,6 +441,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     $scope.hideData = true;
   }
 
+  /* Tirar foto */
   $scope.takePicture = function(options) {
     var optionsTake = {
       quality: 70,
@@ -460,6 +487,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     }, optionsTake);
   };
 
+  /* Selecionar foto */
   $scope.getPicture = function(options) {
     var optionsGet = {
       quality: 70,
@@ -498,7 +526,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     }, optionsGet);
   };
 
-  $scope.data = {};
+  /* Envio de foto */
   $scope.postPhoto = function(){
     
     var address = ServerName.get() + "/api/photos";
