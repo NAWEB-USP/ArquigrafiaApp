@@ -97,16 +97,40 @@ angular.module('starter.controllers', ['highcharts-ng'])
   }
 })
 
-.controller('SearchCtrl', function($scope, Photos, ServerName, $http, $state) {
+.controller('SearchCtrl', function($scope, Photos, ServerName, Feed, $http, $state) {
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
       $state.go('login');
     }
   })
+  /* Definição de variáveis */
+  $scope.serverName = ServerName.get();
+  $scope.moreDataCanBeLoaded = true;
+  var maxId = 0;
+  /* Mostra as fotos mais recentes */
+  Feed.getMostRecent().then(function(result){
+    $scope.photos = result;
+    maxId = result[result.length-1].id;
+    console.log(maxId);
+    if (result.length < 20) {
+      $scope.moreDataCanBeLoaded = false;
+    }
+  });
+  /* Carrega mais fotos recentes */
+  $scope.loadMoreData = function() {
+    Feed.getMoreMostRecent(maxId).then(function(result){
+      maxId = result[result.length-1].id;
+      $scope.photos = $scope.photos.concat(result);
+      if (result.length < 20) {
+        $scope.moreDataCanBeLoaded = false;
+      }
+      $scope.$broadcast('scroll.infiniteScrollComplete');
+    });
+  }
 })
 
 .controller('PhotoDetailCtrl', function($scope, $http, $stateParams, Photos, ServerName) {
-  /* Definição e variáveis */
+  /* Definição de variáveis */
   $scope.serverName = ServerName.get();
   $scope.detail = {};
   /* Carrega informações da foto */
@@ -183,8 +207,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
       }
       tickPos.push(count++);
     }
-    console.log(avgData);
-    console.log(userData);
     $scope.averageData = avgData;
   })
   $scope.chartConfig = {
@@ -378,7 +400,9 @@ angular.module('starter.controllers', ['highcharts-ng'])
 })
 
 .controller('UserFollowersCtrl', function($scope, $http, $stateParams, ServerName, Profiles) {
+  /* Definição de variáveis */
   $scope.serverName = ServerName.get();
+  /* Pega as seguidores do usuário */
   var followers = Profiles.getFollowers($stateParams.userId);
   followers.then(function(result){
     $scope.followers = result;
@@ -386,7 +410,9 @@ angular.module('starter.controllers', ['highcharts-ng'])
 })
 
 .controller('UserFollowingCtrl', function($scope, $http, $stateParams, ServerName, Profiles) {
+  /* Definição de variáveis */
   $scope.serverName = ServerName.get();
+  /* Pega os seguidos do usuário */
   var following = Profiles.getFollowing($stateParams.userId);
   following.then(function(result){
     $scope.following = result;
