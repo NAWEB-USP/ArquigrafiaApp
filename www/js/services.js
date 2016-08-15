@@ -65,7 +65,10 @@ angular.module('starter.services', [])
         return result.data;
       });
     },
-    remove: function(photo) {
+    remove: function(photoId) {
+      return $http.delete(ServerName.get() + "/api/photos/" + photoId).then(function(result){
+        return result.data;
+      })
     },
     get: function(photoId) {
       return $http.get(ServerName.get() + "/api/photos/" + photoId).then(function(result){

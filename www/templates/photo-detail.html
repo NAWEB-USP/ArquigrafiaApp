@@ -1,6 +1,10 @@
 <div class="bar bar-header">
   <a class="button icon-left ion-chevron-left button-clear button-dark" href="#/tab/account">Voltar</a>
   <div class="h1 title"></div>
+  <div class="buttons" ng-if="photo['photo'].user_id == photo['sender'].id">
+    <button class="button button-positive" ng-click="editPhoto(photo['photo'].id)">Editar</button>
+    <button class="button button-positive" ng-click="deletePhoto(photo['photo'].id)">Deletar</button>
+  </div>
 </div>
 <ion-view view-title="{{photo['photo'].name}}" id="photo-detail">
   <ion-content class="has-header">

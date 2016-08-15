@@ -183,8 +183,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
       }
       tickPos.push(count++);
     }
-    console.log(avgData);
-    console.log(userData);
     $scope.averageData = avgData;
   })
   $scope.chartConfig = {
@@ -258,6 +256,20 @@ angular.module('starter.controllers', ['highcharts-ng'])
       },              
       color: '#000000',
     }]
+  }
+
+  /*Operacoes de foto */
+  $scope.deletePhoto = function(id) {
+    if(confirm("Deseja mesmo deletar esta foto? " + id)) {
+      Photos.remove(id).then(function() {
+        alert("Foto deletada com sucesso");
+        $state.go('tab.dash', {}, {reload: true});
+      });
+    }
+  }
+
+  $scope.editPhoto = function(id) {
+
   }
 })
 
