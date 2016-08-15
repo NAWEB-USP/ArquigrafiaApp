@@ -133,3 +133,25 @@ a.item-content {
     padding-left: 0px !important;
     padding-right: 0px !important;
 }
+
+/* Camera tab*/
+@-webkit-keyframes slideInSmooth {
+  0% {
+    -webkit-transform: translate3d(0,-100%,0);
+  }
+  50% {
+  	-webkit-transform: translate3d(0,-50%,0);
+  }
+  100% {
+    -webkit-transform: translate3d(0,0,0);
+  }
+}
+
+.slideAnimation {
+  -webkit-animation: slideInSmooth ease-in 1; 
+  animation: slideInSmooth ease-in 1;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-duration: 750ms;
+  animation-duration: 750ms;
+}

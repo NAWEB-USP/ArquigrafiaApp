@@ -419,12 +419,45 @@ angular.module('starter.controllers', ['highcharts-ng'])
   })
 })
 
-.controller('CameraCtrl', function($scope, $http, ServerName, Tags, Camera) {
+.controller('CameraCtrl', function($scope, $http, $state, ServerName, Tags, Camera, Geolocation) {
+  /* Declaracao de variavel */
   $scope.hideData = true;
+  $scope.showAditional = false;
+  var longitude = null;
+  var latitude = null;
+  $scope.data = {};
+  $scope.data.tags = [];
+
+  /* Tags */
   var tags = Tags.all();
   tags.then(function(result){
     $scope.tags = result;
   });
+
+  $scope.getTag = function(newValue, oldValue){
+    if($scope.data.tags.indexOf(newValue.name) == -1)
+      $scope.data.tags.push(newValue.name);
+    console.log($scope.data.tags);
+  }
+
+  $scope.addTag = function(){
+    var tag = prompt("Digite o nome da tag:");
+    tag = tag.trim().toLowerCase();
+    if($scope.data.tags.indexOf(tag) == -1)
+      $scope.data.tags.push(tag);
+    console.log($scope.data.tags);
+  }
+
+  $scope.removeTag = function(tag){
+    var position = $scope.data.tags.indexOf(tag);
+    $scope.data.tags.splice(position, 1);
+    console.log($scope.data.tags);
+  }
+
+  /* Controle de tela */
+  $scope.toggle = function() {
+    $scope.showAditional = !$scope.showAditional;
+  }
 
   $scope.forward = function() {
     $scope.hideData = false;
@@ -434,6 +467,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     $scope.hideData = true;
   }
 
+  /* Tirar foto */
   $scope.takePicture = function(options) {
     var optionsTake = {
       quality: 70,
@@ -444,9 +478,34 @@ angular.module('starter.controllers', ['highcharts-ng'])
       saveToPhotoAlbum: false //para testes nao ocuparem mta memoria, para release colocar true
     };
 
+    var onSuccess = function(position){
+      latitude = position.coords.latitude;
+      longitude = position.coords.longitude;
+    };
+    var onFail = function(error) {
+      alert("Code: " + error.code + " Message: " + error.message);
+    };
+
     navigator.camera.getPicture(function (imageURI) {
+      
+      var geoImage = new Image();
+      geoImage.onload = function(){
+        navigator.geolocation.getCurrentPosition(onSuccess, onFail);
+        if(latitude != null || longitude != null){
+          var result = Geolocation.getAddress(latitude, longitude);
+          result.then(function(address){
+            $scope.data.country   = address.country;
+            $scope.data.city      = address.city;
+            $scope.data.district  = address.district;
+            $scope.data.state     = address.state;
+            $scope.data.address   = address.address;
+          }); 
+        }
+      }
+
       $scope.$apply(function() {
         $scope.imageURI = imageURI;
+        geoImage.src = imageURI;
       });
 
     }, function(error) {
@@ -454,6 +513,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     }, optionsTake);
   };
 
+  /* Selecionar foto */
   $scope.getPicture = function(options) {
     var optionsGet = {
       quality: 70,
@@ -466,7 +526,25 @@ angular.module('starter.controllers', ['highcharts-ng'])
 
     navigator.camera.getPicture(function (imageURI) {
       $scope.$apply(function() {
+        var geoImage = new Image();
+        geoImage.onload = function(){
+          EXIF.getData(geoImage, function(){
+            longitude = EXIF.getTag(geoImage, "GPSLongitude");
+            latitude = EXIF.getTag(geoImage, "GPSLatitude");
+          });
+          if(latitude != null || longitude != null){
+            var result = Geolocation.getAddress(latitude, longitude);
+            result.then(function(address){
+              $scope.data.country   = address.country;
+              $scope.data.city      = address.city;
+              $scope.data.district  = address.district;
+              $scope.data.state     = address.state;
+              $scope.data.address   = address.address;
+            }); 
+          }
+        }
         $scope.imageURI = imageURI;
+        geoImage.src = imageURI;
       });
 
     }, function(error) {
@@ -474,28 +552,24 @@ angular.module('starter.controllers', ['highcharts-ng'])
     }, optionsGet);
   };
 
-  $scope.showTags - function(select){
-    console.log(select);
-  };
-
-  $scope.data = {};
+  /* Envio de foto */
   $scope.postPhoto = function(){
     
     var address = ServerName.get() + "/api/photos";
     var image = $scope.imageURI;
 
-    console.log($scope.data.title);
-
     var onSuccess = function(response){
       console.log("Code = " + response.responseCode);
       console.log("Response = " + response.response);
       console.log("Sent = " + response.bytesSent);
+      $state.go('tab.photo-detail', {'photoId': response.response});
     };
 
     var onFail = function(error){
       console.log("Error code = " + error.responseCode);
       console.log("Error source = " + error.source);
       console.log("error target = " + error.target);
+      alert("Houve um erro, tente novamente mais tarde");
     };
 
     var options = new FileUploadOptions();
@@ -511,7 +585,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     params.photo_country             = $scope.data.country;
     params.photo_city                = $scope.data.city;
     params.photo_description         = $scope.data.description;
-    params.photo_district            = $scope.data.disctrict;
+    params.photo_district            = $scope.data.district;
     params.photo_state               = $scope.data.state;
     params.photo_street              = $scope.data.address;
     params.authorized                = $scope.data.authorized;
