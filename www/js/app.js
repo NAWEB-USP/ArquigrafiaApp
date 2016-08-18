@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ionic-modal-select'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -62,13 +62,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     }
   })
 
-  .state('tab.photos', {
-      url: '/photos',
-      abstract: true,
+  .state('tab.search', {
+      url: '/search',
       views: {
-        'tab-photos': {
-          templateUrl: 'templates/tab-photos.html',
-          controller: 'PhotosCtrl'
+        'tab-search': {
+          templateUrl: 'templates/tab-search.html',
+          controller: 'SearchCtrl'
         }
       }
     })

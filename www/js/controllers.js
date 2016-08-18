@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['highcharts-ng'])
 
 .controller('WelcomeCtrl', function($scope, $state) {
     /* Verifica se o usuário está logado */
@@ -97,24 +97,40 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('PhotosCtrl', function($scope, Photos, ServerName, $http, $state) {
+.controller('SearchCtrl', function($scope, Photos, ServerName, Feed, $http, $state) {
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
       $state.go('login');
     }
   })
-    var photos = Photos.all();
-    photos.then(function(result){
-      $scope.photos = result;
-    });
-  $scope.remove = function(photo) {
-    Photos.remove(photo);
-  };
+  /* Definição de variáveis */
   $scope.serverName = ServerName.get();
+  $scope.moreDataCanBeLoaded = true;
+  var maxId = 0;
+  /* Mostra as fotos mais recentes */
+  Feed.getMostRecent().then(function(result){
+    $scope.photos = result;
+    maxId = result[result.length-1].id;
+    console.log(maxId);
+    if (result.length < 20) {
+      $scope.moreDataCanBeLoaded = false;
+    }
+  });
+  /* Carrega mais fotos recentes */
+  $scope.loadMoreData = function() {
+    Feed.getMoreMostRecent(maxId).then(function(result){
+      maxId = result[result.length-1].id;
+      $scope.photos = $scope.photos.concat(result);
+      if (result.length < 20) {
+        $scope.moreDataCanBeLoaded = false;
+      }
+      $scope.$broadcast('scroll.infiniteScrollComplete');
+    });
+  }
 })
 
 .controller('PhotoDetailCtrl', function($scope, $http, $stateParams, Photos, ServerName) {
-  /* Definição e variáveis */
+  /* Definição de variáveis */
   $scope.serverName = ServerName.get();
   $scope.detail = {};
   /* Carrega informações da foto */
@@ -152,13 +168,118 @@ angular.module('starter.controllers', [])
   }
   /* Exibe informações da foto */
   $scope.showInformation = function() {
-    document.getElementById("info-container").style.display = "initial";
+    document.getElementById("photo-info-container").style.display = "initial";
     document.getElementById("evaluation-container").style.display = "none";
+    document.getElementById("evaluation-average-container").style.display = "none";
   }
   /* Exibe binômios para avaliação */
   $scope.showEvaluation = function() {
-    document.getElementById("info-container").style.display = "none";
+    document.getElementById("photo-info-container").style.display = "none";
     document.getElementById("evaluation-container").style.display = "initial";
+    document.getElementById("evaluation-average-container").style.display = "none";
+  }
+  /* Exibe gráfico com a média das avaliações */
+  $scope.showAverage = function() {
+    document.getElementById("photo-info-container").style.display = "none";
+    document.getElementById("evaluation-container").style.display = "none";
+    document.getElementById("evaluation-average-container").style.display = "initial";
+  }
+  /* Configuração do gráfico com as médias das avaliações */
+  var averageEvaluation = Photos.averageEvaluation($stateParams.photoId, window.localStorage.getItem("user_id"));
+  var count = 0;
+  var l1 = [];
+  var l2 = [];
+  var tickPos = [];
+  var avgData = [];
+  var userData = [];
+  averageEvaluation.then(function(result){
+    var binomials = result["binomials"];
+    var average = result["average"];
+    var user_evaluation = result["user_evaluation"];
+    for (x in binomials) {
+      l1.push(binomials[x].firstOption);
+      l2.push(binomials[x].secondOption);
+      if(typeof average[count] != 'undefined') {
+        avgData.push([parseInt(average[count].avgPosition), count]);
+      }
+      if(typeof user_evaluation[x] != 'undefined') {
+        userData.push([parseInt(user_evaluation[x].evaluationPosition), count]);
+      }
+      tickPos.push(count++);
+    }
+    $scope.averageData = avgData;
+  })
+  $scope.chartConfig = {
+    options: {
+      credits: {
+        enabled: false,
+      },
+      chart: {
+        marginRight: 80,
+      },
+      tooltip: {
+        formatter: function() {
+          return ''+ l1[this.y] + '-' + l2[this.y] + ': <br>' + this.series.name + '= ' + this.x;
+        },
+        crosshairs: [true,true]
+      }
+    },
+    title: {
+      text: ''
+    },
+    xAxis: {
+      lineColor: '#000',
+      min: 0,
+      max: 100,
+    },
+    yAxis: [{
+      lineColor: '#000',
+      lineWidth: 1,
+      tickAmount: count,
+      tickPositions: tickPos,
+      title: {
+        text: ''
+      },
+      labels: {
+        formatter: function() {
+          return l1[this.value];
+        }
+      }
+    },
+    {
+      lineWidth: 1,
+      tickAmount: count,
+      tickPositions: tickPos,
+      opposite: true,
+      title: {
+        text: ''
+      },
+      labels: {
+        formatter: function() {
+          return l2[this.value];
+        }
+      },
+    }],
+    series: [{
+      data: avgData,
+      yAxis: 1,
+      name: 'Média',
+      marker: {
+        symbol: 'circle',
+        enabled: true
+      },
+      color: '#999999',
+    },
+    {
+      data: userData,
+      yAxis: 0,              
+      name: 'Sua impressão',
+      marker: {
+        symbol: 'circle',
+        enabled: true
+      },              
+      color: '#000000',
+    }]
   }
 })
 
@@ -279,7 +400,9 @@ angular.module('starter.controllers', [])
 })
 
 .controller('UserFollowersCtrl', function($scope, $http, $stateParams, ServerName, Profiles) {
+  /* Definição de variáveis */
   $scope.serverName = ServerName.get();
+  /* Pega as seguidores do usuário */
   var followers = Profiles.getFollowers($stateParams.userId);
   followers.then(function(result){
     $scope.followers = result;
@@ -287,19 +410,54 @@ angular.module('starter.controllers', [])
 })
 
 .controller('UserFollowingCtrl', function($scope, $http, $stateParams, ServerName, Profiles) {
+  /* Definição de variáveis */
   $scope.serverName = ServerName.get();
+  /* Pega os seguidos do usuário */
   var following = Profiles.getFollowing($stateParams.userId);
   following.then(function(result){
     $scope.following = result;
   })
 })
 
-.controller('CameraCtrl', function($scope, $http, ServerName, Tags, Camera) {
+.controller('CameraCtrl', function($scope, $http, $state, ServerName, Tags, Camera, Geolocation) {
+  /* Declaracao de variavel */
   $scope.hideData = true;
+  $scope.showAditional = false;
+  var longitude = null;
+  var latitude = null;
+  $scope.data = {};
+  $scope.data.tags = [];
+
+  /* Tags */
   var tags = Tags.all();
   tags.then(function(result){
     $scope.tags = result;
   });
+
+  $scope.getTag = function(newValue, oldValue){
+    if($scope.data.tags.indexOf(newValue.name) == -1)
+      $scope.data.tags.push(newValue.name);
+    console.log($scope.data.tags);
+  }
+
+  $scope.addTag = function(){
+    var tag = prompt("Digite o nome da tag:");
+    tag = tag.trim().toLowerCase();
+    if($scope.data.tags.indexOf(tag) == -1)
+      $scope.data.tags.push(tag);
+    console.log($scope.data.tags);
+  }
+
+  $scope.removeTag = function(tag){
+    var position = $scope.data.tags.indexOf(tag);
+    $scope.data.tags.splice(position, 1);
+    console.log($scope.data.tags);
+  }
+
+  /* Controle de tela */
+  $scope.toggle = function() {
+    $scope.showAditional = !$scope.showAditional;
+  }
 
   $scope.forward = function() {
     $scope.hideData = false;
@@ -309,6 +467,7 @@ angular.module('starter.controllers', [])
     $scope.hideData = true;
   }
 
+  /* Tirar foto */
   $scope.takePicture = function(options) {
     var optionsTake = {
       quality: 70,
@@ -319,9 +478,34 @@ angular.module('starter.controllers', [])
       saveToPhotoAlbum: false //para testes nao ocuparem mta memoria, para release colocar true
     };
 
+    var onSuccess = function(position){
+      latitude = position.coords.latitude;
+      longitude = position.coords.longitude;
+    };
+    var onFail = function(error) {
+      alert("Code: " + error.code + " Message: " + error.message);
+    };
+
     navigator.camera.getPicture(function (imageURI) {
+      
+      var geoImage = new Image();
+      geoImage.onload = function(){
+        navigator.geolocation.getCurrentPosition(onSuccess, onFail);
+        if(latitude != null || longitude != null){
+          var result = Geolocation.getAddress(latitude, longitude);
+          result.then(function(address){
+            $scope.data.country   = address.country;
+            $scope.data.city      = address.city;
+            $scope.data.district  = address.district;
+            $scope.data.state     = address.state;
+            $scope.data.address   = address.address;
+          }); 
+        }
+      }
+
       $scope.$apply(function() {
         $scope.imageURI = imageURI;
+        geoImage.src = imageURI;
       });
 
     }, function(error) {
@@ -329,6 +513,7 @@ angular.module('starter.controllers', [])
     }, optionsTake);
   };
 
+  /* Selecionar foto */
   $scope.getPicture = function(options) {
     var optionsGet = {
       quality: 70,
@@ -341,7 +526,25 @@ angular.module('starter.controllers', [])
 
     navigator.camera.getPicture(function (imageURI) {
       $scope.$apply(function() {
+        var geoImage = new Image();
+        geoImage.onload = function(){
+          EXIF.getData(geoImage, function(){
+            longitude = EXIF.getTag(geoImage, "GPSLongitude");
+            latitude = EXIF.getTag(geoImage, "GPSLatitude");
+          });
+          if(latitude != null || longitude != null){
+            var result = Geolocation.getAddress(latitude, longitude);
+            result.then(function(address){
+              $scope.data.country   = address.country;
+              $scope.data.city      = address.city;
+              $scope.data.district  = address.district;
+              $scope.data.state     = address.state;
+              $scope.data.address   = address.address;
+            }); 
+          }
+        }
         $scope.imageURI = imageURI;
+        geoImage.src = imageURI;
       });
 
     }, function(error) {
@@ -349,28 +552,24 @@ angular.module('starter.controllers', [])
     }, optionsGet);
   };
 
-  $scope.showTags - function(select){
-    console.log(select);
-  };
-
-  $scope.data = {};
+  /* Envio de foto */
   $scope.postPhoto = function(){
     
     var address = ServerName.get() + "/api/photos";
     var image = $scope.imageURI;
 
-    console.log($scope.data.title);
-
     var onSuccess = function(response){
       console.log("Code = " + response.responseCode);
       console.log("Response = " + response.response);
       console.log("Sent = " + response.bytesSent);
+      $state.go('tab.photo-detail', {'photoId': response.response});
     };
 
     var onFail = function(error){
       console.log("Error code = " + error.responseCode);
       console.log("Error source = " + error.source);
       console.log("error target = " + error.target);
+      alert("Houve um erro, tente novamente mais tarde");
     };
 
     var options = new FileUploadOptions();
@@ -386,7 +585,7 @@ angular.module('starter.controllers', [])
     params.photo_country             = $scope.data.country;
     params.photo_city                = $scope.data.city;
     params.photo_description         = $scope.data.description;
-    params.photo_district            = $scope.data.disctrict;
+    params.photo_district            = $scope.data.district;
     params.photo_state               = $scope.data.state;
     params.photo_street              = $scope.data.address;
     params.authorized                = $scope.data.authorized;

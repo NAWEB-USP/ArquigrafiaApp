@@ -1,8 +1,8 @@
 angular.module('starter.services', [])
 
 .factory('ServerName', function(){
-  //var serverName = "http://localhost:8000";
-  var serverName = "http://valinhos.ime.usp.br:51080";
+  var serverName = "http://localhost:8000";
+  //var serverName = "http://valinhos.ime.usp.br:51080";
   return {
     get: function () { 
       return serverName; 
@@ -54,6 +54,16 @@ angular.module('starter.services', [])
       return $http.get(ServerName.get() + "/api/loadMore/" + userId, { params: {max_id : maxId} }).then(function(result){
         return result.data;
       });
+    }, 
+    getMostRecent: function() {
+      return $http.get(ServerName.get() + "/api/recent/").then(function(result){
+        return result.data;
+      });
+    }, 
+    getMoreMostRecent: function(maxId) {
+      return $http.get(ServerName.get() + "/api/moreRecent/", { params: {max_id : maxId} }).then(function(result){
+        return result.data;
+      });
     }
   };
 })
@@ -79,6 +89,11 @@ angular.module('starter.services', [])
     }, 
     postEvaluation: function(photoId, userId, data) {
       return $http.post(ServerName.get() + "/api/photos/" + photoId + "/evaluation/" + userId, { params: {data : data} }).then(function(result){
+        return result.data;
+      });
+    }, 
+    averageEvaluation: function(photoId, userId) {
+      return $http.get(ServerName.get() + "/api/photos/" + photoId + "/averageEvaluation/" + userId).then(function(result){
         return result.data;
       });
     }
@@ -149,6 +164,35 @@ angular.module('starter.services', [])
       }, options);
       
       return q.promise;
+    }
+  }
+})
+.factory("Geolocation", function($http){
+  return {
+    getAddress: function(latitude, longitude) {
+      return $http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude).then(function(data){
+        if(data.data.results[0]) {
+          var address = {};
+          var formattingAddress = {};
+          var result = data.data.results[0].address_components;
+          for(var i = 0; i < result.length; i++) {
+            if(result[i].types.indexOf("country") != -1) //achou country
+              address.country = result[i].long_name;
+            else if(result[i].types.indexOf("administrative_area_level_1") != -1) //achou state
+              address.state = result[i].short_name;
+            else if(result[i].types.indexOf("locality") != -1)//achou city
+              address.city = result[i].long_name;
+            else if(result[i].types.indexOf("sublocality") != -1)//achou bairro
+              address.district = result[i].long_name;
+            else if(result[i].types.indexOf("route") != -1)//achou rua
+              formattingAddress.route = result[i].long_name;
+            else if(result[i].types.indexOf("street_number") != -1)//achou numero
+              formattingAddress.number = result[i].long_name;
+          }
+          address.address = formattingAddress.route + ", " + formattingAddress.number;
+          return address;
+        }
+      });
     }
   }
 });

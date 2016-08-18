@@ -21,8 +21,9 @@
     <div class="button-bar button-light">
       <a class="button" ng-click="showInformation()">Informações</a>
       <a class="button" ng-click="showEvaluation()">Registro de impressões</a>
+      <a class="button" ng-click="showAverage()" ng-if="averageData.length">Média de Impressões</a>
     </div>
-    <div id="info-container">
+    <div id="photo-info-container">
       <div class="list">
         <div class="item" ng-if="!!photo['photo'].description">
           Descrição: {{photo['photo'].description}}
@@ -69,6 +70,9 @@
       <button class="button button-block button-positive" ng-click="postEvaluation()">
         Enviar
       </button>
+    </div>
+    <div id="evaluation-average-container">
+      <highchart id="evaluation-average-chart" config="chartConfig" class="span10"></highchart>
     </div>
   </ion-content>
 </ion-view>
