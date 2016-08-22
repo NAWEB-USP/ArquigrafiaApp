@@ -97,16 +97,38 @@ angular.module('starter.controllers', ['highcharts-ng'])
   }
 })
 
-.controller('SearchCtrl', function($scope, Photos, ServerName, $http, $state) {
+.controller('SearchCtrl', function($scope, Photos, ServerName, Feed, $http, $state) {
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
       $state.go('login');
     }
   })
+  /* Definição de variáveis */
+  $scope.serverName = ServerName.get();
+  $scope.moreDataCanBeLoaded = true;
+  var maxId = 0;
+  /* Mostra as fotos mais recentes */
+  Feed.getMostRecent().then(function(result){
+    $scope.photos = result;
+    maxId = result[result.length-1].id;
+    if (result.length < 20) {
+      $scope.moreDataCanBeLoaded = false;
+    }
+  });
+  /* Carrega mais fotos recentes */
+  $scope.loadMoreData = function() {
+    Feed.getMoreMostRecent(maxId).then(function(result){
+      maxId = result[result.length-1].id;
+      $scope.photos = $scope.photos.concat(result);
+      if (result.length < 20) {
+        $scope.moreDataCanBeLoaded = false;
+      }
+      $scope.$broadcast('scroll.infiniteScrollComplete');
+    });
+  }
 })
 
-.controller('PhotoDetailCtrl', function($scope, $http, $stateParams, Photos, ServerName, $state) {
-  /* Definição e variáveis */
+.controller('PhotoDetailCtrl', function($scope, $http, $stateParams, $ionicHistory, Photos, ServerName, $state) {
   $scope.serverName = ServerName.get();
   $scope.detail = {};
   /* Carrega informações da foto */
@@ -114,6 +136,10 @@ angular.module('starter.controllers', ['highcharts-ng'])
   photo.then(function(result){
     $scope.photo = result;
   })
+  /* Retorna para a página anterior */
+  $scope.goBack = function() {
+    window.history.back();
+  };
   /* Carrega avaliação do usuário atual da foto */
   var evaluation = Photos.getEvaluation($stateParams.photoId, window.localStorage.getItem("user_id"));
   evaluation.then(function(result){
@@ -335,6 +361,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   /* Carrega mais fotos do usuário */
   $scope.loadMorePhotos = function() {
     Profiles.getMorePhotos(window.localStorage.getItem("user_id"), maxIdUpload).then(function(result){
+      console.log(result);
       maxIdUpload = result[result.length-1].id;
       $scope.photos = $scope.photos.concat(result);
       if (result.length < 20) {
@@ -381,16 +408,20 @@ angular.module('starter.controllers', ['highcharts-ng'])
 
   /* Desloga o usuário */
   $scope.logout = function() {
-    window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
-    window.localStorage.removeItem("logged_user");
-    window.localStorage.removeItem("user_id");
-    $ionicHistory.clearHistory();
-    $ionicHistory.clearCache().then(function(){ $state.go('login', {}, {reload: true}) });
+    LoginService.logoutUser(window.localStorage.getItem("logged_user"), window.localStorage.getItem(window.localStorage.getItem("logged_user"))).then(function(data) {
+      window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
+      window.localStorage.removeItem("logged_user");
+      window.localStorage.removeItem("user_id");
+      $ionicHistory.clearHistory();
+      $ionicHistory.clearCache().then(function(){ $state.go('login', {}, {reload: true}) });
+    })
   }
 })
 
 .controller('UserFollowersCtrl', function($scope, $http, $stateParams, ServerName, Profiles) {
+  /* Definição de variáveis */
   $scope.serverName = ServerName.get();
+  /* Pega as seguidores do usuário */
   var followers = Profiles.getFollowers($stateParams.userId);
   followers.then(function(result){
     $scope.followers = result;
@@ -398,7 +429,9 @@ angular.module('starter.controllers', ['highcharts-ng'])
 })
 
 .controller('UserFollowingCtrl', function($scope, $http, $stateParams, ServerName, Profiles) {
+  /* Definição de variáveis */
   $scope.serverName = ServerName.get();
+  /* Pega os seguidos do usuário */
   var following = Profiles.getFollowing($stateParams.userId);
   following.then(function(result){
     $scope.following = result;
@@ -756,7 +789,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     var onSuccess = function(response){
       console.log("Sucesso");
       console.log(response.response);
-      $state.go('tab.photo-detail', {'photoId': $stateParams.photoId});
+      $state.go('tab.photo-feed-detail', {'photoId': $stateParams.photoId});
     };
 
     var onFail = function(error){

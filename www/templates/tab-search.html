@@ -15,7 +15,7 @@
   		</ion-refresher>
     	<div class="row" id="photos-container">
             <ion-list id="search-results">
-                <ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/photos/{{photo.id}}">
+                <ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/search/photos/{{photo.id}}">
                     <img src="{{serverName + '/arquigrafia-images/' + photo.id + '_home.jpg'}}">
                 </ion-item>
             </ion-list>

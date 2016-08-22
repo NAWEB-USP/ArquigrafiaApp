@@ -32,8 +32,10 @@ angular.module('starter.services', [])
             }
             return promise; 
         }, 
-        logoutUser: function(name) {
-            
+        logoutUser: function(name, token) {
+          return $http.post(ServerName.get() + "/api/logout", {login : name, token : token}).then(function(result){
+            return result.data;
+          });
         }
     }
 })
@@ -52,6 +54,16 @@ angular.module('starter.services', [])
     },
     more: function(userId, maxId) {
       return $http.get(ServerName.get() + "/api/loadMore/" + userId, { params: {max_id : maxId} }).then(function(result){
+        return result.data;
+      });
+    }, 
+    getMostRecent: function() {
+      return $http.get(ServerName.get() + "/api/recent/").then(function(result){
+        return result.data;
+      });
+    }, 
+    getMoreMostRecent: function(maxId) {
+      return $http.get(ServerName.get() + "/api/moreRecent/", { params: {max_id : maxId} }).then(function(result){
         return result.data;
       });
     }
