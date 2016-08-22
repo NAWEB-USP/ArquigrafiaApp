@@ -129,7 +129,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   }
 })
 
-.controller('PhotoDetailCtrl', function($scope, $http, $stateParams, Photos, ServerName) {
+.controller('PhotoDetailCtrl', function($scope, $http, $stateParams, $ionicHistory, Photos, ServerName) {
   /* Definição de variáveis */
   $scope.serverName = ServerName.get();
   $scope.detail = {};
@@ -138,6 +138,10 @@ angular.module('starter.controllers', ['highcharts-ng'])
   photo.then(function(result){
     $scope.photo = result;
   })
+  /* Retorna para a página anterior */
+  $scope.goBack = function() {
+    window.history.back();
+  };
   /* Carrega avaliação do usuário atual da foto */
   var evaluation = Photos.getEvaluation($stateParams.photoId, window.localStorage.getItem("user_id"));
   evaluation.then(function(result){
@@ -345,6 +349,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   /* Carrega mais fotos do usuário */
   $scope.loadMorePhotos = function() {
     Profiles.getMorePhotos(window.localStorage.getItem("user_id"), maxIdUpload).then(function(result){
+      console.log(result);
       maxIdUpload = result[result.length-1].id;
       $scope.photos = $scope.photos.concat(result);
       if (result.length < 20) {

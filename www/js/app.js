@@ -82,10 +82,30 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
   })
 
-  .state('tab.photo-detail', {
-    url: '/photos/:photoId', 
+  .state('tab.photo-search-detail', {
+    url: '/search/photos/:photoId', 
+    views: {
+      'tab-search': {
+        templateUrl: 'templates/photo-detail.html',
+        controller: 'PhotoDetailCtrl'
+      }
+    }
+  })
+
+  .state('tab.photo-account-detail', {
+    url: '/account/photos/:photoId', 
     views: {
       'tab-account': {
+        templateUrl: 'templates/photo-detail.html',
+        controller: 'PhotoDetailCtrl'
+      }
+    }
+  })
+
+  .state('tab.photo-feed-detail', {
+    url: '/feed/photos/:photoId', 
+    views: {
+      'tab-dash': {
         templateUrl: 'templates/photo-detail.html',
         controller: 'PhotoDetailCtrl'
       }
