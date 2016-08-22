@@ -111,7 +111,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
   Feed.getMostRecent().then(function(result){
     $scope.photos = result;
     maxId = result[result.length-1].id;
-    console.log(maxId);
     if (result.length < 20) {
       $scope.moreDataCanBeLoaded = false;
     }
@@ -396,11 +395,13 @@ angular.module('starter.controllers', ['highcharts-ng'])
 
   /* Desloga o usuário */
   $scope.logout = function() {
-    window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
-    window.localStorage.removeItem("logged_user");
-    window.localStorage.removeItem("user_id");
-    $ionicHistory.clearHistory();
-    $ionicHistory.clearCache().then(function(){ $state.go('login', {}, {reload: true}) });
+    LoginService.logoutUser(window.localStorage.getItem("logged_user"), window.localStorage.getItem(window.localStorage.getItem("logged_user"))).then(function(data) {
+      window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
+      window.localStorage.removeItem("logged_user");
+      window.localStorage.removeItem("user_id");
+      $ionicHistory.clearHistory();
+      $ionicHistory.clearCache().then(function(){ $state.go('login', {}, {reload: true}) });
+    })
   }
 })
 

@@ -32,8 +32,10 @@ angular.module('starter.services', [])
             }
             return promise; 
         }, 
-        logoutUser: function(name) {
-            
+        logoutUser: function(name, token) {
+          return $http.post(ServerName.get() + "/api/logout", {login : name, token : token}).then(function(result){
+            return result.data;
+          });
         }
     }
 })
