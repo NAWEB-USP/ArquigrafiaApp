@@ -102,6 +102,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
   })
 
+  .state('tab.edit-photo', {
+    url: '/photos/:photoId/edit',
+    views: {
+      'tab-camera': {
+        templateUrl: 'templates/edit-photo.html',
+        controller: 'EditPhotoCtrl'
+      }
+    }
+  })
+
   .state('tab.photo-feed-detail', {
     url: '/feed/photos/:photoId', 
     views: {
