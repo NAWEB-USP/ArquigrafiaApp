@@ -105,7 +105,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   })
 })
 
-.controller('PhotoDetailCtrl', function($scope, $http, $stateParams, Photos, ServerName) {
+.controller('PhotoDetailCtrl', function($scope, $http, $stateParams, Photos, ServerName, $state) {
   /* Definição e variáveis */
   $scope.serverName = ServerName.get();
   $scope.detail = {};
@@ -269,7 +269,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   }
 
   $scope.editPhoto = function(id) {
-
+    $state.go('tab.edit-photo', {photoId: id});
   }
 })
 
@@ -432,7 +432,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     if($scope.data.tags.indexOf(tag) == -1)
       $scope.data.tags.push(tag);
     console.log($scope.data.tags);
-  }
+ }
 
   $scope.removeTag = function(tag){
     var position = $scope.data.tags.indexOf(tag);
@@ -582,4 +582,217 @@ angular.module('starter.controllers', ['highcharts-ng'])
     var transfer = new FileTransfer();
     transfer.upload(image, address, onSuccess, onFail, options);
   };
+})
+
+.controller('EditPhotoCtrl', function($scope, $http, $state, $stateParams, ServerName, Photos, Tags, Camera, Geolocation) {
+  /* Definindo variaveis */
+  $scope.showAditional = false;
+  var longitude = null;
+  var latitude = null;
+  var editedPhoto = false;
+  $scope.data = {};
+  $scope.data.tags = [];
+
+  /* Preenchendo campos de photo */
+  var photo = Photos.get($stateParams.photoId);
+  photo.then(function(result) {
+    console.log(result['photo']);
+    var photo = result['photo'];
+    $scope.imageURI = ServerName.get() + "/arquigrafia-images/" + result['photo'].id + "_home.jpg";
+
+    $scope.data.commercialUsage = (photo.allowCommercialUses == "YES") ? true : false;
+    $scope.data.modifications = photo.allowModifications.toLowerCase();
+    $scope.data.title = photo.name;
+    $scope.data.author = photo.imageAuthor;
+    if(typeof photo.tags != 'undefined')
+      $scope.data.tags = photo.tags;
+    $scope.data.country = photo.country;
+    $scope.data.city = photo.city;
+    $scope.data.description = photo.description;
+    $scope.data.district = photo.district;
+    $scope.data.state = photo.state;
+    $scope.data.address = photo.address;
+    $scope.data.authorized = (photo.authorized == "1") ? true : false;
+
+    console.log($scope.data);
+  })
+
+  /* Tags */
+  var tags = Tags.all();
+  tags.then(function(result){
+    $scope.tags = result;
+  });
+
+  $scope.getTag = function(newValue, oldValue){
+    if($scope.data.tags.indexOf(newValue.name) == -1)
+      $scope.data.tags.push(newValue.name);
+    console.log($scope.data.tags);
+  }
+
+  $scope.addTag = function(){
+    var tag = prompt("Digite o nome da tag:");
+    if(tag != null) {
+      tag = tag.trim().toLowerCase();
+      if($scope.data.tags.indexOf(tag) == -1)
+        $scope.data.tags.push(tag);
+      console.log($scope.data.tags);
+    }
+  }
+
+  $scope.removeTag = function(tag){
+    var position = $scope.data.tags.indexOf(tag);
+    $scope.data.tags.splice(position, 1);
+    console.log($scope.data.tags);
+  }
+
+  /* Controle de tela */
+  $scope.toggle = function() {
+    $scope.showAditional = !$scope.showAditional;
+  }
+
+  $scope.forward = function() {
+    $scope.hideData = false;
+  }
+
+  $scope.back = function() {
+    $scope.hideData = true;
+  }
+
+  /* Tirar foto */
+  $scope.takePicture = function(options) {
+    var optionsTake = {
+      quality: 70,
+      destinationType: navigator.camera.DestinationType.NATIVE_URI,
+      sourceType: navigator.camera.PictureSourceType.CAMERA,
+      encodingType: navigator.camera.EncodingType.JPEG,
+      correctOrientation: true,
+      saveToPhotoAlbum: false //para testes nao ocuparem mta memoria, para release colocar true
+    };
+
+    var onSuccess = function(position){
+      latitude = position.coords.latitude;
+      longitude = position.coords.longitude;
+    };
+    var onFail = function(error) {
+      alert("Code: " + error.code + " Message: " + error.message);
+    };
+
+    navigator.camera.getPicture(function (imageURI) {
+      
+      var geoImage = new Image();
+      geoImage.onload = function(){
+        navigator.geolocation.getCurrentPosition(onSuccess, onFail);
+        if(latitude != null || longitude != null){
+          var result = Geolocation.getAddress(latitude, longitude);
+          result.then(function(address){
+            $scope.data.country   = address.country;
+            $scope.data.city      = address.city;
+            $scope.data.district  = address.district;
+            $scope.data.state     = address.state;
+            $scope.data.address   = address.address;
+          }); 
+        }
+      }
+
+      $scope.$apply(function() {
+        $scope.imageURI = imageURI;
+        geoImage.src = imageURI;
+        editedPhoto = true;
+      });
+
+    }, function(error) {
+      console.log(error) 
+    }, optionsTake);
+  };
+
+  /* Selecionar foto */
+  $scope.getPicture = function(options) {
+    var optionsGet = {
+      quality: 70,
+      destinationType: navigator.camera.DestinationType.NATIVE_URI,
+      sourceType: navigator.camera.PictureSourceType.SAVEDPHOTOALBUM,
+      encodingType: navigator.camera.EncodingType.JPEG,
+      correctOrientation: true,
+      saveToPhotoAlbum: false
+    };
+
+    navigator.camera.getPicture(function (imageURI) {
+      $scope.$apply(function() {
+        var geoImage = new Image();
+        geoImage.onload = function(){
+          EXIF.getData(geoImage, function(){
+            longitude = EXIF.getTag(geoImage, "GPSLongitude");
+            latitude = EXIF.getTag(geoImage, "GPSLatitude");
+          });
+          if(latitude != null || longitude != null){
+            var result = Geolocation.getAddress(latitude, longitude);
+            result.then(function(address){
+              $scope.data.country   = address.country;
+              $scope.data.city      = address.city;
+              $scope.data.district  = address.district;
+              $scope.data.state     = address.state;
+              $scope.data.address   = address.address;
+            }); 
+          }
+        }
+        $scope.imageURI = imageURI;
+        geoImage.src = imageURI;
+        editedPhoto = true;
+      });
+
+    }, function(error) {
+      console.log(error);
+    }, optionsGet);
+  };
+
+  /* Envio de foto */
+  $scope.postPhoto = function(){
+    
+    var address = ServerName.get() + "/api/photos/" + $stateParams.photoId;
+    console.log(address);
+    var image = $scope.imageURI;
+
+    var onSuccess = function(response){
+      console.log("Sucesso");
+      console.log(response.response);
+      //$state.go('tab.photo-detail', {'photoId': response.response});
+    };
+
+    var onFail = function(error){
+      console.log("Erro");
+      alert("Houve um erro, tente novamente mais tarde");
+    };
+
+    
+    
+
+    var params = {};
+    params.user_id                   = window.localStorage.getItem("user_id");
+    params.photo_allowCommercialUses = $scope.data.commercialUsage;
+    params.photo_allowModifications  = $scope.data.modifications;
+    params.photo_name                = $scope.data.title;
+    params.photo_imageAuthor         = $scope.data.author;
+    params.tags                      = $scope.data.tags;
+    params.photo_country             = $scope.data.country;
+    params.photo_city                = $scope.data.city;
+    params.photo_description         = $scope.data.description;
+    params.photo_district            = $scope.data.district;
+    params.photo_state               = $scope.data.state;
+    params.photo_street              = $scope.data.address;
+    params.authorized                = $scope.data.authorized;
+
+    if(editedPhoto) {
+      var options = new FileUploadOptions();
+      options.params = params;
+      options.httpMethod = "PUT";
+      options.fileKey = "photo";
+
+      var transfer = new FileTransfer();
+      transfer.upload(image, address, onSuccess, onFail, options);
+    }
+    else {
+      $http.put(address, params).then(onSuccess, onFail);
+    }
+  };
+
 });
