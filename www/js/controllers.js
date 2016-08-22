@@ -597,6 +597,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   var photo = Photos.get($stateParams.photoId);
   photo.then(function(result) {
     console.log(result['photo']);
+    console.log(result['tags']);
     var photo = result['photo'];
     $scope.imageURI = ServerName.get() + "/arquigrafia-images/" + result['photo'].id + "_home.jpg";
 
@@ -604,8 +605,8 @@ angular.module('starter.controllers', ['highcharts-ng'])
     $scope.data.modifications = photo.allowModifications.toLowerCase();
     $scope.data.title = photo.name;
     $scope.data.author = photo.imageAuthor;
-    if(typeof photo.tags != 'undefined')
-      $scope.data.tags = photo.tags;
+    if(typeof result['tags'] != 'undefined')
+      $scope.data.tags = result['tags'];
     $scope.data.country = photo.country;
     $scope.data.city = photo.city;
     $scope.data.description = photo.description;
@@ -755,7 +756,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     var onSuccess = function(response){
       console.log("Sucesso");
       console.log(response.response);
-      //$state.go('tab.photo-detail', {'photoId': response.response});
+      $state.go('tab.photo-detail', {'photoId': $stateParams.photoId});
     };
 
     var onFail = function(error){
