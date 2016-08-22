@@ -97,7 +97,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   }
 })
 
-.controller('SearchCtrl', function($scope, Photos, ServerName, Feed, $http, $state) {
+.controller('SearchCtrl', function($scope, Photos, Search, ServerName, Feed, $http, $state) {
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
       $state.go('login');
@@ -125,6 +125,13 @@ angular.module('starter.controllers', ['highcharts-ng'])
       }
       $scope.$broadcast('scroll.infiniteScrollComplete');
     });
+  }
+  /* Realiza busca */
+  $scope.search = function() {
+    Search.getSearch().then(function(result){
+      $scope.moreDataCanBeLoaded = false;
+      $scope.photos = Object.keys(result).map(function(k) { return result[k] }).sort(function(a, b) { return b.id - a.id; });
+    }); 
   }
 })
 
