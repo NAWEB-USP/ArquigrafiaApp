@@ -1,8 +1,8 @@
 angular.module('starter.services', [])
 
 .factory('ServerName', function(){
-  //var serverName = "http://localhost:8000";
-  var serverName = "http://valinhos.ime.usp.br:51080";
+  var serverName = "http://localhost:8000";
+  //var serverName = "http://valinhos.ime.usp.br:51080";
   return {
     get: function () { 
       return serverName; 
@@ -29,7 +29,7 @@ angular.module('starter.services', [])
   }
 })
 
-.factory('LoginService', function($q, $http, ServerName) {
+.factory('LoginService', function($q, $http, $ionicHistory, $state, ServerName) {
     return {
         loginUser: function(name, pw) {
             var deferred = $q.defer();
@@ -55,6 +55,22 @@ angular.module('starter.services', [])
           return $http.post(ServerName.get() + "/api/logout", {login : name, token : token}).then(function(result){
             return result.data;
           });
+        }, 
+        verifyCredentials: function() {
+          if(window.localStorage.getItem("logged_user") == null) {
+            $state.go('login');
+          }
+          else {
+            return $http.post(ServerName.get() + "/api/auth", {login : window.localStorage.getItem("logged_user"), token : window.localStorage.getItem(window.localStorage.getItem("logged_user")), id : window.localStorage.getItem("user_id")}).then(function(result){
+              if (result.data["auth"] != true) {
+                window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
+                window.localStorage.removeItem("logged_user");
+                window.localStorage.removeItem("user_id");
+                $ionicHistory.clearHistory();
+                $ionicHistory.clearCache().then(function(){ $state.go('login', {}, {reload: true}) });     
+              }
+            });
+          }
         }
     }
 })

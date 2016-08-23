@@ -38,12 +38,10 @@ angular.module('starter.controllers', ['highcharts-ng'])
     }
 })
 
-.controller('FeedCtrl', function($scope, $state, Feed, ServerName) {
-  /* Verifica se o usuário está logado */
+.controller('FeedCtrl', function($scope, $state, Feed, ServerName, LoginService) {
+  /* Verifica se o usuário está autorizado */
   $scope.$on('$ionicView.enter', function() {
-    if(window.localStorage.getItem("logged_user") == null) {
-      $state.go('login');
-    }
+    LoginService.verifyCredentials();
   })
   /* Definição de variáveis */
   $scope.serverName = ServerName.get();
@@ -84,11 +82,10 @@ angular.module('starter.controllers', ['highcharts-ng'])
   }
 })
 
-.controller('SearchCtrl', function($scope, $state, Photos, Search, ServerName, Feed) {
+.controller('SearchCtrl', function($scope, $state, Photos, Search, LoginService, ServerName, Feed) {
+  /* Verifica se o usuário está autorizado */
   $scope.$on('$ionicView.enter', function() {
-    if(window.localStorage.getItem("logged_user") == null) {
-      $state.go('login');
-    }
+    LoginService.verifyCredentials();
   })
   /* Definição de variáveis */
   $scope.serverName = ServerName.get();
@@ -127,6 +124,11 @@ angular.module('starter.controllers', ['highcharts-ng'])
 })
 
 .controller('PhotoDetailCtrl', function($scope, $stateParams, $state, Photos, ServerName, PopUpService) {
+  /* Verifica se o usuário está autorizado */
+  $scope.$on('$ionicView.enter', function() {
+    LoginService.verifyCredentials();
+  })
+  /* Definição de variáveis */
   $scope.serverName = ServerName.get();
   $scope.detail = {};
   $scope.user_id = window.localStorage.getItem("user_id");
@@ -303,11 +305,9 @@ angular.module('starter.controllers', ['highcharts-ng'])
 })
 
 .controller('AccountCtrl', function($scope, $state, $timeout, $ionicHistory, Profiles, ServerName, LoginService) {
-  /* Verifica se o usuário está logado */
+  /* Verifica se o usuário está autorizado */
   $scope.$on('$ionicView.enter', function() {
-    if(window.localStorage.getItem("logged_user") == null) {
-      $state.go('login');
-    }
+    LoginService.verifyCredentials();
   })
 
   /* Definição de variáveis */
@@ -426,6 +426,10 @@ angular.module('starter.controllers', ['highcharts-ng'])
 })
 
 .controller('UserFollowersCtrl', function($scope, $http, $stateParams, ServerName, Profiles) {
+  /* Verifica se o usuário está autorizado */
+  $scope.$on('$ionicView.enter', function() {
+    LoginService.verifyCredentials();
+  })
   /* Definição de variáveis */
   $scope.serverName = ServerName.get();
   /* Pega as seguidores do usuário */
@@ -436,6 +440,10 @@ angular.module('starter.controllers', ['highcharts-ng'])
 })
 
 .controller('UserFollowingCtrl', function($scope, $http, $stateParams, ServerName, Profiles) {
+  /* Verifica se o usuário está autorizado */
+  $scope.$on('$ionicView.enter', function() {
+    LoginService.verifyCredentials();
+  })
   /* Definição de variáveis */
   $scope.serverName = ServerName.get();
   /* Pega os seguidos do usuário */
@@ -446,6 +454,10 @@ angular.module('starter.controllers', ['highcharts-ng'])
 })
 
 .controller('CameraCtrl', function($scope, $http, $state, ServerName, Tags, Camera, Geolocation) {
+  /* Verifica se o usuário está autorizado */
+  $scope.$on('$ionicView.enter', function() {
+    LoginService.verifyCredentials();
+  })
   /* Declaracao de variavel */
   $scope.hideData = true;
   $scope.showAditional = false;
@@ -637,6 +649,10 @@ angular.module('starter.controllers', ['highcharts-ng'])
 })
 
 .controller('EditPhotoCtrl', function($scope, $http, $state, $stateParams, ServerName, Photos, Tags, Camera, Geolocation) {
+  /* Verifica se o usuário está autorizado */
+  $scope.$on('$ionicView.enter', function() {
+    LoginService.verifyCredentials();
+  })
   /* Definindo variaveis */
   $scope.showAditional = false;
   var longitude = null;
