@@ -12,46 +12,33 @@ angular.module('starter.controllers', ['highcharts-ng'])
     })
 })
 
-.controller('LoginCtrl', function($scope, LoginService, ServerName, $ionicPopup, $state, $ionicLoading) {
+.controller('LoginCtrl', function($scope, $state, PopUpService, LoginService, ServerName) {
     /* Verifica se o usuário já está logado */
     $scope.$on('$ionicView.enter', function() {
       if(window.localStorage.getItem("logged_user") != null) {
         $state.go('tab.dash');
       }
     })
-    /* Mostra spinner */
-    $scope.show = function() {
-    $ionicLoading.show({
-        template: '<p>Carregando...</p><ion-spinner></ion-spinner>'
-      });
-    };
-    /* Esconde o spinner */
-    $scope.hide = function(){
-      $ionicLoading.hide();
-    };
-
+    /* Definição de variáveis */
     $scope.serverName = ServerName.get();
     $scope.data = {};
     /* Faz o login */
     $scope.login = function() {
-        $scope.show($ionicLoading);
+        PopUpService.showSpinner('Carregando...');
         LoginService.loginUser($scope.data.username, $scope.data.password).success(function(data) {
             window.localStorage.setItem("logged_user", data.login);
             window.localStorage.setItem(data.login, data.token);
             window.localStorage.setItem("user_id", data.id);
             $state.go('tab.dash', {}, {reload: true});
         }).error(function(data) {
-            var alertPopup = $ionicPopup.alert({
-                title: 'Falha no login!',
-                template: 'Usuário ou senha incorretos!'
-            });
-        }).finally(function($ionicLoading) { 
-          $scope.hide($ionicLoading);  
+            PopUpService.showPopUp('Falha no login!', 'Usuário ou senha incorretos!');
+        }).finally(function($ionicLoading) {  
+          PopUpService.hideSpinner(); 
         });
     }
 })
 
-.controller('FeedCtrl', function($scope, Feed, ServerName, $http, $state) {
+.controller('FeedCtrl', function($scope, $state, Feed, ServerName) {
   /* Verifica se o usuário está logado */
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
@@ -97,7 +84,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   }
 })
 
-.controller('SearchCtrl', function($scope, Photos, Search, ServerName, Feed, $http, $state) {
+.controller('SearchCtrl', function($scope, $state, Photos, Search, ServerName, Feed) {
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {
       $state.go('login');
@@ -128,14 +115,18 @@ angular.module('starter.controllers', ['highcharts-ng'])
   }
   /* Realiza busca */
   $scope.search = function() {
-    Search.getSearch().then(function(result){
+    $ionicLoading.show({
+      template: 'Loading...'
+    });
+    Search.getSearch(document.getElementById('search-bar').value).then(function(result){
       $scope.moreDataCanBeLoaded = false;
       $scope.photos = Object.keys(result).map(function(k) { return result[k] }).sort(function(a, b) { return b.id - a.id; });
+      $ionicLoading.hide();
     }); 
   }
 })
 
-.controller('PhotoDetailCtrl', function($scope, $http, $stateParams, $ionicHistory, Photos, ServerName, $state) {
+.controller('PhotoDetailCtrl', function($scope, $stateParams, $state, Photos, ServerName, PopUpService) {
   $scope.serverName = ServerName.get();
   $scope.detail = {};
   /* Carrega informações da foto */
@@ -173,7 +164,11 @@ angular.module('starter.controllers', ['highcharts-ng'])
     else {
       data["areArchitecture"] = "no";
     }
-    var evaluation = Photos.postEvaluation($stateParams.photoId, window.localStorage.getItem("user_id"), data);
+    PopUpService.showSpinner("Enviando impressões...");
+    Photos.postEvaluation($stateParams.photoId, window.localStorage.getItem("user_id"), data).then(function(result) {
+      PopUpService.hideSpinner();
+      PopUpService.showPopUp('Impressões registradas com sucesso.');
+    });
   }
   /* Exibe informações da foto */
   $scope.showInformation = function() {
@@ -306,7 +301,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   }
 })
 
-.controller('AccountCtrl', function($scope, $http, $state, $timeout, $ionicHistory, Profiles, ServerName, LoginService) {
+.controller('AccountCtrl', function($scope, $state, $timeout, $ionicHistory, Profiles, ServerName, LoginService) {
   /* Verifica se o usuário está logado */
   $scope.$on('$ionicView.enter', function() {
     if(window.localStorage.getItem("logged_user") == null) {

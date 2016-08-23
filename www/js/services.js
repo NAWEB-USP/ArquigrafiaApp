@@ -1,11 +1,30 @@
 angular.module('starter.services', [])
 
 .factory('ServerName', function(){
-  //var serverName = "http://localhost:8000";
-  var serverName = "http://valinhos.ime.usp.br:51080";
+  var serverName = "http://localhost:8000";
+  //var serverName = "http://valinhos.ime.usp.br:51080";
   return {
     get: function () { 
       return serverName; 
+    }
+  }
+})
+
+.factory('PopUpService', function($ionicPopup, $ionicLoading) {
+  return {
+    showSpinner : function (message) {
+      $ionicLoading.show({
+        template: '<p>' + message + '</p><ion-spinner></ion-spinner>'
+      });
+    }, 
+    hideSpinner : function () {
+      $ionicLoading.hide();
+    }, 
+    showPopUp : function (title, message) {
+      $ionicPopup.alert({
+        title: title,
+        template: message
+      });
     }
   }
 })
