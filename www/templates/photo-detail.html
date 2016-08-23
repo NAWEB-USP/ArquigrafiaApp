@@ -1,7 +1,7 @@
 <div class="bar bar-header">
   <a class="button icon-left ion-chevron-left button-clear button-dark" ng-click="goBack()">Voltar</a>
   <div class="h1 title"></div>
-  <div class="buttons" ng-if="photo['photo'].user_id == photo['sender'].id">
+  <div class="buttons" ng-if="photo['photo'].user_id == user_id&&photo['photo'].institution_id == null">
     <button class="button button-positive" ng-click="editPhoto(photo['photo'].id)">Editar</button>
     <button class="button button-positive" ng-click="deletePhoto(photo['photo'].id)">Deletar</button>
   </div>
