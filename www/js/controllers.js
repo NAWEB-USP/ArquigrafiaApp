@@ -389,6 +389,10 @@ angular.module('starter.controllers', ['highcharts-ng'])
   $scope.doRefresh = function() {
     $scope.moreUploadsCanBeLoaded = true;
     $scope.moreEvaluationsCanBeLoaded = true;
+    var account = Profiles.getProfile(window.localStorage.getItem("user_id"));
+    account.then(function(result){
+      $scope.account = result;
+    });
     Profiles.getPhotos(window.localStorage.getItem("user_id")).then(function(result){
       $scope.photos = result;
       maxIdUpload = result[result.length-1].id;
