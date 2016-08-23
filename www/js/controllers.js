@@ -167,7 +167,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     PopUpService.showSpinner("Enviando impressões...");
     Photos.postEvaluation($stateParams.photoId, window.localStorage.getItem("user_id"), data).then(function(result) {
       PopUpService.hideSpinner();
-      PopUpService.showPopUp('Impressões registradas com sucesso.');
+      PopUpService.showPopUp('Sucesso', 'Impressões registradas com sucesso.');
     });
   }
   /* Exibe informações da foto */
@@ -289,8 +289,10 @@ angular.module('starter.controllers', ['highcharts-ng'])
   /*Operacoes de foto */
   $scope.deletePhoto = function(id) {
     if(confirm("Deseja mesmo deletar esta foto? " + id)) {
+      PopUpService.showSpinner('Processando');
       Photos.remove(id).then(function() {
-        alert("Foto deletada com sucesso");
+        PopUpService.hideSpinner();
+        PopUpService.showPopUp('Sucesso', 'Foto deletada com sucesso');
         $state.go('tab.dash', {}, {reload: true});
       });
     }
@@ -444,7 +446,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   })
 })
 
-.controller('CameraCtrl', function($scope, $http, $state, ServerName, Tags, Camera, Geolocation) {
+.controller('CameraCtrl', function($scope, $http, $state, ServerName, Tags, Camera, Geolocation, PopUpService) {
   /* Declaracao de variavel */
   $scope.hideData = true;
   $scope.showAditional = false;
@@ -519,18 +521,21 @@ angular.module('starter.controllers', ['highcharts-ng'])
             $scope.data.district  = address.district;
             $scope.data.state     = address.state;
             $scope.data.address   = address.address;
+            PopUpService.hideSpinner();
           }); 
-        }
+        } else { PopUpService.hideSpinner(); }
     };
     var onFail = function(error) {
-      alert("Code: " + error.code + " Message: " + error.message);
+      PopUpService.hideSpinner();
+      PopUpService.showPopUp("Erro " + error.code, "Mensagem: " + error.message);
     };
 
     navigator.camera.getPicture(function (imageURI) {
       
       var geoImage = new Image();
       geoImage.onload = function(){
-        navigator.geolocation.getCurrentPosition(onSuccess, onFail);        
+        PopUpService.showSpinner('Carregando...');
+        navigator.geolocation.getCurrentPosition(onSuccess, onFail);       
       }
 
       $scope.$apply(function() {
@@ -557,17 +562,19 @@ angular.module('starter.controllers', ['highcharts-ng'])
     navigator.camera.getPicture(function (imageURI) {
       var geoImage = new Image();
       geoImage.onload = function(){
+        PopUpService.showSpinner('Carregando...');
         EXIF.getData(geoImage, function(){
           longitude = EXIF.getTag(geoImage, "GPSLongitude");
-          longitude = convertDegToDec(longitude);
           latitude = EXIF.getTag(geoImage, "GPSLatitude");
-          latitude = convertDegToDec(latitude);
-
-          //Coordenadas negativas
-          if(EXIF.getTag(this,"GPSLongitudeRef") === "W") longitude = -1 * longitude;
-          if(EXIF.getTag(this,"GPSLatitudeRef") === "S") latitude = -1 * latitude;
 
           if(latitude != null || longitude != null){
+            latitude = convertDegToDec(latitude);
+            longitude = convertDegToDec(longitude);
+
+            //Coordenadas negativas
+            if(EXIF.getTag(this,"GPSLongitudeRef") === "W") longitude = -1 * longitude;
+            if(EXIF.getTag(this,"GPSLatitudeRef") === "S") latitude = -1 * latitude;
+
             var result = Geolocation.getAddress(latitude, longitude);
             result.then(function(address){
               $scope.data.country   = address.country;
@@ -575,8 +582,9 @@ angular.module('starter.controllers', ['highcharts-ng'])
               $scope.data.district  = address.district;
               $scope.data.state     = address.state;
               $scope.data.address   = address.address;
+              PopUpService.hideSpinner();
             }); 
-          }
+          } else { PopUpService.hideSpinner(); }
         });
       }
       $scope.$apply(function() {
@@ -591,11 +599,12 @@ angular.module('starter.controllers', ['highcharts-ng'])
 
   /* Envio de foto */
   $scope.postPhoto = function(){
-    
+    PopUpService.showSpinner('Enviando...');
     var address = ServerName.get() + "/api/photos";
     var image = $scope.imageURI;
 
     var onSuccess = function(response){
+      PopUpService.hideSpinner();
       console.log("Code = " + response.responseCode);
       console.log("Response = " + response.response);
       console.log("Sent = " + response.bytesSent);
@@ -603,15 +612,15 @@ angular.module('starter.controllers', ['highcharts-ng'])
     };
 
     var onFail = function(error){
+      PopUpService.hideSpinner();
       console.log("Error code = " + error.responseCode);
       console.log("Error source = " + error.source);
       console.log("error target = " + error.target);
-      alert("Houve um erro, tente novamente mais tarde");
+      PopUpService.showPopUp('Erro', 'Houve um erro, tente novamente mais tarde');
     };
 
     var options = new FileUploadOptions();
     
-
     var params = {};
     params.user_id                   = window.localStorage.getItem("user_id");
     params.photo_allowCommercialUses = $scope.data.commercialUsage;
@@ -635,7 +644,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   };
 })
 
-.controller('EditPhotoCtrl', function($scope, $http, $state, $stateParams, ServerName, Photos, Tags, Camera, Geolocation) {
+.controller('EditPhotoCtrl', function($scope, $http, $state, $stateParams, ServerName, Photos, Tags, Camera, Geolocation, PopUpService) {
   /* Definindo variaveis */
   $scope.showAditional = false;
   var longitude = null;
@@ -732,17 +741,20 @@ angular.module('starter.controllers', ['highcharts-ng'])
             $scope.data.district  = address.district;
             $scope.data.state     = address.state;
             $scope.data.address   = address.address;
+            PopUpService.hideSpinner();
           }); 
-        }
+        } else { PopUpService.hideSpinner(); }
     };
     var onFail = function(error) {
-      alert("Code: " + error.code + " Message: " + error.message);
+      PopUpService.hideSpinner();
+      PopUpService.showPopUp("Erro " + error.code, "Mensagem: " + error.message);
     };
 
     navigator.camera.getPicture(function (imageURI) {
       
       var geoImage = new Image();
       geoImage.onload = function(){
+        PopUpService.showSpinner('Carregando...');
         navigator.geolocation.getCurrentPosition(onSuccess, onFail);
       }
 
@@ -771,6 +783,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     navigator.camera.getPicture(function (imageURI) {
       var geoImage = new Image();
       geoImage.onload = function(){
+        PopUpService.showSpinner('Carregando...');
         EXIF.getData(geoImage, function(){
           longitude = EXIF.getTag(geoImage, "GPSLongitude");
           longitude = convertDegToDec(longitude);
@@ -789,8 +802,9 @@ angular.module('starter.controllers', ['highcharts-ng'])
               $scope.data.district  = address.district;
               $scope.data.state     = address.state;
               $scope.data.address   = address.address;
+              PopUpService.hideSpinner();
             }); 
-          }
+          } else { PopUpService.hideSpinner(); }
         });
       }
       $scope.$apply(function() {
@@ -806,24 +820,23 @@ angular.module('starter.controllers', ['highcharts-ng'])
 
   /* Envio de foto */
   $scope.postPhoto = function(){
-    
+    PopUpService.showSpinner('Enviando...');
     var address = ServerName.get() + "/api/photos/" + $stateParams.photoId;
     console.log(address);
     var image = $scope.imageURI;
 
     var onSuccess = function(response){
+      PopUpService.hideSpinner();
       console.log("Sucesso");
       console.log(response.response);
       $state.go('tab.photo-feed-detail', {'photoId': $stateParams.photoId});
     };
 
     var onFail = function(error){
+      PopUpService.hideSpinner();
       console.log("Erro");
-      alert("Houve um erro, tente novamente mais tarde");
+      PopUpService.showPopUp('Erro', 'Houve um erro, tente novamente mais tarde');
     };
-
-    
-    
 
     var params = {};
     params.user_id                   = window.localStorage.getItem("user_id");
