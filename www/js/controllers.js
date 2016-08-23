@@ -290,9 +290,9 @@ angular.module('starter.controllers', ['highcharts-ng'])
   $scope.deletePhoto = function(id) {
     if(confirm("Deseja mesmo deletar esta foto? " + id)) {
       PopUpService.showSpinner('Processando');
-      Photos.remove(id).then(function() {
+      Photos.remove(id).then(function(data) {
         PopUpService.hideSpinner();
-        PopUpService.showPopUp('Sucesso', 'Foto deletada com sucesso');
+        PopUpService.showPopUp(data.message);
         $state.go('tab.dash', {}, {reload: true});
       });
     }
@@ -622,6 +622,8 @@ angular.module('starter.controllers', ['highcharts-ng'])
     var options = new FileUploadOptions();
     
     var params = {};
+    var logged_user = window.localStorage.getItem("logged_user");
+    params.token                     = window.localStorage.getItem(logged_user);
     params.user_id                   = window.localStorage.getItem("user_id");
     params.photo_allowCommercialUses = $scope.data.commercialUsage;
     params.photo_allowModifications  = $scope.data.modifications;
@@ -839,6 +841,8 @@ angular.module('starter.controllers', ['highcharts-ng'])
     };
 
     var params = {};
+    var logged_user = window.localStorage.getItem("logged_user");
+    params.token                     = window.localStorage.getItem(logged_user);
     params.user_id                   = window.localStorage.getItem("user_id");
     params.photo_allowCommercialUses = $scope.data.commercialUsage;
     params.photo_allowModifications  = $scope.data.modifications;
