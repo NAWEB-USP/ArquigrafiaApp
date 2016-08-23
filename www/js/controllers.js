@@ -129,6 +129,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
 .controller('PhotoDetailCtrl', function($scope, $stateParams, $state, Photos, ServerName, PopUpService) {
   $scope.serverName = ServerName.get();
   $scope.detail = {};
+  $scope.user_id = window.localStorage.getItem("user_id");
   /* Carrega informações da foto */
   var photo = Photos.get($stateParams.photoId);
   photo.then(function(result){
