@@ -145,6 +145,16 @@ angular.module('starter.services', [])
   }
 })
 
+.factory('Search', function($http, ServerName) {
+  return {
+    getSearch: function(query) {
+      return $http.post(ServerName.get() + "/api/search/", {q : query}).then(function(result){
+        return result.data;
+      });
+    }
+  }
+})
+
 .factory('Tags', function($http, ServerName){
   return {
     all: function() {
@@ -157,7 +167,7 @@ angular.module('starter.services', [])
   }
 })
 
-.factory("Camera", function($q) {
+.factory('Camera', function($q) {
   return {
     getPicture: function(options){
       var q = $q.defer();
@@ -172,7 +182,8 @@ angular.module('starter.services', [])
     }
   }
 })
-.factory("Geolocation", function($http){
+
+.factory('Geolocation', function($http){
   return {
     getAddress: function(latitude, longitude) {
       return $http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude).then(function(data){
