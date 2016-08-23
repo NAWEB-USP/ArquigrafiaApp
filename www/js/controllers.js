@@ -488,6 +488,11 @@ angular.module('starter.controllers', ['highcharts-ng'])
     $scope.hideData = true;
   }
 
+  //utility funct based on https://en.wikipedia.org/wiki/Geographic_coordinate_conversion
+  var convertDegToDec = function(arr) {
+      return (arr[0].numerator + arr[1].numerator/60 + (arr[2].numerator/arr[2].denominator)/3600).toFixed(4);
+  };
+
   /* Tirar foto */
   $scope.takePicture = function(options) {
     var optionsTake = {
@@ -502,17 +507,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     var onSuccess = function(position){
       latitude = position.coords.latitude;
       longitude = position.coords.longitude;
-    };
-    var onFail = function(error) {
-      alert("Code: " + error.code + " Message: " + error.message);
-    };
-
-    navigator.camera.getPicture(function (imageURI) {
-      
-      var geoImage = new Image();
-      geoImage.onload = function(){
-        navigator.geolocation.getCurrentPosition(onSuccess, onFail);
-        if(latitude != null || longitude != null){
+      if(latitude != null || longitude != null){
           var result = Geolocation.getAddress(latitude, longitude);
           result.then(function(address){
             $scope.data.country   = address.country;
@@ -522,6 +517,16 @@ angular.module('starter.controllers', ['highcharts-ng'])
             $scope.data.address   = address.address;
           }); 
         }
+    };
+    var onFail = function(error) {
+      alert("Code: " + error.code + " Message: " + error.message);
+    };
+
+    navigator.camera.getPicture(function (imageURI) {
+      
+      var geoImage = new Image();
+      geoImage.onload = function(){
+        navigator.geolocation.getCurrentPosition(onSuccess, onFail);        
       }
 
       $scope.$apply(function() {
@@ -546,13 +551,18 @@ angular.module('starter.controllers', ['highcharts-ng'])
     };
 
     navigator.camera.getPicture(function (imageURI) {
-      $scope.$apply(function() {
-        var geoImage = new Image();
-        geoImage.onload = function(){
-          EXIF.getData(geoImage, function(){
-            longitude = EXIF.getTag(geoImage, "GPSLongitude");
-            latitude = EXIF.getTag(geoImage, "GPSLatitude");
-          });
+      var geoImage = new Image();
+      geoImage.onload = function(){
+        EXIF.getData(geoImage, function(){
+          longitude = EXIF.getTag(geoImage, "GPSLongitude");
+          longitude = convertDegToDec(longitude);
+          latitude = EXIF.getTag(geoImage, "GPSLatitude");
+          latitude = convertDegToDec(latitude);
+
+          //Coordenadas negativas
+          if(EXIF.getTag(this,"GPSLongitudeRef") === "W") longitude = -1 * longitude;
+          if(EXIF.getTag(this,"GPSLatitudeRef") === "S") latitude = -1 * latitude;
+
           if(latitude != null || longitude != null){
             var result = Geolocation.getAddress(latitude, longitude);
             result.then(function(address){
@@ -563,7 +573,9 @@ angular.module('starter.controllers', ['highcharts-ng'])
               $scope.data.address   = address.address;
             }); 
           }
-        }
+        });
+      }
+      $scope.$apply(function() {
         $scope.imageURI = imageURI;
         geoImage.src = imageURI;
       });
@@ -708,6 +720,16 @@ angular.module('starter.controllers', ['highcharts-ng'])
     var onSuccess = function(position){
       latitude = position.coords.latitude;
       longitude = position.coords.longitude;
+      if(latitude != null || longitude != null){
+          var result = Geolocation.getAddress(latitude, longitude);
+          result.then(function(address){
+            $scope.data.country   = address.country;
+            $scope.data.city      = address.city;
+            $scope.data.district  = address.district;
+            $scope.data.state     = address.state;
+            $scope.data.address   = address.address;
+          }); 
+        }
     };
     var onFail = function(error) {
       alert("Code: " + error.code + " Message: " + error.message);
@@ -718,16 +740,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
       var geoImage = new Image();
       geoImage.onload = function(){
         navigator.geolocation.getCurrentPosition(onSuccess, onFail);
-        if(latitude != null || longitude != null){
-          var result = Geolocation.getAddress(latitude, longitude);
-          result.then(function(address){
-            $scope.data.country   = address.country;
-            $scope.data.city      = address.city;
-            $scope.data.district  = address.district;
-            $scope.data.state     = address.state;
-            $scope.data.address   = address.address;
-          }); 
-        }
       }
 
       $scope.$apply(function() {
@@ -753,13 +765,18 @@ angular.module('starter.controllers', ['highcharts-ng'])
     };
 
     navigator.camera.getPicture(function (imageURI) {
-      $scope.$apply(function() {
-        var geoImage = new Image();
-        geoImage.onload = function(){
-          EXIF.getData(geoImage, function(){
-            longitude = EXIF.getTag(geoImage, "GPSLongitude");
-            latitude = EXIF.getTag(geoImage, "GPSLatitude");
-          });
+      var geoImage = new Image();
+      geoImage.onload = function(){
+        EXIF.getData(geoImage, function(){
+          longitude = EXIF.getTag(geoImage, "GPSLongitude");
+          longitude = convertDegToDec(longitude);
+          latitude = EXIF.getTag(geoImage, "GPSLatitude");
+          latitude = convertDegToDec(latitude);
+
+          //Coordenadas negativas
+          if(EXIF.getTag(this,"GPSLongitudeRef") === "W") longitude = -1 * longitude;
+          if(EXIF.getTag(this,"GPSLatitudeRef") === "S") latitude = -1 * latitude;
+
           if(latitude != null || longitude != null){
             var result = Geolocation.getAddress(latitude, longitude);
             result.then(function(address){
@@ -770,7 +787,9 @@ angular.module('starter.controllers', ['highcharts-ng'])
               $scope.data.address   = address.address;
             }); 
           }
-        }
+        });
+      }
+      $scope.$apply(function() {
         $scope.imageURI = imageURI;
         geoImage.src = imageURI;
         editedPhoto = true;
