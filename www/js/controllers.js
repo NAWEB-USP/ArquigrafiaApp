@@ -455,7 +455,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
   })
 })
 
-<<<<<<< HEAD
 .controller('CameraCtrl', function($scope, $http, $state, ServerName, Tags, Camera, 
                                    Geolocation, PopUpService, LoginService) {
   /* Verifica se o usuário está autorizado */
