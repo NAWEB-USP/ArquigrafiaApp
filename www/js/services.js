@@ -117,8 +117,8 @@ angular.module('starter.services', [])
         return result.data;
       })
     },
-    get: function(photoId) {
-      return $http.get(ServerName.get() + "/api/photos/" + photoId).then(function(result){
+    get: function(photoId, userId) {
+      return $http.get(ServerName.get() + "/api/photos/" + photoId, { params: {user_id : userId} }).then(function(result){
         return result.data;
       });
     }, 
@@ -182,11 +182,16 @@ angular.module('starter.services', [])
 
 .factory('Search', function($http, ServerName) {
   return {
-    getSearch: function(query) {
-      return $http.post(ServerName.get() + "/api/search/", {q : query}).then(function(result){
+    getSearch: function(query, userId) {
+      return $http.post(ServerName.get() + "/api/search/", {q : query, user_id : userId}).then(function(result){
         return result.data;
       });
-    }
+    }, 
+    getMoreSearch: function(query, maxId) {
+      return $http.post(ServerName.get() + "/api/moreSearch/", {q : query, max_id : maxId}).then(function(result){
+        return result.data;
+      });
+    } 
   }
 })
 

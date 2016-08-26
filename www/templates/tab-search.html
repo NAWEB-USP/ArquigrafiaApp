@@ -21,10 +21,16 @@
             </ion-list>
         </div>
     	<ion-infinite-scroll
-  			on-infinite="loadMoreData()"
+  			on-infinite="loadMoreRecent()"
   			distance="5%"
   			immediate-check="false"
-  			ng-if="moreDataCanBeLoaded">
+  			ng-if="moreDataCanBeLoaded&&!searchDone">
 		</ion-infinite-scroll>
+    <ion-infinite-scroll
+        on-infinite="loadMoreResults()"
+        distance="5%"
+        immediate-check="false"
+        ng-if="moreDataCanBeLoaded&&searchDone">
+    </ion-infinite-scroll>
   	</ion-content>
 </ion-view>
