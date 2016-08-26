@@ -82,7 +82,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   }
 })
 
-.controller('SearchCtrl', function($scope, $state, Photos, Search, LoginService, ServerName, Feed) {
+.controller('SearchCtrl', function($scope, $state, $ionicScrollDelegate, Photos, Search, PopUpService, LoginService, ServerName, Feed) {
   /* Verifica se o usuário está autorizado */
   $scope.$on('$ionicView.enter', function() {
     LoginService.verifyCredentials();
@@ -90,6 +90,8 @@ angular.module('starter.controllers', ['highcharts-ng'])
   /* Definição de variáveis */
   $scope.serverName = ServerName.get();
   $scope.moreDataCanBeLoaded = true;
+  $scope.searchDone = false;
+  var last_search_terms = "";
   var maxId = 0;
   /* Mostra as fotos mais recentes */
   Feed.getMostRecent().then(function(result){
@@ -100,7 +102,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     }
   });
   /* Carrega mais fotos recentes */
-  $scope.loadMoreData = function() {
+  $scope.loadMoreRecent = function() {
     Feed.getMoreMostRecent(maxId).then(function(result){
       maxId = result[result.length-1].id;
       $scope.photos = $scope.photos.concat(result);
@@ -112,14 +114,32 @@ angular.module('starter.controllers', ['highcharts-ng'])
   }
   /* Realiza busca */
   $scope.search = function() {
-    $ionicLoading.show({
-      template: 'Loading...'
-    });
-    Search.getSearch(document.getElementById('search-bar').value).then(function(result){
-      $scope.moreDataCanBeLoaded = false;
+    PopUpService.showSpinner("Carregando...");
+    last_search_terms = document.getElementById('search-bar').value;
+    $scope.moreDataCanBeLoaded = true;
+    Search.getSearch(last_search_terms, window.localStorage.getItem("user_id")).then(function(result){
+      if (result.length < 20) {
+        $scope.moreDataCanBeLoaded = false;
+      }
+      $scope.photos = [];
       $scope.photos = Object.keys(result).map(function(k) { return result[k] }).sort(function(a, b) { return b.id - a.id; });
-      $ionicLoading.hide();
+      maxId = $scope.photos[$scope.photos.length-1].id;
+      $scope.searchDone = true;
+      $ionicScrollDelegate.scrollTop();
+      PopUpService.hideSpinner();
     }); 
+  }
+
+  /* Recupera mais resultados da busca */
+  $scope.loadMoreResults = function() {
+    Search.getMoreSearch(last_search_terms, maxId).then(function(result){
+      maxId = result[result.length-1].id;
+      $scope.photos = $scope.photos.concat(result);
+      if (result.length < 20) {
+        $scope.moreDataCanBeLoaded = false;
+      }
+      $scope.$broadcast('scroll.infiniteScrollComplete');
+    });
   }
 })
 
@@ -133,7 +153,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   $scope.detail = {};
   $scope.user_id = window.localStorage.getItem("user_id");
   /* Carrega informações da foto */
-  var photo = Photos.get($stateParams.photoId);
+  var photo = Photos.get($stateParams.photoId, window.localStorage.getItem("user_id"));
   photo.then(function(result){
     $scope.photo = result;
   })
@@ -675,7 +695,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   $scope.data.tags = [];
 
   /* Preenchendo campos de photo */
-  var photo = Photos.get($stateParams.photoId);
+  var photo = Photos.get($stateParams.photoId, window.localStorage.getItem("user_id"));
   photo.then(function(result) {
     console.log(result['photo']);
     console.log(result['tags']);
