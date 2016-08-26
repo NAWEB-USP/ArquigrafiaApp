@@ -182,7 +182,7 @@
 					</div>
 					
 					<div>
-						<button class="button button-block button-positive" ng-click="postPhoto()" ng-disabled="submitPhoto.$invalid || !(!!imageURI)">Enviar</button>
+						<button class="button button-block button-positive" ng-click="postPhoto()" ng-disabled="submitPhoto.$invalid || !(!!imageURI) || data.tags.length == 0">Enviar</button>
 					</div>
 					
 						
