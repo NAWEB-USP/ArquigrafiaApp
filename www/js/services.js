@@ -1,8 +1,8 @@
 angular.module('starter.services', [])
 
 .factory('ServerName', function(){
-  var serverName = "http://localhost:8000";
-  //var serverName = "http://valinhos.ime.usp.br:51080";
+  //var serverName = "http://localhost:8000";
+  var serverName = "http://valinhos.ime.usp.br:51080";
   return {
     get: function () { 
       return serverName; 
@@ -10,7 +10,26 @@ angular.module('starter.services', [])
   }
 })
 
-.factory('LoginService', function($q, $http, ServerName) {
+.factory('PopUpService', function($ionicPopup, $ionicLoading) {
+  return {
+    showSpinner : function (message) {
+      $ionicLoading.show({
+        template: '<p>' + message + '</p><ion-spinner></ion-spinner>'
+      });
+    }, 
+    hideSpinner : function () {
+      $ionicLoading.hide();
+    }, 
+    showPopUp : function (title, message) {
+      $ionicPopup.alert({
+        title: title,
+        template: message
+      });
+    }
+  }
+})
+
+.factory('LoginService', function($q, $http, $ionicHistory, $state, ServerName) {
     return {
         loginUser: function(name, pw) {
             var deferred = $q.defer();
@@ -32,8 +51,26 @@ angular.module('starter.services', [])
             }
             return promise; 
         }, 
-        logoutUser: function(name) {
-            
+        logoutUser: function(name, token) {
+          return $http.post(ServerName.get() + "/api/logout", {login : name, token : token}).then(function(result){
+            return result.data;
+          });
+        }, 
+        verifyCredentials: function() {
+          if(window.localStorage.getItem("logged_user") == null) {
+            $state.go('login');
+          }
+          else {
+            return $http.post(ServerName.get() + "/api/auth", {login : window.localStorage.getItem("logged_user"), token : window.localStorage.getItem(window.localStorage.getItem("logged_user")), id : window.localStorage.getItem("user_id")}).then(function(result){
+              if (result.data["auth"] != true) {
+                window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
+                window.localStorage.removeItem("logged_user");
+                window.localStorage.removeItem("user_id");
+                $ionicHistory.clearHistory();
+                $ionicHistory.clearCache().then(function(){ $state.go('login', {}, {reload: true}) });     
+              }
+            });
+          }
         }
     }
 })
@@ -75,10 +112,13 @@ angular.module('starter.services', [])
         return result.data;
       });
     },
-    remove: function(photo) {
+    remove: function(photoId) {
+      return $http.delete(ServerName.get() + "/api/photos/" + photoId).then(function(result){
+        return result.data;
+      })
     },
-    get: function(photoId) {
-      return $http.get(ServerName.get() + "/api/photos/" + photoId).then(function(result){
+    get: function(photoId, userId) {
+      return $http.get(ServerName.get() + "/api/photos/" + photoId, { params: {user_id : userId} }).then(function(result){
         return result.data;
       });
     }, 
@@ -140,6 +180,21 @@ angular.module('starter.services', [])
   }
 })
 
+.factory('Search', function($http, ServerName) {
+  return {
+    getSearch: function(query, userId) {
+      return $http.post(ServerName.get() + "/api/search/", {q : query, user_id : userId}).then(function(result){
+        return result.data;
+      });
+    }, 
+    getMoreSearch: function(query, maxId) {
+      return $http.post(ServerName.get() + "/api/moreSearch/", {q : query, max_id : maxId}).then(function(result){
+        return result.data;
+      });
+    } 
+  }
+})
+
 .factory('Tags', function($http, ServerName){
   return {
     all: function() {
@@ -152,7 +207,7 @@ angular.module('starter.services', [])
   }
 })
 
-.factory("Camera", function($q) {
+.factory('Camera', function($q) {
   return {
     getPicture: function(options){
       var q = $q.defer();
@@ -167,7 +222,8 @@ angular.module('starter.services', [])
     }
   }
 })
-.factory("Geolocation", function($http){
+
+.factory('Geolocation', function($http){
   return {
     getAddress: function(latitude, longitude) {
       return $http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude).then(function(data){

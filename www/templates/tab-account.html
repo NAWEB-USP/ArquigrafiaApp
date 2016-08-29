@@ -41,12 +41,12 @@
         </div>
         <div class="row" id="photos-container">
             <ion-list id="uploads">
-                <ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/photos/{{photo.id}}">
+                <ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/account/photos/{{photo.id}}">
                     <img src="{{serverName + '/arquigrafia-images/' + photo.id + '_home.jpg'}}">
                 </ion-item>
             </ion-list>
             <ion-list id="evaluations">
-                <ion-item class="item-remove-animate feed-item" ng-repeat="photo in evaluations" type="item-text-wrap" href="#/tab/photos/{{photo.id}}">
+                <ion-item class="item-remove-animate feed-item" ng-repeat="photo in evaluations" type="item-text-wrap" href="#/tab/account/photos/{{photo.id}}">
                     <img src="{{serverName + '/arquigrafia-images/' + photo.id + '_home.jpg'}}">
                 </ion-item>
             </ion-list>

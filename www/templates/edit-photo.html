@@ -1,26 +1,25 @@
 <div class="bar bar-header bar-stable">
-	<button class="button button-positive" ng-click="back()" ng-show="!hideData">Voltar</button>
-	<button class="button button-positive" ng-click="forward()" ng-show="hideData">Continuar Cadastro</button>
+	<h1 class="tittle">Editar Foto</h1>
 </div>
 
 <ion-view view-title="Camera">
-	<ion-content class="has-header padding" scroll="true" overflow-scroll="true">
+	<ion-content class="has-header padding" overflow-scroll="true">
 		<div class="list">
 			<form name="submitPhoto">
-				<div id="photoArea" ng-show="hideData">
+				<div id="photoArea">
 					<div class="padding" align="center">
 						<img style="max-height:150px" ng-if="!!imageURI" ng-src="{{imageURI}}">
 					</div>
 				
-					<div class="padding">
-						<button class="button button-block button-positive icon-left ion-camera " ng-click="takePicture()">
+					<div class="padding buttons">
+						<button class="button button-positive icon-left ion-camera " ng-click="takePicture()">
 							Tirar Foto
 						</button>
-						<button class="button button-block button-positive icon-left ion-images" ng-click="getPicture()">Escolher Foto</button>
+						<button class="button button-positive icon-left ion-images" ng-click="getPicture()">Escolher Foto</button>
 					</div>
 				</div>
 				
-				<div id="data" ng-show="!hideData">
+				<div id="data">
 
 					<label for="title" class="item item-input">
 						<span class="input-label">Titulo*:</span>
@@ -37,29 +36,27 @@
 						<input id="country" ng-model="data.country" type="text" ng-minlength="5" required/> 
 					</label>
 
-					<!-- <label for="tags" class="item item-input">
-						<span class="input-label">Tags*:</span>
-						<select id="tags" ng-model="data.tags" ng-change="showTags(data.tags)" multiple="true" required>
-							<option ng-repeat="tag in tags" ng-value="tag.name">{{tag.name}}</option>
-						<select>
-					</label> -->
-					<button class="button button-positive" modal-select ng-model="teste" options="tags" modal-title="Selecione uma Tag" has-search="true" on-select="getTag(newValue, oldValue)">
-							    Selecionar
-							    <div class="option">
-							        {{option.name}}
-							    </div>
-							</button>
-					<button id="meuNome" class="button button-positive" ng-click="addTag()">Adicionar</button>
-					<button class="button button-small button-assertive icon-right ion-close" ng-repeat="tag in data.tags" ng-click="removeTag(tag)">{{tag}}</button>
 					<label class="item item-input">
 						<div>
 							<span class="input-label">Tags*:</span>
-							<!-- se eu coloco o grupo de botoes aqui, eles param de responder corretamente-->
-
 							
 						</div>
-						
 					</label>
+
+					<div>
+						<button class="button button-positive" modal-select ng-model="teste" options="tags" modal-title="Selecione uma Tag" has-search="true" on-select="getTag(newValue, oldValue)">
+						    Selecionar
+						    <div class="option">
+						        {{option.name}}
+						    </div>
+						</button>
+
+						<button class="button button-positive" ng-click="addTag()">Adicionar</button>
+
+						<button class="button button-small button-assertive icon-right ion-close" ng-repeat="tag in data.tags" ng-click="removeTag(tag)">{{tag}}</button>
+					</div>
+					
+					
 
 					<div class="item item-divider" ng-show="!showAditional" ng-click="toggle()"><i class="ion-chevron-down"></i> Mostrar campos opcionais</div>
 					<div class="item item-divider" ng-show="showAditional" ng-click="toggle()"><i class="ion-chevron-up"></i> Ocultar campos adicionais</div>
@@ -183,11 +180,14 @@
 							Selecione uma imagem
 						</p>
 					</div>
-
-					<div class="padding">
-						<button class="button button-block button-positive" ng-click="postPhoto()" ng-disabled="submitPhoto.$invalid || !(!!imageURI)">Enviar</button>
+					
+					<div>
+						<button class="button button-block button-positive" ng-click="postPhoto()" ng-disabled="submitPhoto.$invalid || !(!!imageURI) || data.tags.length == 0">Enviar</button>
 					</div>
-				</div>
+					
+						
+					</div>
+				
 			</form>
 		</div>
 	</ion-content> 
