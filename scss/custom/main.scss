@@ -1,0 +1,335 @@
+/* 
+ * Base styles. 
+ */
+
+ .button.button-arq,
+ .bar .button.button-arq {
+	font-weight: 500;
+	text-transform: uppercase;
+	color: $dark-gray-arq;
+	border: 2px solid $dark-gray-arq;
+	background-color: white;
+	transition: all 300ms ease-in-out;
+
+	&.button-block {
+		width: 100%;
+	}
+
+	&.button-inverted {
+		color: white;
+		background-color: $dark-gray-arq;
+
+		&:hover,
+		&.active {
+			color: $dark-gray-arq;
+			background-color: white;
+		}
+	}
+
+	&.button-shy {
+		border: none;
+		font-weight: 300;
+		background-color: #ddd;
+		padding: 5px 13px;
+
+		&:hover,
+		&.active {
+			color: $dark-gray-arq;
+			background-color: white;
+		}
+	}
+
+	&:hover,
+	&.active {
+		color: white;
+		background-color: $dark-gray-arq;
+	}
+
+ }
+
+ .item-arq {
+ 	border: 1px solid $dark-gray-arq;
+ 	margin-bottom: 10px;
+
+ 	&::last-of-type {
+ 		margin-bottom: 0;
+ 	}
+
+ 	input {
+		color: $light-gray-arq;
+ 	}
+ }
+
+ .bar.bar-header {
+ 	padding-top: 9px;
+ 	padding-left: 10px;
+	height: 50px;
+	background-color: white;
+
+ 	img {
+ 		height: 30px;
+ 	}
+ }
+
+ .tab-nav.tabs {
+ 	background-color: white;
+ 	padding: 5px 0;
+ 	height: 56px;
+
+ 	.tab-item {
+ 		color: $light-gray-arq;
+
+ 		&.tab-item-active, 
+ 		&.activated {
+ 			color: $dark-gray-arq;
+ 		}
+ 	}
+ }
+
+ .has-header {
+ 	top: 50px;
+ }
+
+/* 
+ * Welcome page. 
+ */
+
+#welcome-content {
+
+	.row,
+	.scroll {
+		height: 100%;
+	}
+	
+}
+
+/* 
+ * Login page. 
+ */
+
+ #login {
+	max-width: 550px;
+	margin: auto;
+
+	img {
+		width: 100%;
+		max-width: 70px;
+		margin: 0 0 15px;	
+	}
+
+	.scroll {
+		height: 100%;
+		position: relative;
+	}
+
+	.center-content {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-60%);
+		width: 100%;
+	}
+ }
+
+ /* 
+ * Feed tab. 
+ */
+
+ #feed {
+	
+	.item {
+		border: none;
+
+	}
+
+	.item-content {
+		padding: 0;
+		background-color: $background-gray;
+
+		&.activated {
+			background-color: white;
+
+			.list.card {
+				opacity: .8;
+			}
+		}
+	}
+
+	.list.card {
+		margin: 10px 10px 5px 10px;
+
+		h2 {
+			color: $dark-gray-arq;
+		}
+
+		p {
+			color: $light-gray-arq;
+		}
+	}
+
+ }
+
+ /* 
+ * Camera tab. 
+ */
+
+ #camera {
+	
+	.scroll {
+		background-color: $background-gray;
+		position: relative;
+
+		.list {
+			position: absolute;
+			width: 100%;
+			top: 0;
+		}
+	}
+
+	#image-upload {
+
+		img {
+			max-width: 100%;
+			box-shadow: 0 1px 3px rgba(0,0,0,.3);
+		}
+	}
+
+	.item-divider {
+		position: relative;
+
+		i {
+			position: absolute;
+			right: 10px;
+		}
+
+		&.item-divider-light {
+			background-color: $background-gray;
+		}
+	}
+
+	.item-error {
+		color: red;
+	}
+
+ }
+
+ #input-tag {
+ 	position: relative;
+
+ 	#tag-buttons {
+ 		position: absolute;
+ 		z-index: 999;
+ 		right: 10px;
+ 		top: 7px;
+
+ 	}
+ }
+
+
+/*********************************************************/
+
+/* Account tab */
+
+#account-name {
+	text-align: center;
+}
+
+#personal-info div #user-avatar img {
+	width: inherit;
+}
+
+#personal-info .row {
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+#user-info {
+	display: flex;
+    flex-direction: column;
+}
+
+#user-info button {
+	flex: 1;
+	margin: 0px;
+}
+
+#user-info a {
+	text-decoration: none;
+}
+
+#user-info h4 {
+	text-align: center;
+	font-weight: normal;
+}
+
+#logout-button {
+	text-align: center;
+}
+
+#photos-container ion-list {
+	width: 100%;
+}
+
+#photos-container ion-list .list ion-item {
+	width: 33.3333%;
+    display: inline-block;
+}
+
+#photos-container ion-list .list ion-item .item-content {
+	padding: 0px;
+}
+
+#photos-container ion-list .list ion-item img {
+	width: 100%;
+}
+
+#evaluations {
+	display: none;
+}
+
+/* Follow list */
+
+.user-follow-list h2 {
+	position: relative;
+	left: 5em;
+}
+
+/* Photo detail */
+
+.avatar-row .avatar-col h4 {
+	margin: auto;
+}
+
+#evaluation-container {
+	display: none;
+}
+
+#evaluation-average-container {
+	display: none;
+}
+
+#evaluation-average-chart {
+	width: 100vw;
+    height: 100vw;
+}
+
+/* Camera tab*/
+@-webkit-keyframes slideInSmooth {
+  0% {
+    -webkit-transform: translate3d(0,-100%,0);
+  }
+  50% {
+  	-webkit-transform: translate3d(0,-50%,0);
+  }
+  100% {
+    -webkit-transform: translate3d(0,0,0);
+  }
+}
+
+.slideAnimation {
+  -webkit-animation: slideInSmooth ease-in 1; 
+  animation: slideInSmooth ease-in 1;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-duration: 750ms;
+  animation-duration: 750ms;
+}
