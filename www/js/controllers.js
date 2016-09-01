@@ -20,7 +20,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
       }
     })
     /* Definição de variáveis */
-    $scope.serverName = ServerName.get();
     $scope.data = {};
     /* Faz o login */
     $scope.login = function() {
@@ -90,28 +89,8 @@ angular.module('starter.controllers', ['highcharts-ng'])
   /* Definição de variáveis */
   $scope.serverName = ServerName.get();
   $scope.moreDataCanBeLoaded = true;
-  $scope.searchDone = false;
   var last_search_terms = "";
   var maxId = 0;
-  /* Mostra as fotos mais recentes */
-  Feed.getMostRecent().then(function(result){
-    $scope.photos = result;
-    maxId = result[result.length-1].id;
-    if (result.length < 20) {
-      $scope.moreDataCanBeLoaded = false;
-    }
-  });
-  /* Carrega mais fotos recentes */
-  $scope.loadMoreRecent = function() {
-    Feed.getMoreMostRecent(maxId).then(function(result){
-      maxId = result[result.length-1].id;
-      $scope.photos = $scope.photos.concat(result);
-      if (result.length < 20) {
-        $scope.moreDataCanBeLoaded = false;
-      }
-      $scope.$broadcast('scroll.infiniteScrollComplete');
-    });
-  }
   /* Realiza busca */
   $scope.search = function() {
     PopUpService.showSpinner("Carregando...");
@@ -124,7 +103,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
       $scope.photos = [];
       $scope.photos = Object.keys(result).map(function(k) { return result[k] }).sort(function(a, b) { return b.id - a.id; });
       maxId = $scope.photos[$scope.photos.length-1].id;
-      $scope.searchDone = true;
       $ionicScrollDelegate.scrollTop();
       PopUpService.hideSpinner();
     }); 
@@ -386,7 +364,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
   /* Carrega mais fotos do usuário */
   $scope.loadMorePhotos = function() {
     Profiles.getMorePhotos(window.localStorage.getItem("user_id"), maxIdUpload).then(function(result){
-      console.log(result);
       maxIdUpload = result[result.length-1].id;
       $scope.photos = $scope.photos.concat(result);
       if (result.length < 20) {
@@ -498,7 +475,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
   $scope.getTag = function(newValue, oldValue){
     if($scope.data.tags.indexOf(newValue.name) == -1)
       $scope.data.tags.push(newValue.name);
-    console.log($scope.data.tags);
   }
 
   $scope.addTag = function(){
@@ -506,13 +482,11 @@ angular.module('starter.controllers', ['highcharts-ng'])
     tag = tag.trim().toLowerCase();
     if($scope.data.tags.indexOf(tag) == -1)
       $scope.data.tags.push(tag);
-    console.log($scope.data.tags);
  }
 
   $scope.removeTag = function(tag){
     var position = $scope.data.tags.indexOf(tag);
     $scope.data.tags.splice(position, 1);
-    console.log($scope.data.tags);
   }
 
   /* Controle de tela */
@@ -639,9 +613,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
 
     var onSuccess = function(response){
       PopUpService.hideSpinner();
-      console.log("Code = " + response.responseCode);
-      console.log("Response = " + response.response);
-      console.log("Sent = " + response.bytesSent);
       $state.go('tab.photo-detail', {'photoId': response.response});
     };
 
@@ -697,8 +668,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
   /* Preenchendo campos de photo */
   var photo = Photos.get($stateParams.photoId, window.localStorage.getItem("user_id"));
   photo.then(function(result) {
-    console.log(result['photo']);
-    console.log(result['tags']);
     var photo = result['photo'];
     $scope.imageURI = ServerName.get() + "/arquigrafia-images/" + result['photo'].id + "_home.jpg";
 
@@ -715,8 +684,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
     $scope.data.state = photo.state;
     $scope.data.address = photo.address;
     $scope.data.authorized = (photo.authorized == "1") ? true : false;
-
-    console.log($scope.data);
   })
 
   /* Tags */
@@ -728,7 +695,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
   $scope.getTag = function(newValue, oldValue){
     if($scope.data.tags.indexOf(newValue.name) == -1)
       $scope.data.tags.push(newValue.name);
-    console.log($scope.data.tags);
   }
 
   $scope.addTag = function(){
@@ -737,14 +703,12 @@ angular.module('starter.controllers', ['highcharts-ng'])
       tag = tag.trim().toLowerCase();
       if($scope.data.tags.indexOf(tag) == -1)
         $scope.data.tags.push(tag);
-      console.log($scope.data.tags);
     }
   }
 
   $scope.removeTag = function(tag){
     var position = $scope.data.tags.indexOf(tag);
     $scope.data.tags.splice(position, 1);
-    console.log($scope.data.tags);
   }
 
   /* Controle de tela */
@@ -863,13 +827,10 @@ angular.module('starter.controllers', ['highcharts-ng'])
   $scope.postPhoto = function(){
     PopUpService.showSpinner('Enviando...');
     var address = ServerName.get() + "/api/photos/" + $stateParams.photoId;
-    console.log(address);
     var image = $scope.imageURI;
 
     var onSuccess = function(response){
       PopUpService.hideSpinner();
-      console.log("Sucesso");
-      console.log(response.response);
       $state.go('tab.photo-feed-detail', {'photoId': $stateParams.photoId});
     };
 
