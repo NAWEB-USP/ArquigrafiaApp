@@ -9,11 +9,10 @@
 		<div class="list">
 			<form name="submitPhoto">
 				<div id="photoArea" ng-show="hideData">				
-					<div class="padding">
-						<button class="button button-block button-arq button-inverted icon-left ion-camera " ng-click="takePicture()">
-							Tirar Foto
+					<div class="padding clearfix">
+						<button class="button button-arq icon ion-camera" ng-click="takePicture()">
 						</button>
-						<button class="button button-block button-arq button-inverted icon-left ion-images" ng-click="getPicture()">Escolher Foto</button>
+						<button class="button button-arq icon ion-images" ng-click="getPicture()"></button>
 					</div>
 					<div class="padding" id="image-upload" align="center">
 						<img ng-if="!!imageURI" ng-src="{{imageURI}}">

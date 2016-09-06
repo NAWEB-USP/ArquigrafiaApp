@@ -224,67 +224,144 @@
  	}
  }
 
+ #photoArea {
+
+ 	button {
+ 		display: inline-block;
+		width: calc(50% - 7.5px);
+		float: left;
+		height: 40vw;
+
+		&::before {
+			font-size: 30vw;
+		}
+
+		&:first-of-type {
+			margin-right: 15px;
+		}
+ 	}
+ }
+
+ /* 
+ * Account tab. 
+ */
+
+ #account {
+ 	background-color: $background-gray;
+ }
+
+ #info-container {
+	margin-bottom: 15px;
+
+	#user-avatar {
+
+		img {
+			max-width: 100%;
+			border-radius: 100%;
+			-webkit-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.3);
+			-moz-box-shadow:    1px 1px 5px 0px rgba(50, 50, 50, 0.3);
+			box-shadow:         1px 1px 5px 0px rgba(50, 50, 50, 0.3);
+			margin-top: 15px;
+			margin-bottom: 30px;
+		}
+
+		p {
+			text-align: center;
+		}
+
+		a {
+			color: black;
+			cursor: pointer;
+		}
+
+	}
+
+	#user-info {
+		padding-left: 30px;
+
+		h4 {
+			margin-top: 20px;
+			padding-bottom: 5px;
+			border-bottom: 1px solid $border-gray;
+			margin-bottom: 20px;
+			font-weight: 500;
+			text-transform: uppercase;
+			color: $dark-gray-arq;
+		}
+
+		p {
+
+			color: $light-gray-arq;
+			margin-bottom: 5px;
+			font-size: 16px;
+
+			span {
+				display: inline-block;
+				width: 25px;
+				font-weight: bold;
+				color: $dark-gray-arq;
+			}
+
+			&.first-of-type {
+				margin-top: 15px;
+			}
+		}
+
+	}
+
+ }
+
+ #personal-info {
+
+	.button-bar {
+		a {
+			font-weight: 500;
+			text-transform: uppercase;
+			color: $dark-gray-arq;
+			background-color: white;
+			border-bottom: 1px solid $dark-gray-arq;
+			padding-top: 3px;
+
+			&.active {
+				border-bottom: 3px solid $dark-gray-arq;
+			}
+		}
+	}
+
+ }
+
+ #uploads {
+ 	width: 100%;
+ }
+
+ #photos-container {
+
+ 	.list {
+ 		width: 100%;
+ 	}
+
+	.item {
+		border: none;
+		width: 33.333333%;
+		float: left;
+		padding-right: 7px;
+		padding-bottom: 1px;
+
+		&:nth-child(3n) {
+			padding-right: 0;
+		}
+
+		a {
+			padding: 0;
+			width: 100%;
+			background-color: $background-gray;
+		}
+	}
+
+ }
+
 
 /*********************************************************/
-
-/* Account tab */
-
-#account-name {
-	text-align: center;
-}
-
-#personal-info div #user-avatar img {
-	width: inherit;
-}
-
-#personal-info .row {
-	padding-left: 0px;
-	padding-right: 0px;
-}
-
-#user-info {
-	display: flex;
-    flex-direction: column;
-}
-
-#user-info button {
-	flex: 1;
-	margin: 0px;
-}
-
-#user-info a {
-	text-decoration: none;
-}
-
-#user-info h4 {
-	text-align: center;
-	font-weight: normal;
-}
-
-#logout-button {
-	text-align: center;
-}
-
-#photos-container ion-list {
-	width: 100%;
-}
-
-#photos-container ion-list .list ion-item {
-	width: 33.3333%;
-    display: inline-block;
-}
-
-#photos-container ion-list .list ion-item .item-content {
-	padding: 0px;
-}
-
-#photos-container ion-list .list ion-item img {
-	width: 100%;
-}
-
-#evaluations {
-	display: none;
-}
 
 /* Follow list */
 

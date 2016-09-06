@@ -9938,52 +9938,89 @@ a.button {
     right: 10px;
     top: 7px; }
 
+#photoArea button {
+  display: inline-block;
+  width: calc(50% - 7.5px);
+  float: left;
+  height: 40vw; }
+  #photoArea button::before {
+    font-size: 30vw; }
+  #photoArea button:first-of-type {
+    margin-right: 15px; }
+
+/* 
+ * Account tab. 
+ */
+#account {
+  background-color: #fafafa; }
+
+#info-container {
+  margin-bottom: 15px; }
+  #info-container #user-avatar img {
+    max-width: 100%;
+    border-radius: 100%;
+    -webkit-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.3);
+    -moz-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.3);
+    box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.3);
+    margin-top: 15px;
+    margin-bottom: 30px; }
+  #info-container #user-avatar p {
+    text-align: center; }
+  #info-container #user-avatar a {
+    color: black;
+    cursor: pointer; }
+  #info-container #user-info {
+    padding-left: 30px; }
+    #info-container #user-info h4 {
+      margin-top: 20px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #eaeaea;
+      margin-bottom: 20px;
+      font-weight: 500;
+      text-transform: uppercase;
+      color: #1e1e1e; }
+    #info-container #user-info p {
+      color: #787878;
+      margin-bottom: 5px;
+      font-size: 16px; }
+      #info-container #user-info p span {
+        display: inline-block;
+        width: 25px;
+        font-weight: bold;
+        color: #1e1e1e; }
+      #info-container #user-info p.first-of-type {
+        margin-top: 15px; }
+
+#personal-info .button-bar a {
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #1e1e1e;
+  background-color: white;
+  border-bottom: 1px solid #1e1e1e;
+  padding-top: 3px; }
+  #personal-info .button-bar a.active {
+    border-bottom: 3px solid #1e1e1e; }
+
+#uploads {
+  width: 100%; }
+
+#photos-container .list {
+  width: 100%; }
+
+#photos-container .item {
+  border: none;
+  width: 33.333333%;
+  float: left;
+  padding-right: 7px;
+  padding-bottom: 1px; }
+  #photos-container .item:nth-child(3n) {
+    padding-right: 0; }
+  #photos-container .item a {
+    padding: 0;
+    width: 100%;
+    background-color: #fafafa; }
+
 /*********************************************************/
-/* Account tab */
-#account-name {
-  text-align: center; }
-
-#personal-info div #user-avatar img {
-  width: inherit; }
-
-#personal-info .row {
-  padding-left: 0px;
-  padding-right: 0px; }
-
-#user-info {
-  display: flex;
-  flex-direction: column; }
-
-#user-info button {
-  flex: 1;
-  margin: 0px; }
-
-#user-info a {
-  text-decoration: none; }
-
-#user-info h4 {
-  text-align: center;
-  font-weight: normal; }
-
-#logout-button {
-  text-align: center; }
-
-#photos-container ion-list {
-  width: 100%; }
-
-#photos-container ion-list .list ion-item {
-  width: 33.3333%;
-  display: inline-block; }
-
-#photos-container ion-list .list ion-item .item-content {
-  padding: 0px; }
-
-#photos-container ion-list .list ion-item img {
-  width: 100%; }
-
-#evaluations {
-  display: none; }
-
 /* Follow list */
 .user-follow-list h2 {
   position: relative;
