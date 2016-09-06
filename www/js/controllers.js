@@ -13,6 +13,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
 })
 
 .controller('LoginCtrl', function($scope, $state, PopUpService, LoginService, ServerName) {
+    var serverName = ServerName.get();
     /* Verifica se o usuário já está logado */
     $scope.$on('$ionicView.enter', function() {
       if(window.localStorage.getItem("logged_user") != null) {
@@ -22,7 +23,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     /* Definição de variáveis */
     $scope.data = {};
     $scope.cadastro= function(){
-      var ref = cordova.InAppBrowser.open('http://www.arquigrafia.org.br/users/account', '_self', 'location=yes');
+      var ref = cordova.InAppBrowser.open(serverName + '/users/account', '_blank', 'location=yes, hardwareback=no');
       ref.show();
     }
 
@@ -106,8 +107,10 @@ angular.module('starter.controllers', ['highcharts-ng'])
         $scope.moreDataCanBeLoaded = false;
       }
       $scope.photos = [];
-      $scope.photos = Object.keys(result).map(function(k) { return result[k] }).sort(function(a, b) { return b.id - a.id; });
-      maxId = $scope.photos[$scope.photos.length-1].id;
+      if (result.length > 0) { 
+        $scope.photos = Object.keys(result).map(function(k) { return result[k] }).sort(function(a, b) { return b.id - a.id; });
+        maxId = $scope.photos[$scope.photos.length-1].id;
+      }
       $ionicScrollDelegate.scrollTop();
       PopUpService.hideSpinner();
     }); 
