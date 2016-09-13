@@ -1,9 +1,9 @@
 <div class="bar bar-header item-input-inset">
   <label class="item-input-wrapper">
     <i class="icon ion-ios-search placeholder-icon"></i>
-    <input type="search" placeholder="Digite as palavras-chave">
+    <input type="search" placeholder="Digite as palavras-chave" id="search-bar">
   </label>
-  <button class="button button-clear">
+  <button class="button button-clear" ng-click="search()">
     Buscar
   </button>
 </div>
@@ -14,17 +14,20 @@
     		on-refresh="doRefresh()">
   		</ion-refresher>
     	<div class="row" id="photos-container">
-            <ion-list id="search-results">
-                <ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/photos/{{photo.id}}">
-                    <img src="{{serverName + '/arquigrafia-images/' + photo.id + '_home.jpg'}}">
-                </ion-item>
-            </ion-list>
+          <div id="search-placeholder" ng-if="photos.length < 1">
+            <a class="button button-icon icon ion-search"><span>Nenhum resultado encontrado</span></a>
+          </div>
+          <ion-list id="search-results">
+              <ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/search/photos/{{photo.id}}">
+                  <img src="{{serverName + '/arquigrafia-images/' + photo.id + '_home.jpg'}}">
+              </ion-item>
+          </ion-list>
         </div>
-    	<ion-infinite-scroll
-  			on-infinite="loadMoreData()"
-  			distance="5%"
-  			immediate-check="false"
-  			ng-if="moreDataCanBeLoaded">
-		</ion-infinite-scroll>
+    <ion-infinite-scroll
+        on-infinite="loadMoreResults()"
+        distance="5%"
+        immediate-check="false"
+        ng-if="moreDataCanBeLoaded">
+    </ion-infinite-scroll>
   	</ion-content>
 </ion-view>

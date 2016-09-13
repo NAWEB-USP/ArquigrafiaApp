@@ -1,27 +1,28 @@
 <div class="bar bar-header bar-stable">
-	<button class="button button-positive" ng-click="back()" ng-show="!hideData">Voltar</button>
-	<button class="button button-positive" ng-click="forward()" ng-show="hideData">Continuar Cadastro</button>
+	<img src="img/logo.svg">
+	<button class="button button-arq pull-right" ng-click="back()" ng-show="!hideData">Voltar</button>
 </div>
 
 <ion-view view-title="Camera">
-	<ion-content class="has-header padding" scroll="true" overflow-scroll="true">
+	<ion-content class="has-header" scroll="true" overflow-scroll="true" id="camera">
 		<div class="list">
-			<form name="submitPhoto" ng-submit="postPhoto()">
-				<div id="photoArea" ng-show="hideData">
-					<div class="padding" align="center">
-						<img style="max-height:150px" ng-if="!!imageURI" ng-src="{{imageURI}}">
-					</div>
-				
-					<div class="padding">
-						<button class="button button-block button-positive icon-left ion-camera " ng-click="takePicture()">
-							Tirar Foto
+			<form name="submitPhoto">
+				<div id="photoArea" ng-show="hideData">				
+					<div class="padding clearfix">
+						<button class="button button-arq icon ion-camera" ng-click="takePicture()">
 						</button>
-						<button class="button button-block button-positive icon-left ion-images" ng-click="getPicture()">Escolher Foto</button>
+						<button class="button button-arq icon ion-images" ng-click="getPicture()"></button>
+					</div>
+					<div class="padding" id="image-upload" align="center">
+						<img ng-if="!!imageURI" ng-src="{{imageURI}}">
 					</div>
 				</div>
 				
-				<div id="data" ng-show="!hideData">
+				<div id="data" class="list" ng-show="!hideData">
 
+					<div class="item item-divider">
+						Informações obrigatórias
+					</div>
 					<label for="title" class="item item-input">
 						<span class="input-label">Titulo*:</span>
 						<input id="title" ng-model="data.title" type="text" ng-minlength="5" required/>
@@ -43,25 +44,28 @@
 							<option ng-repeat="tag in tags" ng-value="tag.name">{{tag.name}}</option>
 						<select>
 					</label> -->
-					<label class="item item-input">
-						<div>
-							<span class="input-label">Tags*:</span>
-							<button class="button button-positive" modal-select ng-model="teste" options="tags" modal-title="Seelcione uma Tag" has-search="true" on-select="getTag(newValue, oldValue)">
-							    Selecionar
-							    <div class="option">
-							        {{option.name}}
-							    </div>
-							</button>
-
-							<button class="button button-positive" ng-click="addTag()">Adicionar</button>
-						</div>
-						<div>
+					
+					<div id="input-tag">
+						<label class="item item-input">
+							<div>
+								<span class="input-label">Tags*:</span>
+								<!-- se eu coloco o grupo de botoes aqui, eles param de responder corretamente-->						
+							</div>						
+						</label>
+						<div id="tag-buttons">
+							<button class="button button-small button-arq button-shy" modal-select ng-model="teste" options="tags" modal-title="Selecione uma Tag" has-search="true" on-select="getTag(newValue, oldValue)">
+								    Selecionar
+								    <div class="option">
+								        {{option.name}}
+								    </div>
+								</button>
+							<button id="meuNome" class="button button-small button-arq button-shy" ng-click="addTag()">Adicionar</button>
 							<button class="button button-small button-assertive icon-right ion-close" ng-repeat="tag in data.tags" ng-click="removeTag(tag)">{{tag}}</button>
 						</div>
-					</label>
+					</div>
 
-					<div class="item item-divider" ng-show="!showAditional" ng-click="toggle()"><i class="ion-chevron-down"></i> Mostrar campos opcionais</div>
-					<div class="item item-divider" ng-show="showAditional" ng-click="toggle()"><i class="ion-chevron-up"></i> Ocultar campos adicionais</div>
+					<div class="item item-divider" ng-show="!showAditional" ng-click="toggle()">Informações opcionais<i class="ion-plus"></i></div>
+					<div class="item item-divider" ng-show="showAditional" ng-click="toggle()">Informações opcionais<i class="ion-minus"></i></div>
 					<div id="aditionalInfo" class="slideAnimation" ng-show="showAditional">
 						<label for="state" class="item item-input">
 							<span class="input-label">Estado:</span>
@@ -132,59 +136,64 @@
 							<textarea id="description" name="description" ng-model="data.description"></textarea> 
 						</label>
 					</div>
+					
+					<div class="item item-divider">
+						Escolho a licenca <a id="creative_commons" href="http://creativecommons.org/licenses//?lang=pt-BR" target="_blank" style="text-decoration: undeline; line-height=1.em;">Creative Commons</a>, para publicar a imagem, com as seguintes permissoes:
+					</div>	
+					
+					<div class="item item-divider item-divider-light">
+						Permitir o uso comercial da imagem?
+					</div>
+					<div>
+						<ion-radio name="comercialUsage" ng-model="data.commercialUsage" ng-value="true">Sim</ion-radio>
+						<ion-radio name="comercialUsage" ng-model="data.commercialUsage" ng-value="false">Nao</ion-radio>
+					</div>
 
+					<div class="item item-divider item-divider-light">
+						Permitir modificacoes em sua imagem?
+					</div>
+					<div>
+						<ion-radio name="modifications" ng-model="data.modifications" ng-value="'yes'">Sim</ion-radio>
+						<ion-radio name="modifications" ng-model="data.modifications" ng-value="'yes_sa'">Sim, contanto que os outros compartilhem de forma semelhante</ion-radio>
+						<ion-radio name="modifications" ng-model="data.modifications" ng-value="'no'">Nao</ion-radio>
+					</div>
+
+					<div class="item item-divider item-divider-light">
+						&nbsp;
+					</div>
 					<ion-checkbox class="item-text-wrap" ng-model="data.authorized">* Sou o autor da imagem ou possuo permissão expressa do autor para disponibilizá-la no Arquigrafia</ion-checkbox>
 
-					<div class="padding">
-						<p>Escolho a licenca <a id="creative_commons" href="http://creativecommons.org/licenses//?lang=pt-BR" target="_blank" style="text-decoration: undeline; line-height=1.em;">Creative Commons</a>, para publicar a imagem, com as seguintes permissoes:</p>
+					<div class="item item-divider item-divider-light">
+						&nbsp;
 					</div>
-					
-					<div class="padding">
-						<div>
-							<label>Permitir o uso comercial da imagem?</label>
-							<ion-radio name="comercialUsage" ng-model="data.commercialUsage" ng-value="true">Sim</ion-radio>
-							<ion-radio name="comercialUsage" ng-model="data.commercialUsage" ng-value="false">Nao</ion-radio>
-						</div>
-
-						<div>
-							<label>Permitir modificacoes em sua imagem?</label>
-							<ion-radio name="modifications" ng-model="data.modifications" ng-value="'yes'">Sim</ion-radio>
-							<ion-radio name="modifications" ng-model="data.modifications" ng-value="'yes_sa'">Sim, contanto que os outros compartilhem de forma semelhante</ion-radio>
-							<ion-radio name="modifications" ng-model="data.modifications" ng-value="'no'">Nao</ion-radio>
-						</div>
+					<div class="item item-error">* Campos obrigatorios</div>
+					<div class="item item-error" ng-show="submitPhoto.title.$error.minlength && submitPhoto.title.$touched">
+						<i class="ion-information-circled"></i>
+						Titulo precisa ter 5 ou mais caracteres
 					</div>
 
-					<div class="padding" style="color:#F00;">
-						<p>* Campos obrigatorios</p>
+					<div class="item item-error" ng-show="submitPhoto.author.$error.minlength && submitPhoto.author.$touched">
+						<i class="ion-information-circled"></i>
+						Nome do autor precisa ter 5 ou mais caracteres
+					</div>
 
-						<p ng-show="submitPhoto.title.$error.minlength && submitPhoto.title.$touched">
-							<i class="ion-information-circled"></i>
-							Titulo precisa ter 5 ou mais caracteres
-						</p>
+					<div class="item item-error" ng-show="submitPhoto.country.$error.minlength && submitPhoto.country.$touched">
+						<i class="ion-information-circled"></i>
+						Pais precisa ter 5 ou mais caracteres
+					</div>
 
-						<p ng-show="submitPhoto.author.$error.minlength && submitPhoto.author.$touched">
-							<i class="ion-information-circled"></i>
-							Nome do autor precisa ter 5 ou mais caracteres
-						</p>
+					<div class="item item-error" ng-show="submitPhoto.tags.$error.minlength && submitPhoto.tags.$touched">
+						<i class="ion-information-circled"></i>
+						Tags precisam ter 5 ou mais caracteres
+					</div>
 
-						<p ng-show="submitPhoto.country.$error.minlength && submitPhoto.country.$touched">
-							<i class="ion-information-circled"></i>
-							Pais precisa ter 5 ou mais caracteres
-						</p>
-
-						<p ng-show="submitPhoto.tags.$error.minlength && submitPhoto.tags.$touched">
-							<i class="ion-information-circled"></i>
-							Tags precisam ter 5 ou mais caracteres
-						</p>
-
-						<p ng-show="!(!!imageURI)">
-							<i class="ion-information-circled"></i>
-							Selecione uma imagem
-						</p>
+					<div class="item item-error" ng-show="!(!!imageURI)">
+						<i class="ion-information-circled"></i>
+						Selecione uma imagem
 					</div>
 
 					<div class="padding">
-						<button class="button button-block button-positive" type="submit" ng-disabled="submitPhoto.$invalid || !(!!imageURI)">Enviar</button>
+						<button class="button button-block button-arq button-inverted" ng-click="postPhoto()" ng-disabled="submitPhoto.$invalid || !(!!imageURI)">Enviar</button>
 					</div>
 				</div>
 			</form>

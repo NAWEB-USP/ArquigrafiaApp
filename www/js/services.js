@@ -1,8 +1,8 @@
 angular.module('starter.services', [])
 
 .factory('ServerName', function(){
-  var serverName = "http://localhost:8000";
-  //var serverName = "http://valinhos.ime.usp.br:51080";
+  //var serverName = "http://localhost:8000";
+  var serverName = "http://valinhos.ime.usp.br:51080";
   return {
     get: function () { 
       return serverName; 
@@ -10,7 +10,26 @@ angular.module('starter.services', [])
   }
 })
 
-.factory('LoginService', function($q, $http, ServerName) {
+.factory('PopUpService', function($ionicPopup, $ionicLoading) {
+  return {
+    showSpinner : function (message) {
+      $ionicLoading.show({
+        template: '<p>' + message + '</p><ion-spinner></ion-spinner>'
+      });
+    }, 
+    hideSpinner : function () {
+      $ionicLoading.hide();
+    }, 
+    showPopUp : function (title, message) {
+      $ionicPopup.alert({
+        title: title,
+        template: message
+      });
+    }
+  }
+})
+
+.factory('LoginService', function($q, $http, $ionicHistory, $state, ServerName) {
     return {
         loginUser: function(name, pw) {
             var deferred = $q.defer();
@@ -32,8 +51,26 @@ angular.module('starter.services', [])
             }
             return promise; 
         }, 
-        logoutUser: function(name) {
-            
+        logoutUser: function(name, token) {
+          return $http.post(ServerName.get() + "/api/logout", {login : name, token : token}).then(function(result){
+            return result.data;
+          });
+        }, 
+        verifyCredentials: function() {
+          if(window.localStorage.getItem("logged_user") == null) {
+            $state.go('login');
+          }
+          else {
+            return $http.post(ServerName.get() + "/api/auth", {login : window.localStorage.getItem("logged_user"), token : window.localStorage.getItem(window.localStorage.getItem("logged_user")), id : window.localStorage.getItem("user_id")}).then(function(result){
+              if (result.data["auth"] != true) {
+                window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
+                window.localStorage.removeItem("logged_user");
+                window.localStorage.removeItem("user_id");
+                $ionicHistory.clearHistory();
+                $ionicHistory.clearCache().then(function(){ $state.go('login', {}, {reload: true}) });     
+              }
+            });
+          }
         }
     }
 })
@@ -68,20 +105,116 @@ angular.module('starter.services', [])
   };
 })
 
-.factory('Photos', function($http, ServerName) {
+.factory('Photos', function($http, $state, $stateParams, ServerName, PopUpService) {
   return {
     all: function() {
       return $http.get(ServerName.get() + "/api/photos").then(function(result){
         return result.data;
       });
     },
-    remove: function(photo) {
+    remove: function(photoId) {
+      var params = {};
+      var logged_user = window.localStorage.getItem("logged_user");
+      params.token                     = window.localStorage.getItem(logged_user);
+      params.user_id                   = window.localStorage.getItem("user_id");
+      return $http.delete(ServerName.get() + "/api/photos/" + photoId, {params: params}).then(function(result){
+        return result.data;
+      })
     },
-    get: function(photoId) {
-      return $http.get(ServerName.get() + "/api/photos/" + photoId).then(function(result){
+    get: function(photoId, userId) {
+      return $http.get(ServerName.get() + "/api/photos/" + photoId, { params: {user_id : userId} }).then(function(result){
         return result.data;
       });
     }, 
+    sendWithPhoto: function(image, data, isNewPhoto) {
+      PopUpService.showSpinner('Enviando...');
+      var address = ServerName.get() + "/api/photos";
+
+      var onSuccess = function(response){
+        console.log("Code = " + response.responseCode);
+        console.log("Response = " + response.response);
+        console.log("Sent = " + response.bytesSent);
+        PopUpService.hideSpinner();
+        $state.go('tab.photo-account-detail', {'photoId': response.response});
+      };
+
+      var onFail = function(error){ 
+        console.log("Error code = " + error.responseCode);
+        console.log("Error source = " + error.source);
+        console.log("error target = " + error.target);
+        PopUpService.hideSpinner();
+        PopUpService.showPopUp('Erro', 'Houve um erro, tente novamente mais tarde');
+      };
+
+      var options = new FileUploadOptions();
+    
+      var params = {};
+      var logged_user = window.localStorage.getItem("logged_user");
+      params.token                     = window.localStorage.getItem(logged_user);
+      params.user_id                   = window.localStorage.getItem("user_id");
+      params.photo_allowCommercialUses = data.commercialUsage;
+      params.photo_allowModifications  = data.modifications;
+      params.photo_name                = data.title;
+      params.photo_imageAuthor         = data.author;
+      params.tags                      = data.tags;
+      params.photo_country             = data.country;
+      params.photo_city                = data.city;
+      params.photo_description         = data.description;
+      params.photo_district            = data.district;
+      params.photo_state               = data.state;
+      params.photo_street              = data.address;
+      params.authorized                = data.authorized;
+
+      options.params = params;
+      options.fileKey = "photo";
+      options.httpMethod = (isNewPhoto) ? "POST" : "PUT" ;
+      options.headers = {
+        Connection: "close"
+      };
+
+      var transfer = new FileTransfer();
+      transfer.upload(image, address, onSuccess, onFail, options);
+    },
+    put: function(data) {
+      PopUpService.showSpinner('Enviando...');
+
+      var onSuccess = function(response){
+        console.log("Code = " + response.responseCode);
+        console.log("Response = " + response.response);
+        console.log("Sent = " + response.bytesSent);
+        PopUpService.hideSpinner();
+        $state.go('tab.photo-account-detail', {'photoId': response.response});
+      };
+
+      var onFail = function(error){ 
+        console.log("Error code = " + error.responseCode);
+        console.log("Error source = " + error.source);
+        console.log("error target = " + error.target);
+        PopUpService.hideSpinner();
+        PopUpService.showPopUp('Erro', 'Houve um erro, tente novamente mais tarde');
+      };
+
+      var address = ServerName.get() + "/api/photos/" + $stateParams.photoId;
+
+      var params = {};
+      var logged_user = window.localStorage.getItem("logged_user");
+      params.token                     = window.localStorage.getItem(logged_user);
+      params.user_id                   = window.localStorage.getItem("user_id");
+      params.photo_allowCommercialUses = data.commercialUsage;
+      params.photo_allowModifications  = data.modifications;
+      params.photo_name                = data.title;
+      params.photo_imageAuthor         = data.author;
+      params.tags                      = data.tags;
+      params.photo_country             = data.country;
+      params.photo_city                = data.city;
+      params.photo_description         = data.description;
+      params.photo_district            = data.district;
+      params.photo_state               = data.state;
+      params.photo_street              = data.address;
+      params.authorized                = data.authorized;
+
+      $http.put(address, params).then(onSuccess, onFail);
+    },
     getEvaluation: function(photoId, userId) {
       return $http.get(ServerName.get() + "/api/photos/" + photoId + "/evaluation/" + userId).then(function(result){
         return result.data;
@@ -140,6 +273,21 @@ angular.module('starter.services', [])
   }
 })
 
+.factory('Search', function($http, ServerName) {
+  return {
+    getSearch: function(query, userId) {
+      return $http.post(ServerName.get() + "/api/search", {q : query, user_id : userId}).then(function(result){
+        return result.data;
+      });
+    }, 
+    getMoreSearch: function(query, maxId) {
+      return $http.post(ServerName.get() + "/api/moreSearch", {q : query, max_id : maxId}).then(function(result){
+        return result.data;
+      });
+    } 
+  }
+})
+
 .factory('Tags', function($http, ServerName){
   return {
     all: function() {
@@ -152,22 +300,18 @@ angular.module('starter.services', [])
   }
 })
 
-.factory("Camera", function($q) {
+.factory('Camera', function($q) {
   return {
     getPicture: function(options){
-      var q = $q.defer();
-
-      navigator.camera.getPicture(function(result) {
-        q.resolve(result);
-      }, function (error) {
-        q.reject(error);
-      }, options);
-      
-      return q.promise;
+      return null;
+    },
+    takePicture: function(option){
+      return null;
     }
   }
 })
-.factory("Geolocation", function($http){
+
+.factory('Geolocation', function($http, $q){
   return {
     getAddress: function(latitude, longitude) {
       return $http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude).then(function(data){
@@ -193,6 +337,44 @@ angular.module('starter.services', [])
           return address;
         }
       });
+    },
+    getCoordinates: function(image){
+      var latitude, longitude;
+      var result = {};
+      var deferred = $q.defer();
+      var convertDegToDec = function(arr) {
+        return (arr[0].numerator + arr[1].numerator/60 + (arr[2].numerator/arr[2].denominator)/3600).toFixed(4);
+      };
+
+      EXIF.getData(image, function(){
+        longitude = EXIF.getTag(image, "GPSLongitude");
+        latitude = EXIF.getTag(image, "GPSLatitude");
+
+        if(latitude != null || longitude != null){
+          latitude = convertDegToDec(latitude);
+          longitude = convertDegToDec(longitude);
+
+          //Coordenadas negativas
+          if(EXIF.getTag(this,"GPSLongitudeRef") === "W") longitude = -1 * longitude;
+          if(EXIF.getTag(this,"GPSLatitudeRef") === "S") latitude = -1 * latitude;
+          result.latitude = latitude;
+          result.longitude = longitude;
+          deferred.resolve(result);
+        }
+        else {
+          navigator.geolocation.getCurrentPosition(function(position){
+            latitude = position.coords.latitude;
+            longitude = position.coords.longitude;
+            result.latitude = latitude;
+            result.longitude = longitude;
+            deferred.resolve(result);
+          });
+        }
+        
+        
+      });
+
+      return deferred.promise;
     }
   }
 });

@@ -12,51 +12,41 @@ angular.module('starter.controllers', ['highcharts-ng'])
     })
 })
 
-.controller('LoginCtrl', function($scope, LoginService, ServerName, $ionicPopup, $state, $ionicLoading) {
+.controller('LoginCtrl', function($scope, $state, PopUpService, LoginService, ServerName) {
+    var serverName = ServerName.get();
     /* Verifica se o usuário já está logado */
     $scope.$on('$ionicView.enter', function() {
       if(window.localStorage.getItem("logged_user") != null) {
         $state.go('tab.dash');
       }
     })
-    /* Mostra spinner */
-    $scope.show = function() {
-    $ionicLoading.show({
-        template: '<p>Carregando...</p><ion-spinner></ion-spinner>'
-      });
-    };
-    /* Esconde o spinner */
-    $scope.hide = function(){
-      $ionicLoading.hide();
-    };
-
-    $scope.serverName = ServerName.get();
+    /* Definição de variáveis */
     $scope.data = {};
+    $scope.cadastro= function(){
+      var ref = cordova.InAppBrowser.open(serverName + '/users/account', '_blank', 'location=yes, hardwareback=no');
+      ref.show();
+    }
+
     /* Faz o login */
     $scope.login = function() {
-        $scope.show($ionicLoading);
+        PopUpService.showSpinner('Carregando...');
         LoginService.loginUser($scope.data.username, $scope.data.password).success(function(data) {
             window.localStorage.setItem("logged_user", data.login);
             window.localStorage.setItem(data.login, data.token);
             window.localStorage.setItem("user_id", data.id);
             $state.go('tab.dash', {}, {reload: true});
         }).error(function(data) {
-            var alertPopup = $ionicPopup.alert({
-                title: 'Falha no login!',
-                template: 'Usuário ou senha incorretos!'
-            });
-        }).finally(function($ionicLoading) { 
-          $scope.hide($ionicLoading);  
+            PopUpService.showPopUp('Falha no login!', 'Usuário ou senha incorretos!');
+        }).finally(function($ionicLoading) {  
+          PopUpService.hideSpinner(); 
         });
     }
 })
 
-.controller('FeedCtrl', function($scope, Feed, ServerName, $http, $state) {
-  /* Verifica se o usuário está logado */
+.controller('FeedCtrl', function($scope, $state, Feed, ServerName, LoginService) {
+  /* Verifica se o usuário está autorizado */
   $scope.$on('$ionicView.enter', function() {
-    if(window.localStorage.getItem("logged_user") == null) {
-      $state.go('login');
-    }
+    LoginService.verifyCredentials();
   })
   /* Definição de variáveis */
   $scope.serverName = ServerName.get();
@@ -97,28 +87,43 @@ angular.module('starter.controllers', ['highcharts-ng'])
   }
 })
 
-.controller('SearchCtrl', function($scope, Photos, ServerName, Feed, $http, $state) {
+.controller('SearchCtrl', function($scope, $state, $ionicScrollDelegate, Photos, Search, PopUpService, LoginService, ServerName, Feed) {
+  /* Verifica se o usuário está autorizado */
   $scope.$on('$ionicView.enter', function() {
-    if(window.localStorage.getItem("logged_user") == null) {
-      $state.go('login');
-    }
+    LoginService.verifyCredentials();
   })
   /* Definição de variáveis */
   $scope.serverName = ServerName.get();
   $scope.moreDataCanBeLoaded = true;
+  var last_search_terms = "";
   var maxId = 0;
-  /* Mostra as fotos mais recentes */
-  Feed.getMostRecent().then(function(result){
-    $scope.photos = result;
-    maxId = result[result.length-1].id;
-    console.log(maxId);
-    if (result.length < 20) {
-      $scope.moreDataCanBeLoaded = false;
-    }
-  });
-  /* Carrega mais fotos recentes */
-  $scope.loadMoreData = function() {
-    Feed.getMoreMostRecent(maxId).then(function(result){
+  $scope.photos = [];
+  /* Realiza busca */
+  $scope.search = function() {
+    document.getElementById("search-placeholder").style.display = "none";
+    PopUpService.showSpinner("Carregando...");
+    last_search_terms = document.getElementById('search-bar').value;
+    $scope.moreDataCanBeLoaded = true;
+    Search.getSearch(last_search_terms, window.localStorage.getItem("user_id")).then(function(result){
+      if (result.length < 20) {
+        $scope.moreDataCanBeLoaded = false;
+      }
+      $scope.photos = [];
+      if (result.length > 0) { 
+        $scope.photos = Object.keys(result).map(function(k) { return result[k] }).sort(function(a, b) { return b.id - a.id; });
+        maxId = $scope.photos[$scope.photos.length-1].id;
+      }
+      if (result.length == 0) {
+        document.getElementById("search-placeholder").style.display = "block";
+      }
+      $ionicScrollDelegate.scrollTop();
+      PopUpService.hideSpinner();
+    }); 
+  }
+
+  /* Recupera mais resultados da busca */
+  $scope.loadMoreResults = function() {
+    Search.getMoreSearch(last_search_terms, maxId).then(function(result){
       maxId = result[result.length-1].id;
       $scope.photos = $scope.photos.concat(result);
       if (result.length < 20) {
@@ -129,15 +134,24 @@ angular.module('starter.controllers', ['highcharts-ng'])
   }
 })
 
-.controller('PhotoDetailCtrl', function($scope, $http, $stateParams, Photos, ServerName) {
+.controller('PhotoDetailCtrl', function($scope, $stateParams, $state, Photos, ServerName, PopUpService, LoginService) {
+  /* Verifica se o usuário está autorizado */
+  $scope.$on('$ionicView.enter', function() {
+    LoginService.verifyCredentials();
+  })
   /* Definição de variáveis */
   $scope.serverName = ServerName.get();
   $scope.detail = {};
+  $scope.user_id = window.localStorage.getItem("user_id");
   /* Carrega informações da foto */
-  var photo = Photos.get($stateParams.photoId);
+  var photo = Photos.get($stateParams.photoId, window.localStorage.getItem("user_id"));
   photo.then(function(result){
     $scope.photo = result;
   })
+  /* Retorna para a página anterior */
+  $scope.goBack = function() {
+    window.history.back();
+  };
   /* Carrega avaliação do usuário atual da foto */
   var evaluation = Photos.getEvaluation($stateParams.photoId, window.localStorage.getItem("user_id"));
   evaluation.then(function(result){
@@ -164,25 +178,46 @@ angular.module('starter.controllers', ['highcharts-ng'])
     else {
       data["areArchitecture"] = "no";
     }
-    var evaluation = Photos.postEvaluation($stateParams.photoId, window.localStorage.getItem("user_id"), data);
+    PopUpService.showSpinner("Enviando impressões...");
+    Photos.postEvaluation($stateParams.photoId, window.localStorage.getItem("user_id"), data).then(function(result) {
+      PopUpService.hideSpinner();
+      PopUpService.showPopUp('Sucesso', 'Impressões registradas com sucesso.');
+    });
   }
   /* Exibe informações da foto */
   $scope.showInformation = function() {
     document.getElementById("photo-info-container").style.display = "initial";
     document.getElementById("evaluation-container").style.display = "none";
     document.getElementById("evaluation-average-container").style.display = "none";
+    if (document.getElementById("showInformation").className.indexOf("active") == -1) {
+      document.getElementById("showEvaluation").className = document.getElementById("showEvaluation").className.replace('active','');
+      if (document.getElementById("showAverage") != null)
+        document.getElementById("showAverage").className = document.getElementById("showAverage").className.replace('active','');
+      document.getElementById("showInformation").className += " active";
+    }
   }
   /* Exibe binômios para avaliação */
   $scope.showEvaluation = function() {
     document.getElementById("photo-info-container").style.display = "none";
     document.getElementById("evaluation-container").style.display = "initial";
     document.getElementById("evaluation-average-container").style.display = "none";
+    if (document.getElementById("showEvaluation").className.indexOf("active") == -1) {
+      document.getElementById("showInformation").className = document.getElementById("showInformation").className.replace('active','');
+      if (document.getElementById("showAverage") != null)
+        document.getElementById("showAverage").className = document.getElementById("showAverage").className.replace('active','');
+      document.getElementById("showEvaluation").className += " active";
+    }
   }
   /* Exibe gráfico com a média das avaliações */
   $scope.showAverage = function() {
     document.getElementById("photo-info-container").style.display = "none";
     document.getElementById("evaluation-container").style.display = "none";
     document.getElementById("evaluation-average-container").style.display = "initial";
+    if (document.getElementById("showAverage").className.indexOf("active") == -1) {
+      document.getElementById("showEvaluation").className = document.getElementById("showEvaluation").className.replace('active','');
+      document.getElementById("showInformation").className = document.getElementById("showInformation").className.replace('active','');
+      document.getElementById("showAverage").className += " active";
+    }
   }
   /* Configuração do gráfico com as médias das avaliações */
   var averageEvaluation = Photos.averageEvaluation($stateParams.photoId, window.localStorage.getItem("user_id"));
@@ -281,14 +316,28 @@ angular.module('starter.controllers', ['highcharts-ng'])
       color: '#000000',
     }]
   }
+
+  /*Operacoes de foto */
+  $scope.deletePhoto = function(id) {
+    if(confirm("Deseja mesmo deletar esta foto? " + id)) {
+      PopUpService.showSpinner('Processando');
+      Photos.remove(id).then(function(data) {
+        PopUpService.hideSpinner();
+        PopUpService.showPopUp(data.message);
+        $state.go('tab.dash', {}, {reload: true});
+      });
+    }
+  }
+
+  $scope.editPhoto = function(id) {
+    $state.go('tab.edit-photo', {photoId: id});
+  }
 })
 
-.controller('AccountCtrl', function($scope, $http, $state, $timeout, $ionicHistory, Profiles, ServerName, LoginService) {
-  /* Verifica se o usuário está logado */
+.controller('AccountCtrl', function($scope, $state, $timeout, $ionicHistory, Profiles, ServerName, LoginService) {
+  /* Verifica se o usuário está autorizado */
   $scope.$on('$ionicView.enter', function() {
-    if(window.localStorage.getItem("logged_user") == null) {
-      $state.go('login');
-    }
+    LoginService.verifyCredentials();
   })
 
   /* Definição de variáveis */
@@ -310,6 +359,10 @@ angular.module('starter.controllers', ['highcharts-ng'])
   $scope.showEvaluations = function() {
     document.getElementById("evaluations").style.display = "initial";
     document.getElementById("uploads").style.display = "none";
+    if (document.getElementById("showEvaluations").className.indexOf("active") == -1) {
+      document.getElementById("showUploads").className = document.getElementById("showUploads").className.replace('active','');
+      document.getElementById("showEvaluations").className += " active";
+    }
     $scope.evaluationsShowing = true;
     $scope.uploadsShowing = false;
   }
@@ -318,6 +371,10 @@ angular.module('starter.controllers', ['highcharts-ng'])
   $scope.showUploads = function() {
     document.getElementById("uploads").style.display = "initial";
     document.getElementById("evaluations").style.display = "none";
+    if (document.getElementById("showUploads").className.indexOf("active") == -1) {
+      document.getElementById("showEvaluations").className = document.getElementById("showEvaluations").className.replace('active','');
+      document.getElementById("showUploads").className += " active";
+    }
     $scope.evaluationsShowing = false;
     $scope.uploadsShowing = true;
   }
@@ -370,6 +427,10 @@ angular.module('starter.controllers', ['highcharts-ng'])
   $scope.doRefresh = function() {
     $scope.moreUploadsCanBeLoaded = true;
     $scope.moreEvaluationsCanBeLoaded = true;
+    var account = Profiles.getProfile(window.localStorage.getItem("user_id"));
+    account.then(function(result){
+      $scope.account = result;
+    });
     Profiles.getPhotos(window.localStorage.getItem("user_id")).then(function(result){
       $scope.photos = result;
       maxIdUpload = result[result.length-1].id;
@@ -391,15 +452,21 @@ angular.module('starter.controllers', ['highcharts-ng'])
 
   /* Desloga o usuário */
   $scope.logout = function() {
-    window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
-    window.localStorage.removeItem("logged_user");
-    window.localStorage.removeItem("user_id");
-    $ionicHistory.clearHistory();
-    $ionicHistory.clearCache().then(function(){ $state.go('login', {}, {reload: true}) });
+    LoginService.logoutUser(window.localStorage.getItem("logged_user"), window.localStorage.getItem(window.localStorage.getItem("logged_user"))).then(function(data) {
+      window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
+      window.localStorage.removeItem("logged_user");
+      window.localStorage.removeItem("user_id");
+      $ionicHistory.clearHistory();
+      $ionicHistory.clearCache().then(function(){ $state.go('login', {}, {reload: true}) });
+    })
   }
 })
 
-.controller('UserFollowersCtrl', function($scope, $http, $stateParams, ServerName, Profiles) {
+.controller('UserFollowersCtrl', function($scope, $http, $stateParams, ServerName, Profiles, LoginService) {
+  /* Verifica se o usuário está autorizado */
+  $scope.$on('$ionicView.enter', function() {
+    LoginService.verifyCredentials();
+  })
   /* Definição de variáveis */
   $scope.serverName = ServerName.get();
   /* Pega as seguidores do usuário */
@@ -409,7 +476,11 @@ angular.module('starter.controllers', ['highcharts-ng'])
   })
 })
 
-.controller('UserFollowingCtrl', function($scope, $http, $stateParams, ServerName, Profiles) {
+.controller('UserFollowingCtrl', function($scope, $http, $stateParams, ServerName, Profiles, LoginService) {
+  /* Verifica se o usuário está autorizado */
+  $scope.$on('$ionicView.enter', function() {
+    LoginService.verifyCredentials();
+  })
   /* Definição de variáveis */
   $scope.serverName = ServerName.get();
   /* Pega os seguidos do usuário */
@@ -419,7 +490,12 @@ angular.module('starter.controllers', ['highcharts-ng'])
   })
 })
 
-.controller('CameraCtrl', function($scope, $http, $state, ServerName, Tags, Camera, Geolocation) {
+.controller('CameraCtrl', function($scope, $http, $state, ServerName, Tags, Camera, 
+                                   Geolocation, PopUpService, LoginService, Photos) {
+  /* Verifica se o usuário está autorizado */
+  $scope.$on('$ionicView.enter', function() {
+    LoginService.verifyCredentials();
+  })
   /* Declaracao de variavel */
   $scope.hideData = true;
   $scope.showAditional = false;
@@ -437,7 +513,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
   $scope.getTag = function(newValue, oldValue){
     if($scope.data.tags.indexOf(newValue.name) == -1)
       $scope.data.tags.push(newValue.name);
-    console.log($scope.data.tags);
   }
 
   $scope.addTag = function(){
@@ -445,13 +520,186 @@ angular.module('starter.controllers', ['highcharts-ng'])
     tag = tag.trim().toLowerCase();
     if($scope.data.tags.indexOf(tag) == -1)
       $scope.data.tags.push(tag);
-    console.log($scope.data.tags);
+ }
+
+  $scope.removeTag = function(tag){
+    var position = $scope.data.tags.indexOf(tag);
+    $scope.data.tags.splice(position, 1);
+  }
+
+  /* Controle de tela */
+  $scope.toggle = function() {
+    $scope.showAditional = !$scope.showAditional;
+  }
+
+  // $scope.forward = function() {
+  //   $scope.hideData = false;
+  // }
+
+  $scope.back = function() {
+    $scope.hideData = true;
+  }
+
+  //utility funct based on https://en.wikipedia.org/wiki/Geographic_coordinate_conversion
+  
+
+  /* Tirar foto */
+  $scope.takePicture = function(options) {
+    var optionsTake = {
+      quality: 70,
+      destinationType: navigator.camera.DestinationType.NATIVE_URI,
+      sourceType: navigator.camera.PictureSourceType.CAMERA,
+      encodingType: navigator.camera.EncodingType.JPEG,
+      correctOrientation: true,
+      saveToPhotoAlbum: false //para testes nao ocuparem mta memoria, para release colocar true
+    };
+
+    navigator.camera.getPicture(function (imageURI) {      
+      var geoImage = new Image();
+      geoImage.onload = function(){
+        PopUpService.showSpinner('Carregando...');
+
+        var coordinates = Geolocation.getCoordinates(geoImage);
+        coordinates.then(function(coordinates){
+          latitude = coordinates.latitude;
+          longitude = coordinates.longitude;
+
+
+          if(latitude != null || longitude != null){
+            var result = Geolocation.getAddress(latitude, longitude);
+            result.then(function(address){
+              $scope.data.country   = address.country;
+              $scope.data.city      = address.city;
+              $scope.data.district  = address.district;
+              $scope.data.state     = address.state;
+              $scope.data.address   = address.address;
+              PopUpService.hideSpinner();
+            }); 
+          } else { PopUpService.hideSpinner(); }
+        });               
+      }
+
+      $scope.$apply(function() {
+        $scope.imageURI = imageURI;
+        geoImage.src = imageURI;
+        $scope.hideData = false;
+      });
+
+    }, function(error) {
+      console.log(error) 
+    }, optionsTake);
+  };
+
+  /* Selecionar foto */
+  $scope.getPicture = function(options) {
+    var optionsGet = {
+      quality: 70,
+      destinationType: navigator.camera.DestinationType.NATIVE_URI,
+      sourceType: navigator.camera.PictureSourceType.SAVEDPHOTOALBUM,
+      encodingType: navigator.camera.EncodingType.JPEG,
+      correctOrientation: true,
+      saveToPhotoAlbum: false
+    };
+
+    navigator.camera.getPicture(function (imageURI) {
+      var geoImage = new Image();
+      geoImage.onload = function(){
+        PopUpService.showSpinner('Carregando...');
+
+        var coordinates = Geolocation.getCoordinates(geoImage);
+        coordinates.then(function(coordinates){
+          latitude = coordinates.latitude;
+          longitude = coordinates.longitude;
+
+          if(latitude != null || longitude != null){
+            var result = Geolocation.getAddress(latitude, longitude);
+            result.then(function(address){
+              $scope.data.country   = address.country;
+              $scope.data.city      = address.city;
+              $scope.data.district  = address.district;
+              $scope.data.state     = address.state;
+              $scope.data.address   = address.address;
+              PopUpService.hideSpinner();
+            }); 
+          } else { PopUpService.hideSpinner(); }
+        });               
+      }
+
+      $scope.$apply(function() {
+        $scope.imageURI = imageURI;
+        geoImage.src = imageURI;
+        $scope.hideData = false;
+      });
+
+    }, function(error) {
+      console.log(error);
+    }, optionsGet);
+  };
+
+  /* Envio de foto */
+  $scope.postPhoto = function(){ 
+    Photos.sendWithPhoto($scope.imageURI, $scope.data, true); 
+  };
+})
+
+.controller('EditPhotoCtrl', function($scope, $http, $state, $stateParams, 
+                                      ServerName, Photos, Tags, Camera, Geolocation, PopUpService, LoginService) {
+  /* Verifica se o usuário está autorizado */
+  $scope.$on('$ionicView.enter', function() {
+    LoginService.verifyCredentials();
+  })
+  /* Definindo variaveis */
+  $scope.showAditional = false;
+  var longitude = null;
+  var latitude = null;
+  var editedPhoto = false;
+  $scope.data = {};
+  $scope.data.tags = [];
+
+  /* Preenchendo campos de photo */
+  var photo = Photos.get($stateParams.photoId, window.localStorage.getItem("user_id"));
+  photo.then(function(result) {
+    var photo = result['photo'];
+    $scope.imageURI = ServerName.get() + "/arquigrafia-images/" + result['photo'].id + "_home.jpg";
+
+    $scope.data.commercialUsage = (photo.allowCommercialUses == "YES") ? true : false;
+    $scope.data.modifications = photo.allowModifications.toLowerCase();
+    $scope.data.title = photo.name;
+    $scope.data.author = photo.imageAuthor;
+    if(typeof result['tags'] != 'undefined')
+      $scope.data.tags = result['tags'];
+    $scope.data.country = photo.country;
+    $scope.data.city = photo.city;
+    $scope.data.description = photo.description;
+    $scope.data.district = photo.district;
+    $scope.data.state = photo.state;
+    $scope.data.address = photo.address;
+    $scope.data.authorized = (photo.authorized == "1") ? true : false;
+  })
+
+  /* Tags */
+  var tags = Tags.all();
+  tags.then(function(result){
+    $scope.tags = result;
+  });
+
+  $scope.getTag = function(newValue, oldValue){
+    if($scope.data.tags.indexOf(newValue.name) == -1)
+      $scope.data.tags.push(newValue.name);
+  }
+
+  $scope.addTag = function(){
+    var tag = prompt("Digite o nome da tag:");
+    if(tag != null) {
+      tag = tag.trim().toLowerCase();
+      if($scope.data.tags.indexOf(tag) == -1)
+        $scope.data.tags.push(tag);
+    }
   }
 
   $scope.removeTag = function(tag){
     var position = $scope.data.tags.indexOf(tag);
     $scope.data.tags.splice(position, 1);
-    console.log($scope.data.tags);
   }
 
   /* Controle de tela */
@@ -478,34 +726,35 @@ angular.module('starter.controllers', ['highcharts-ng'])
       saveToPhotoAlbum: false //para testes nao ocuparem mta memoria, para release colocar true
     };
 
-    var onSuccess = function(position){
-      latitude = position.coords.latitude;
-      longitude = position.coords.longitude;
-    };
-    var onFail = function(error) {
-      alert("Code: " + error.code + " Message: " + error.message);
-    };
-
     navigator.camera.getPicture(function (imageURI) {
-      
       var geoImage = new Image();
       geoImage.onload = function(){
-        navigator.geolocation.getCurrentPosition(onSuccess, onFail);
-        if(latitude != null || longitude != null){
-          var result = Geolocation.getAddress(latitude, longitude);
-          result.then(function(address){
-            $scope.data.country   = address.country;
-            $scope.data.city      = address.city;
-            $scope.data.district  = address.district;
-            $scope.data.state     = address.state;
-            $scope.data.address   = address.address;
-          }); 
-        }
+        PopUpService.showSpinner('Carregando...');
+
+        var coordinates = Geolocation.getCoordinates(geoImage);
+        coordinates.then(function(coordinates){
+          latitude = coordinates.latitude;
+          longitude = coordinates.longitude;
+
+
+          if(latitude != null || longitude != null){
+            var result = Geolocation.getAddress(latitude, longitude);
+            result.then(function(address){
+              $scope.data.country   = address.country;
+              $scope.data.city      = address.city;
+              $scope.data.district  = address.district;
+              $scope.data.state     = address.state;
+              $scope.data.address   = address.address;
+              PopUpService.hideSpinner();
+            }); 
+          } else { PopUpService.hideSpinner(); }
+        });               
       }
 
       $scope.$apply(function() {
         $scope.imageURI = imageURI;
         geoImage.src = imageURI;
+        editedPhoto = true;
       });
 
     }, function(error) {
@@ -525,13 +774,15 @@ angular.module('starter.controllers', ['highcharts-ng'])
     };
 
     navigator.camera.getPicture(function (imageURI) {
-      $scope.$apply(function() {
-        var geoImage = new Image();
-        geoImage.onload = function(){
-          EXIF.getData(geoImage, function(){
-            longitude = EXIF.getTag(geoImage, "GPSLongitude");
-            latitude = EXIF.getTag(geoImage, "GPSLatitude");
-          });
+      var geoImage = new Image();
+      geoImage.onload = function(){
+        PopUpService.showSpinner('Carregando...');
+
+        var coordinates = Geolocation.getCoordinates(geoImage);
+        coordinates.then(function(coordinates){
+          latitude = coordinates.latitude;
+          longitude = coordinates.longitude;
+
           if(latitude != null || longitude != null){
             var result = Geolocation.getAddress(latitude, longitude);
             result.then(function(address){
@@ -540,11 +791,16 @@ angular.module('starter.controllers', ['highcharts-ng'])
               $scope.data.district  = address.district;
               $scope.data.state     = address.state;
               $scope.data.address   = address.address;
+              PopUpService.hideSpinner();
             }); 
-          }
-        }
+          } else { PopUpService.hideSpinner(); }
+        });               
+      }
+
+      $scope.$apply(function() {
         $scope.imageURI = imageURI;
         geoImage.src = imageURI;
+        editedPhoto = true;
       });
 
     }, function(error) {
@@ -554,46 +810,12 @@ angular.module('starter.controllers', ['highcharts-ng'])
 
   /* Envio de foto */
   $scope.postPhoto = function(){
-    
-    var address = ServerName.get() + "/api/photos";
-    var image = $scope.imageURI;
-
-    var onSuccess = function(response){
-      console.log("Code = " + response.responseCode);
-      console.log("Response = " + response.response);
-      console.log("Sent = " + response.bytesSent);
-      $state.go('tab.photo-detail', {'photoId': response.response});
-    };
-
-    var onFail = function(error){
-      console.log("Error code = " + error.responseCode);
-      console.log("Error source = " + error.source);
-      console.log("error target = " + error.target);
-      alert("Houve um erro, tente novamente mais tarde");
-    };
-
-    var options = new FileUploadOptions();
-    
-
-    var params = {};
-    params.user_id                   = window.localStorage.getItem("user_id");
-    params.photo_allowCommercialUses = $scope.data.commercialUsage;
-    params.photo_allowModifications  = $scope.data.modifications;
-    params.photo_name                = $scope.data.title;
-    params.photo_imageAuthor         = $scope.data.author;
-    params.tags                      = $scope.data.tags;
-    params.photo_country             = $scope.data.country;
-    params.photo_city                = $scope.data.city;
-    params.photo_description         = $scope.data.description;
-    params.photo_district            = $scope.data.district;
-    params.photo_state               = $scope.data.state;
-    params.photo_street              = $scope.data.address;
-    params.authorized                = $scope.data.authorized;
-
-    options.params = params;
-    options.fileKey = "photo";
-
-    var transfer = new FileTransfer();
-    transfer.upload(image, address, onSuccess, onFail, options);
+    if(editedPhoto) {
+      Photos.sendWithPhoto($scope.imageURI, $scope.data, false); 
+    }
+    else {
+      Photos.put($scope.data);
+    }
   };
+
 });

@@ -1,16 +1,24 @@
-<div class="bar bar-header bar-stable">
-    <h1 class="title"><img class="title-image" src="img/logo-mini.png" height="18"/>  Arquigrafia</h1>
-</div>
 <ion-view view-title="Login" name="login-view">
-  <ion-content class="padding has-header">
-      <div class="list list-inset">
-          <label class="item item-input">
+  <ion-content class="padding" id="login">
+    <div class="center-content">
+      <div class="row row-center">
+        <div class="col">
+            <div class="text-center">
+              <img src="img/logo-symbol.svg">
+            </div>
+        </div>
+      </div>
+      <div class="list">          
+          <label class="item item-input item-arq">
               <input type="text" placeholder="Usuário" ng-model="data.username">
           </label>
-          <label class="item item-input">
+          <label class="item item-input item-arq">
               <input type="password" placeholder="Senha" ng-model="data.password">
           </label>
       </div>
-      <button class="button button-block button-calm" ng-click="login()">Entrar</button>
+      <button class="button button-arq button-inverted button-block" ng-click="login()">Entrar</button>
+      <button class="button button-clear button-positive button-block" ng-click="cadastro()">Cadastre-se</button>
+    </div>
+
   </ion-content>
 </ion-view>
