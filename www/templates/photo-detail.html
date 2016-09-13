@@ -1,31 +1,27 @@
 <div class="bar bar-header">
-  <a class="button icon-left ion-chevron-left button-clear button-dark" ng-click="goBack()">Voltar</a>
+  <a class="button icon-left ion-chevron-left button-clear button-dark" ng-click="goBack()" style="margin-top: -4px; margin-left: - 5px;"></a>
   <div class="h1 title"></div>
   <div class="buttons" ng-if="photo['photo'].user_id == user_id&&photo['photo'].institution_id == null">
-    <button class="button button-positive" ng-click="editPhoto(photo['photo'].id)">Editar</button>
-    <button class="button button-positive" ng-click="deletePhoto(photo['photo'].id)">Deletar</button>
+    <button class="button button-arq" ng-click="editPhoto(photo['photo'].id)">Editar</button>
+    <button class="button button-arq" ng-click="deletePhoto(photo['photo'].id)" style="margin-left: 5px;">Deletar</button>
   </div>
 </div>
 <ion-view view-title="{{photo['photo'].name}}" id="photo-detail">
   <ion-content class="has-header">
     <div class="row avatar-row"> 
-      <div class="col avatar-col">
-        <img src="{{serverName + photo['sender'].photo}}" ng-if="!!photo['sender'].photo">
-        <img src="img/avatar-60.png" ng-if="!photo['sender'].photo&&!photo['photo'].institution_id">
-        <img src="img/avatar-institution.png" ng-if="!photo['sender'].photo&&!!photo['photo'].institution_id">
-        <h4>{{photo['sender'].name}}</h4>
-      </div>
+      <img src="{{serverName + photo['sender'].photo}}" ng-if="!!photo['sender'].photo">
+      <img src="img/avatar-60.png" ng-if="!photo['sender'].photo&&!photo['photo'].institution_id">
+      <img src="img/avatar-institution.png" ng-if="!photo['sender'].photo&&!!photo['photo'].institution_id">
+      <h4>{{photo['sender'].name}}</h4>
     </div>
     <div class="row img-row">
-      <div class="col img-col">
-        <img src="{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_home.jpg'}}">
-        <h3>{{photo['photo'].name}}</h3>
-      </div>
+      <img src="{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_home.jpg'}}">
     </div>
+    <h3>{{photo['photo'].name}}</h3>
     <div class="button-bar button-light">
-      <a class="button" ng-click="showInformation()">Informações</a>
-      <a class="button" ng-click="showEvaluation()">Registro de impressões</a>
-      <a class="button" ng-click="showAverage()" ng-if="averageData.length">Média de Impressões</a>
+      <a class="button active" id="showInformation" ng-click="showInformation()">Informações</a>
+      <a class="button" id="showEvaluation" ng-click="showEvaluation()">Impressões</a>
+      <a class="button" id="showAverage" ng-click="showAverage()" >Média de Impressões</a>
     </div>
     <div id="photo-info-container">
       <div class="list">
@@ -55,7 +51,7 @@
         </div>
       </div>
     </div>
-    <div id="evaluation-container">
+    <div id="evaluation-container" style="display: none;">
       <div class="list">
         <div class="item range range-positive" ng-repeat="binomial in binomials">
           <i>{{binomial["firstOption"]}}</i>
@@ -71,12 +67,12 @@
           Estou no local.
         </ion-checkbox>
       </ion-list>
-      <button class="button button-block button-positive" ng-click="postEvaluation()">
+      <button class="button button-arq button-block button-inverted" ng-click="postEvaluation()">
         Enviar
       </button>
     </div>
-    <div id="evaluation-average-container">
-      <highchart id="evaluation-average-chart" config="chartConfig" class="span10"></highchart>
+    <div id="evaluation-average-container" style="display: none;">
+      <highchart id="evaluation-average-chart" config="chartConfig" class="span10" style="width:100% !important;"></highchart>
     </div>
   </ion-content>
 </ion-view>

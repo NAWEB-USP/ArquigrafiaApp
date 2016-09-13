@@ -1,28 +1,29 @@
-<div class="bar bar-header bar-stable">
-  	<h1 class="title"><img class="title-image" src="img/logo-mini.png" height="18"/>  Arquigrafia</h1>
+<div class="bar bar-header">
+  	<img src="img/logo.svg">
 </div>
 <ion-view view-title="Feed">
-	<ion-content class="has-header">
+	<ion-content class="has-header" id="feed">
 		<ion-refresher
     		pulling-text="Puxe e solte para atualizar..."
     		on-refresh="doRefresh()">
   		</ion-refresher>
     	<ion-list>
       		<ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/feed/photos/{{photo['photo'].id}}">
-      			<div class="row avatar-row">
-      				<div class="col avatar-col">
-      					<img src="{{serverName + photo['sender'].photo}}" ng-if="!!photo['sender'].photo">
-      					<img src="img/avatar-60.png" ng-if="!photo['sender'].photo&&!photo['photo'].institution_id">
+            <div class="list card">
+              <div class="item item-avatar">
+                <img src="{{serverName + photo['sender'].photo}}" ng-if="!!photo['sender'].photo">
+                <img src="img/avatar-60.png" ng-if="!photo['sender'].photo&&!photo['photo'].institution_id">
                 <img src="img/avatar-institution.png" ng-if="!photo['sender'].photo&&!!photo['photo'].institution_id">
-      					<h4>{{photo['sender'].name}}</h4>
-      				</div>
-      			</div>
-      			<div class="row img-row">
-      				<div class="col img-col">
-      					<img src="{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_home.jpg'}}">
-        				<h3>{{photo['photo'].name}}</h3>
-        			</div>
-        		</div>
+                <h2>{{photo['sender'].name}}</h2>
+                <p>{{photo['sender'].country}}</p>
+              </div>
+              <div class="item item-image">
+                <img src="{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_home.jpg'}}">
+              </div>
+              <h2 class="item item-icon-left" href="#">
+                {{photo['photo'].name}}
+              </h2>
+            </div>
       		</ion-item>
     	</ion-list>
     	<ion-infinite-scroll

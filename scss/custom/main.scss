@@ -1,0 +1,448 @@
+/* 
+ * Base styles. 
+ */
+
+ .button.button-arq,
+ .bar .button.button-arq {
+	font-weight: 500;
+	text-transform: uppercase;
+	color: $dark-gray-arq;
+	border: 2px solid $dark-gray-arq;
+	background-color: white;
+	transition: all 300ms ease-in-out;
+
+	&.button-block {
+		width: 100%;
+	}
+
+	&.button-inverted {
+		color: white;
+		background-color: $dark-gray-arq;
+
+		&:hover,
+		&.active {
+			color: $dark-gray-arq;
+			background-color: white;
+		}
+	}
+
+	&.button-shy {
+		border: none;
+		font-weight: 300;
+		background-color: #ddd;
+		padding: 5px 13px;
+
+		&:hover,
+		&.active {
+			color: $dark-gray-arq;
+			background-color: white;
+		}
+	}
+
+	&:hover,
+	&.active {
+		color: white;
+		background-color: $dark-gray-arq;
+	}
+
+ }
+
+ .item-arq {
+ 	border: 1px solid $dark-gray-arq;
+ 	margin-bottom: 10px;
+
+ 	&::last-of-type {
+ 		margin-bottom: 0;
+ 	}
+
+ 	input {
+		color: $light-gray-arq;
+ 	}
+ }
+
+ .bar.bar-header {
+ 	padding-top: 9px;
+ 	padding-left: 10px;
+	height: 50px;
+	background-color: white;
+
+ 	img {
+ 		height: 30px;
+ 	}
+ }
+
+ .tab-nav.tabs {
+ 	background-color: white;
+ 	padding: 5px 0;
+ 	height: 56px;
+
+ 	.tab-item {
+ 		color: $light-gray-arq;
+
+ 		&.tab-item-active, 
+ 		&.activated {
+ 			color: $dark-gray-arq;
+ 		}
+ 	}
+ }
+
+ .has-header {
+ 	top: 50px;
+ }
+
+/* 
+ * Welcome page. 
+ */
+
+#welcome-content {
+
+	.row,
+	.scroll {
+		height: 100%;
+	}
+	
+}
+
+/* 
+ * Login page. 
+ */
+
+ #login {
+	max-width: 550px;
+	margin: auto;
+
+	img {
+		width: 100%;
+		max-width: 70px;
+		margin: 0 0 15px;	
+	}
+
+	.scroll {
+		height: 100%;
+		position: relative;
+	}
+
+	.center-content {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-60%);
+		width: 100%;
+	}
+ }
+
+ /* 
+ * Feed tab. 
+ */
+
+ #feed {
+	
+	.item {
+		border: none;
+
+	}
+
+	.item-content {
+		padding: 0;
+		background-color: $background-gray;
+
+		&.activated {
+			background-color: white;
+
+			.list.card {
+				opacity: .8;
+			}
+		}
+	}
+
+	.list.card {
+		margin: 10px 10px 5px 10px;
+
+		h2 {
+			color: $dark-gray-arq;
+		}
+
+		p {
+			color: $light-gray-arq;
+		}
+	}
+
+ }
+
+ /* 
+ * Camera tab. 
+ */
+
+ #camera {
+	
+	.scroll {
+		background-color: $background-gray;
+		position: relative;
+
+		.list {
+			position: absolute;
+			width: 100%;
+			top: 0;
+		}
+	}
+
+	#image-upload {
+
+		img {
+			max-width: 100%;
+			box-shadow: 0 1px 3px rgba(0,0,0,.3);
+		}
+	}
+
+	.item-divider {
+		position: relative;
+
+		i {
+			position: absolute;
+			right: 10px;
+		}
+
+		&.item-divider-light {
+			background-color: $background-gray;
+		}
+	}
+
+	.item-error {
+		color: red;
+	}
+
+ }
+
+ #input-tag {
+ 	position: relative;
+
+ 	#tag-buttons {
+ 		position: absolute;
+ 		z-index: 999;
+ 		right: 10px;
+ 		top: 7px;
+
+ 	}
+ }
+
+ #photoArea {
+
+ 	button {
+ 		display: inline-block;
+		width: calc(50% - 7.5px);
+		float: left;
+		height: 40vw;
+
+		&::before {
+			font-size: 30vw;
+		}
+
+		&:first-of-type {
+			margin-right: 15px;
+		}
+ 	}
+ }
+
+ /* 
+ * Account tab. 
+ */
+
+ #account {
+ 	background-color: $background-gray;
+ }
+
+ #info-container {
+	margin-bottom: 15px;
+
+	#user-avatar {
+
+		img {
+			max-width: 100%;
+			border-radius: 100%;
+			-webkit-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.3);
+			-moz-box-shadow:    1px 1px 5px 0px rgba(50, 50, 50, 0.3);
+			box-shadow:         1px 1px 5px 0px rgba(50, 50, 50, 0.3);
+			margin-top: 15px;
+			margin-bottom: 30px;
+		}
+
+		p {
+			text-align: center;
+		}
+
+		a {
+			color: black;
+			cursor: pointer;
+		}
+
+	}
+
+	#user-info {
+		padding-left: 30px;
+
+		h4 {
+			margin-top: 20px;
+			padding-bottom: 5px;
+			border-bottom: 1px solid $border-gray;
+			margin-bottom: 20px;
+			font-weight: 500;
+			text-transform: uppercase;
+			color: $dark-gray-arq;
+		}
+
+		p {
+
+			color: $light-gray-arq;
+			margin-bottom: 5px;
+			font-size: 16px;
+
+			span {
+				display: inline-block;
+				width: 25px;
+				font-weight: bold;
+				color: $dark-gray-arq;
+			}
+
+			&.first-of-type {
+				margin-top: 15px;
+			}
+		}
+
+	}
+
+ }
+
+ #personal-info,
+ #photo-detail {
+
+	.button-bar {
+		a {
+			font-weight: 500;
+			text-transform: uppercase;
+			color: $dark-gray-arq;
+			background-color: white;
+			border-bottom: 1px solid $dark-gray-arq;
+			padding-top: 3px;
+
+			&.active {
+				border-bottom: 3px solid $dark-gray-arq;
+			}
+		}
+	}
+
+ }
+
+ #uploads {
+ 	width: 100%;
+ }
+
+ #photos-container {
+
+ 	.list {
+ 		width: 100%;
+ 	}
+
+	.item {
+		border: none;
+		width: 33.333333%;
+		float: left;
+		padding-right: 7px;
+		padding-bottom: 1px;
+
+		&:nth-child(3n) {
+			padding-right: 0;
+		}
+
+		a {
+			padding: 0;
+			width: 100%;
+			background-color: $background-gray;
+		}
+	}
+
+ }
+
+ /* 
+ * Photo detail tab. 
+ */
+
+ #photo-detail {
+
+	.avatar-row {
+		
+		img {
+			width: 50px;
+			border-radius: 100%;
+			margin: 5px 15px 5px 5px;
+		}
+
+		h4 {
+			margin-top: 17px;
+		}
+
+		border-bottom: 1px solid $border-gray;
+		padding-bottom: 2px;
+		margin-bottom: 10px;
+	}
+
+	.img-row {
+
+		img {
+			width: 100%;
+			display: block;
+			word-wrap: normal;
+		}
+
+		&+h3 {
+			margin: 10px 5px;
+			font-size: 18px;
+			border-bottom: 1px solid $border-gray;
+			padding-bottom: 10px;
+		}
+
+	}
+
+	.list {
+		margin-bottom: 0;
+	}
+
+	.button {
+		margin: 0 !important;
+	}
+
+	.checkbox input:checked + .checkbox-icon::before, .checkbox input:checked::before {
+	    background: $dark-gray-arq;
+	    border-color: $dark-gray-arq;
+	}
+
+ }
+
+/*********************************************************/
+
+/* Follow list */
+
+.user-follow-list h2 {
+	position: relative;
+	left: 5em;
+}
+
+/* Camera tab*/
+@-webkit-keyframes slideInSmooth {
+  0% {
+    -webkit-transform: translate3d(0,-100%,0);
+  }
+  50% {
+  	-webkit-transform: translate3d(0,-50%,0);
+  }
+  100% {
+    -webkit-transform: translate3d(0,0,0);
+  }
+}
+
+.slideAnimation {
+  -webkit-animation: slideInSmooth ease-in 1; 
+  animation: slideInSmooth ease-in 1;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-duration: 750ms;
+  animation-duration: 750ms;
+}
