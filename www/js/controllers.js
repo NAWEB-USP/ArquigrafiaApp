@@ -502,9 +502,9 @@ angular.module('starter.controllers', ['highcharts-ng'])
     $scope.showAditional = !$scope.showAditional;
   }
 
-  $scope.forward = function() {
-    $scope.hideData = false;
-  }
+  // $scope.forward = function() {
+  //   $scope.hideData = false;
+  // }
 
   $scope.back = function() {
     $scope.hideData = true;
@@ -552,6 +552,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
       $scope.$apply(function() {
         $scope.imageURI = imageURI;
         geoImage.src = imageURI;
+        $scope.hideData = false;
       });
 
     }, function(error) {
@@ -597,6 +598,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
       $scope.$apply(function() {
         $scope.imageURI = imageURI;
         geoImage.src = imageURI;
+        $scope.hideData = false;
       });
 
     }, function(error) {
