@@ -198,18 +198,35 @@ angular.module('starter.controllers', ['highcharts-ng'])
     document.getElementById("photo-info-container").style.display = "initial";
     document.getElementById("evaluation-container").style.display = "none";
     document.getElementById("evaluation-average-container").style.display = "none";
+    if (document.getElementById("showInformation").className.indexOf("active") == -1) {
+      document.getElementById("showEvaluation").className = document.getElementById("showEvaluation").className.replace('active','');
+      if (document.getElementById("showAverage") != null)
+        document.getElementById("showAverage").className = document.getElementById("showAverage").className.replace('active','');
+      document.getElementById("showInformation").className += " active";
+    }
   }
   /* Exibe binômios para avaliação */
   $scope.showEvaluation = function() {
     document.getElementById("photo-info-container").style.display = "none";
     document.getElementById("evaluation-container").style.display = "initial";
     document.getElementById("evaluation-average-container").style.display = "none";
+    if (document.getElementById("showEvaluation").className.indexOf("active") == -1) {
+      document.getElementById("showInformation").className = document.getElementById("showInformation").className.replace('active','');
+      if (document.getElementById("showAverage") != null)
+        document.getElementById("showAverage").className = document.getElementById("showAverage").className.replace('active','');
+      document.getElementById("showEvaluation").className += " active";
+    }
   }
   /* Exibe gráfico com a média das avaliações */
   $scope.showAverage = function() {
     document.getElementById("photo-info-container").style.display = "none";
     document.getElementById("evaluation-container").style.display = "none";
     document.getElementById("evaluation-average-container").style.display = "initial";
+    if (document.getElementById("showAverage").className.indexOf("active") == -1) {
+      document.getElementById("showEvaluation").className = document.getElementById("showEvaluation").className.replace('active','');
+      document.getElementById("showInformation").className = document.getElementById("showInformation").className.replace('active','');
+      document.getElementById("showAverage").className += " active";
+    }
   }
   /* Configuração do gráfico com as médias das avaliações */
   var averageEvaluation = Photos.averageEvaluation($stateParams.photoId, window.localStorage.getItem("user_id"));

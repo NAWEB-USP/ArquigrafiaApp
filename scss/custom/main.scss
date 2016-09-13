@@ -311,7 +311,8 @@
 
  }
 
- #personal-info {
+ #personal-info,
+ #photo-detail {
 
 	.button-bar {
 		a {
@@ -360,6 +361,60 @@
 
  }
 
+ /* 
+ * Photo detail tab. 
+ */
+
+ #photo-detail {
+
+	.avatar-row {
+		
+		img {
+			width: 50px;
+			border-radius: 100%;
+			margin: 5px 15px 5px 5px;
+		}
+
+		h4 {
+			margin-top: 17px;
+		}
+
+		border-bottom: 1px solid $border-gray;
+		padding-bottom: 2px;
+		margin-bottom: 10px;
+	}
+
+	.img-row {
+
+		img {
+			width: 100%;
+			display: block;
+			word-wrap: normal;
+		}
+
+		&+h3 {
+			margin: 10px 5px;
+			font-size: 18px;
+			border-bottom: 1px solid $border-gray;
+			padding-bottom: 10px;
+		}
+
+	}
+
+	.list {
+		margin-bottom: 0;
+	}
+
+	.button {
+		margin: 0 !important;
+	}
+
+	.checkbox input:checked + .checkbox-icon::before, .checkbox input:checked::before {
+	    background: $dark-gray-arq;
+	    border-color: $dark-gray-arq;
+	}
+
+ }
 
 /*********************************************************/
 
@@ -368,25 +423,6 @@
 .user-follow-list h2 {
 	position: relative;
 	left: 5em;
-}
-
-/* Photo detail */
-
-.avatar-row .avatar-col h4 {
-	margin: auto;
-}
-
-#evaluation-container {
-	display: none;
-}
-
-#evaluation-average-container {
-	display: none;
-}
-
-#evaluation-average-chart {
-	width: 100vw;
-    height: 100vw;
 }
 
 /* Camera tab*/

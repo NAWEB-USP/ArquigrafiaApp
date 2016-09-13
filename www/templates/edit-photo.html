@@ -1,5 +1,5 @@
 <div class="bar bar-header bar-stable">
-	<h1 class="tittle">Editar Foto</h1>
+	<h1 class="title">Editar Foto</h1>
 </div>
 
 <ion-view view-title="Camera">
@@ -11,11 +11,10 @@
 						<img style="max-height:150px" ng-if="!!imageURI" ng-src="{{imageURI}}">
 					</div>
 				
-					<div class="padding buttons">
-						<button class="button button-positive icon-left ion-camera " ng-click="takePicture()">
-							Tirar Foto
+					<div class="padding buttons clearfix" style="margin-bottom: 20px;">
+						<button class="button button-arq icon ion-camera" ng-click="takePicture()">
 						</button>
-						<button class="button button-positive icon-left ion-images" ng-click="getPicture()">Escolher Foto</button>
+						<button class="button button-arq icon ion-images" ng-click="getPicture()"></button>
 					</div>
 				</div>
 				

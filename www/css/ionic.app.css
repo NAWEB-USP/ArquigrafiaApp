@@ -9991,14 +9991,16 @@ a.button {
       #info-container #user-info p.first-of-type {
         margin-top: 15px; }
 
-#personal-info .button-bar a {
+#personal-info .button-bar a,
+#photo-detail .button-bar a {
   font-weight: 500;
   text-transform: uppercase;
   color: #1e1e1e;
   background-color: white;
   border-bottom: 1px solid #1e1e1e;
   padding-top: 3px; }
-  #personal-info .button-bar a.active {
+  #personal-info .button-bar a.active,
+  #photo-detail .button-bar a.active {
     border-bottom: 3px solid #1e1e1e; }
 
 #uploads {
@@ -10020,25 +10022,46 @@ a.button {
     width: 100%;
     background-color: #fafafa; }
 
+/* 
+ * Photo detail tab. 
+ */
+#photo-detail .avatar-row {
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 2px;
+  margin-bottom: 10px; }
+  #photo-detail .avatar-row img {
+    width: 50px;
+    border-radius: 100%;
+    margin: 5px 15px 5px 5px; }
+  #photo-detail .avatar-row h4 {
+    margin-top: 17px; }
+
+#photo-detail .img-row img {
+  width: 100%;
+  display: block;
+  word-wrap: normal; }
+
+#photo-detail .img-row + h3 {
+  margin: 10px 5px;
+  font-size: 18px;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 10px; }
+
+#photo-detail .list {
+  margin-bottom: 0; }
+
+#photo-detail .button {
+  margin: 0 !important; }
+
+#photo-detail .checkbox input:checked + .checkbox-icon::before, #photo-detail .checkbox input:checked::before {
+  background: #1e1e1e;
+  border-color: #1e1e1e; }
+
 /*********************************************************/
 /* Follow list */
 .user-follow-list h2 {
   position: relative;
   left: 5em; }
-
-/* Photo detail */
-.avatar-row .avatar-col h4 {
-  margin: auto; }
-
-#evaluation-container {
-  display: none; }
-
-#evaluation-average-container {
-  display: none; }
-
-#evaluation-average-chart {
-  width: 100vw;
-  height: 100vw; }
 
 /* Camera tab*/
 @-webkit-keyframes slideInSmooth {
