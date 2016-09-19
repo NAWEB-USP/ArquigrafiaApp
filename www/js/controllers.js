@@ -532,12 +532,19 @@ angular.module('starter.controllers', ['highcharts-ng'])
     $scope.showAditional = !$scope.showAditional;
   }
 
-  // $scope.forward = function() {
-  //   $scope.hideData = false;
-  // }
+  $scope.forward = function() {
+    $scope.hideData = false;
+  }
 
   $scope.back = function() {
     $scope.hideData = true;
+  }
+
+  $scope.shouldShow = function() {
+    if ($scope.hideData && (typeof $scope.imageURI != 'undefined'))
+      return true;
+    else
+      return false;
   }
 
   //utility funct based on https://en.wikipedia.org/wiki/Geographic_coordinate_conversion
