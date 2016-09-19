@@ -7,7 +7,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ionic-modal-select'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $state) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -20,6 +20,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+    // Disable BACK button on home
+    $ionicPlatform.registerBackButtonAction(function (event) {
+      if($state.current.name=="tab.dash" || $state.current.name=="login"){
+        navigator.app.exitApp();
+      }
+      else {
+        navigator.app.backHistory();
+      }
+    }, 100);
   });
 })
 
