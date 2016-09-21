@@ -106,8 +106,10 @@ angular.module('starter.controllers', ['highcharts-ng'])
         $scope.moreDataCanBeLoaded = false;
       }
       $scope.photos = [];
-      $scope.photos = Object.keys(result).map(function(k) { return result[k] }).sort(function(a, b) { return b.id - a.id; });
-      maxId = $scope.photos[$scope.photos.length-1].id;
+      if (result.length > 0) {
+        $scope.photos = Object.keys(result).map(function(k) { return result[k] }).sort(function(a, b) { return b.id - a.id; });
+        maxId = $scope.photos[$scope.photos.length-1].id;
+      }
       $ionicScrollDelegate.scrollTop();
       PopUpService.hideSpinner();
     }); 
