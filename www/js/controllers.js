@@ -324,7 +324,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
       Photos.remove(id).then(function(data) {
         PopUpService.hideSpinner();
         PopUpService.showPopUp(data.message);
-        $state.go('tab.dash', {}, {reload: true});
+        $state.go('tab.account', {}, {reload: true});
       });
     }
   }
@@ -491,7 +491,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
 })
 
 .controller('CameraCtrl', function($scope, $http, $state, ServerName, Tags, Camera, 
-                                   Geolocation, PopUpService, LoginService, Photos) {
+                                   Geolocation, PopUpService, LoginService, Photos, Profiles) {
   /* Verifica se o usuário está autorizado */
   $scope.$on('$ionicView.enter', function() {
     LoginService.verifyCredentials();
@@ -503,6 +503,11 @@ angular.module('starter.controllers', ['highcharts-ng'])
   var latitude = null;
   $scope.data = {};
   $scope.data.tags = [];
+
+  var user_data = Profiles.getProfile(window.localStorage.getItem('user_id'));
+  user_data.then(function(result) {
+    $scope.data.author = result.name;
+  })
 
   /* Tags */
   var tags = Tags.all();
