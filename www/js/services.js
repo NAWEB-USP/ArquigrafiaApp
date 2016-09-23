@@ -311,7 +311,7 @@ angular.module('starter.services', [])
   }
 })
 
-.factory('Geolocation', function($http, $q){
+.factory('Geolocation', function($http, $q, PopUpService){
   return {
     getAddress: function(latitude, longitude) {
       return $http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude).then(function(data){
@@ -368,7 +368,10 @@ angular.module('starter.services', [])
             result.latitude = latitude;
             result.longitude = longitude;
             deferred.resolve(result);
-          });
+          }, function (error) {
+            PopUpService.hideSpinner();
+            PopUpService.showPopUp("Erro", "Nao foi possivel preencher localizacao automaticamente");
+          }, {timeout: 5000} );
         }
         
         
