@@ -105,7 +105,7 @@ angular.module('starter.services', [])
   };
 })
 
-.factory('Photos', function($http, $state, $stateParams, ServerName, PopUpService) {
+.factory('Photos', function($http, $state, $stateParams, $ionicHistory, ServerName, PopUpService) {
   return {
     all: function() {
       return $http.get(ServerName.get() + "/api/photos").then(function(result){
@@ -135,7 +135,8 @@ angular.module('starter.services', [])
         console.log("Response = " + response.response);
         console.log("Sent = " + response.bytesSent);
         PopUpService.hideSpinner();
-        $state.go('tab.photo-account-detail', {'photoId': response.response});
+        $state.go('tab.dash');
+        $ionicHistory.clearCache();
       };
 
       var onFail = function(error){ 
@@ -183,7 +184,8 @@ angular.module('starter.services', [])
         console.log("Response = " + response.response);
         console.log("Sent = " + response.bytesSent);
         PopUpService.hideSpinner();
-        $state.go('tab.photo-account-detail', {'photoId': response.response});
+        $state.go('tab.dash');
+        $ionicHistory.clearCache();
       };
 
       var onFail = function(error){ 
