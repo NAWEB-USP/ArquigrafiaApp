@@ -92,6 +92,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   .state('tab.photo-search-detail', {
+    cache: false, 
     url: '/search/photos/:photoId', 
     views: {
       'tab-search': {
@@ -102,6 +103,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   .state('tab.photo-account-detail', {
+    cache: false, 
     url: '/account/photos/:photoId', 
     views: {
       'tab-account': {
@@ -122,6 +124,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   .state('tab.photo-feed-detail', {
+    cache: false, 
     url: '/feed/photos/:photoId', 
     views: {
       'tab-dash': {
