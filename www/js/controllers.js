@@ -100,7 +100,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
   $scope.photos = [];
   /* Realiza busca */
   $scope.search = function() {
-    document.getElementById("search-placeholder").style.display = "none";
     last_search_terms = document.getElementById('search-bar').value;
     if (last_search_terms.length <= 3) {
       PopUpService.showPopUp("Erro!", "Digite mais do que 3 caracteres para realizar uma busca");
