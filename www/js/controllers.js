@@ -558,9 +558,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
       return false;
   }
 
-  //utility funct based on https://en.wikipedia.org/wiki/Geographic_coordinate_conversion
-  
-
   /* Tirar foto */
   $scope.takePicture = function(options) {
     var optionsTake = {
