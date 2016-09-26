@@ -101,8 +101,12 @@ angular.module('starter.controllers', ['highcharts-ng'])
   /* Realiza busca */
   $scope.search = function() {
     document.getElementById("search-placeholder").style.display = "none";
-    PopUpService.showSpinner("Carregando...");
     last_search_terms = document.getElementById('search-bar').value;
+    if (last_search_terms.length <= 3) {
+      PopUpService.showPopUp("Erro!", "Digite mais do que 3 caracteres para realizar uma busca");
+      return;
+    }
+    PopUpService.showSpinner("Carregando...");
     $scope.moreDataCanBeLoaded = true;
     Search.getSearch(last_search_terms, window.localStorage.getItem("user_id")).then(function(result){
       if (result.length < 20) {
@@ -183,6 +187,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
       PopUpService.hideSpinner();
       PopUpService.showPopUp('Sucesso', 'Impressões registradas com sucesso.');
     });
+    $state.reload();
   }
   /* Exibe informações da foto */
   $scope.showInformation = function() {
@@ -220,30 +225,33 @@ angular.module('starter.controllers', ['highcharts-ng'])
     }
   }
   /* Configuração do gráfico com as médias das avaliações */
-  var averageEvaluation = Photos.averageEvaluation($stateParams.photoId, window.localStorage.getItem("user_id"));
   var count = 0;
   var l1 = [];
   var l2 = [];
   var tickPos = [];
   var avgData = [];
   var userData = [];
-  averageEvaluation.then(function(result){
-    var binomials = result["binomials"];
-    var average = result["average"];
-    var user_evaluation = result["user_evaluation"];
-    for (x in binomials) {
-      l1.push(binomials[x].firstOption);
-      l2.push(binomials[x].secondOption);
-      if(typeof average[count] != 'undefined') {
-        avgData.push([parseInt(average[count].avgPosition), count]);
+  function getGraphData() {
+    var averageEvaluation = Photos.averageEvaluation($stateParams.photoId, window.localStorage.getItem("user_id"));
+    averageEvaluation.then(function(result){
+      var binomials = result["binomials"];
+      var average = result["average"];
+      var user_evaluation = result["user_evaluation"];
+      for (x in binomials) {
+        l1.push(binomials[x].firstOption);
+        l2.push(binomials[x].secondOption);
+        if(typeof average[count] != 'undefined') {
+          avgData.push([parseInt(average[count].avgPosition), count]);
+        }
+        if(typeof user_evaluation[x] != 'undefined') {
+          userData.push([parseInt(user_evaluation[x].evaluationPosition), count]);
+        }
+        tickPos.push(count++);
       }
-      if(typeof user_evaluation[x] != 'undefined') {
-        userData.push([parseInt(user_evaluation[x].evaluationPosition), count]);
-      }
-      tickPos.push(count++);
-    }
-    $scope.averageData = avgData;
-  })
+      $scope.averageData = avgData;
+    })
+  }
+  getGraphData();
   $scope.chartConfig = {
     options: {
       credits: {
@@ -316,7 +324,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
       color: '#000000',
     }]
   }
-
   /*Operacoes de foto */
   $scope.deletePhoto = function(id) {
     if(confirm("Deseja mesmo deletar esta foto? " + id)) {
