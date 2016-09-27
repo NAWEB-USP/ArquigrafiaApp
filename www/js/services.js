@@ -372,7 +372,7 @@ angular.module('starter.services', [])
             deferred.resolve(result);
           }, function (error) {
             PopUpService.hideSpinner();
-            PopUpService.showPopUp("Erro", "Nao foi possivel preencher localizacao automaticamente");
+            PopUpService.showPopUp("Erro", "Não foi possivel preencher localização automaticamente");
           }, {timeout: 5000} );
         }
         
