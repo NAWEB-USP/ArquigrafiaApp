@@ -681,7 +681,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     $scope.data.modifications = photo.allowModifications.toLowerCase();
     $scope.data.title = photo.name;
     $scope.data.author = photo.imageAuthor;
-    if(typeof result['tags'] != 'undefined')
+    if(typeof result['tags'] != 'undefined' || result['tags'][0] != "")
       $scope.data.tags = result['tags'];
     $scope.data.country = photo.country;
     $scope.data.city = photo.city;

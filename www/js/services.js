@@ -135,7 +135,7 @@ angular.module('starter.services', [])
         console.log("Response = " + response.response);
         console.log("Sent = " + response.bytesSent);
         PopUpService.hideSpinner();
-        $state.go('tab.dash');
+        $state.go('tab.account');
         $ionicHistory.clearCache();
       };
 
@@ -184,7 +184,7 @@ angular.module('starter.services', [])
         console.log("Response = " + response.response);
         console.log("Sent = " + response.bytesSent);
         PopUpService.hideSpinner();
-        $state.go('tab.dash');
+        $state.go('tab.account');
         $ionicHistory.clearCache();
       };
 
