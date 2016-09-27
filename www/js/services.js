@@ -372,7 +372,7 @@ angular.module('starter.services', [])
             deferred.resolve(result);
           }, function (error) {
             PopUpService.hideSpinner();
-            PopUpService.showPopUp("Erro", "Não foi possivel preencher localização automaticamente");
+            PopUpService.showPopUp("Atenção", "A imagem selecionada não possui dados de localização");
           }, {timeout: 5000} );
         }
         
