@@ -19,9 +19,9 @@
     </div>
     <h3>{{photo['photo'].name}}</h3>
     <div class="button-bar button-light">
-      <a class="button active" id="showInformation" ng-click="showInformation()">Informações</a>
-      <a class="button" id="showEvaluation" ng-click="showEvaluation()">Impressões</a>
-      <a class="button" id="showAverage" ng-click="showAverage()" >Média de Impressões</a>
+      <a class="button active" id="showInformation" ng-click="showInformation()">Info</a>
+      <a class="button" id="showEvaluation" ng-click="showEvaluation()">Análise</a>
+      <a class="button" id="showAverage" ng-click="showAverage()" >Média</a>
     </div>
     <div id="photo-info-container">
       <div class="list">
@@ -47,7 +47,7 @@
           Endereço: {{photo['photo'].street}}
         </div>
         <div class="item">
-          Licensa: <a href="{{'http://creativecommons.org/licenses/' + photo['license'][0] + '/3.0/deed.pt_BR'}}" target="_blank"><img src="{{'img/ccIcons/' + photo['license'][0] + '88x31.png'}}" title="{{photo['license'][1]}}"></a>
+          Licença: <a href="{{'http://creativecommons.org/licenses/' + photo['license'][0] + '/3.0/deed.pt_BR'}}" target="_blank"><img src="{{'img/ccIcons/' + photo['license'][0] + '88x31.png'}}" title="{{photo['license'][1]}}"></a>
         </div>
       </div>
     </div>

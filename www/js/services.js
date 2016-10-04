@@ -105,7 +105,7 @@ angular.module('starter.services', [])
   };
 })
 
-.factory('Photos', function($http, $state, $stateParams, ServerName, PopUpService) {
+.factory('Photos', function($http, $state, $stateParams, $ionicHistory, ServerName, PopUpService) {
   return {
     all: function() {
       return $http.get(ServerName.get() + "/api/photos").then(function(result){
@@ -135,7 +135,8 @@ angular.module('starter.services', [])
         console.log("Response = " + response.response);
         console.log("Sent = " + response.bytesSent);
         PopUpService.hideSpinner();
-        $state.go('tab.photo-account-detail', {'photoId': response.response});
+        $state.go('tab.account');
+        $ionicHistory.clearCache();
       };
 
       var onFail = function(error){ 
@@ -183,7 +184,8 @@ angular.module('starter.services', [])
         console.log("Response = " + response.response);
         console.log("Sent = " + response.bytesSent);
         PopUpService.hideSpinner();
-        $state.go('tab.photo-account-detail', {'photoId': response.response});
+        $state.go('tab.account');
+        $ionicHistory.clearCache();
       };
 
       var onFail = function(error){ 
@@ -311,7 +313,7 @@ angular.module('starter.services', [])
   }
 })
 
-.factory('Geolocation', function($http, $q){
+.factory('Geolocation', function($http, $q, PopUpService){
   return {
     getAddress: function(latitude, longitude) {
       return $http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude).then(function(data){
@@ -368,7 +370,10 @@ angular.module('starter.services', [])
             result.latitude = latitude;
             result.longitude = longitude;
             deferred.resolve(result);
-          });
+          }, function (error) {
+            PopUpService.hideSpinner();
+            PopUpService.showPopUp("Sua imagem não possui dados de localização",  "Não foi possivel preencher o endereço automaticamente");
+          }, {timeout: 5000} );
         }
         
         

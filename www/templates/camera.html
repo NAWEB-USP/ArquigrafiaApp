@@ -1,9 +1,10 @@
 <div class="bar bar-header bar-stable">
 	<img src="img/logo.svg">
 	<button class="button button-arq pull-right" ng-click="back()" ng-show="!hideData">Voltar</button>
+	<button class="button button-arq pull-right" ng-click="forward()" ng-show="shouldShow()">Continuar Cadastro</button>
 </div>
 
-<ion-view view-title="Camera">
+<ion-view view-title="Câmera">
 	<ion-content class="has-header" scroll="true" overflow-scroll="true" id="camera">
 		<div class="list">
 			<form name="submitPhoto">
@@ -16,6 +17,7 @@
 					<div class="padding" id="image-upload" align="center">
 						<img ng-if="!!imageURI" ng-src="{{imageURI}}">
 					</div>
+					<div><p class="padding">Favor habilitar o serviço de GPS para preencher a localização automaticamente.</p></div>
 				</div>
 				
 				<div id="data" class="list" ng-show="!hideData">
@@ -24,32 +26,25 @@
 						Informações obrigatórias
 					</div>
 					<label for="title" class="item item-input">
-						<span class="input-label">Titulo*:</span>
-						<input id="title" ng-model="data.title" type="text" ng-minlength="5" required/>
+						<span class="input-label">Título*:</span>
+						<input id="title" ng-model="data.title" type="text" ng-minlength="2" required/>
 					</label>
 
 					<label for="author" class="item item-input">
-						<span class="input-label">Autor*:</span>
-						<input id="author" ng-model="data.author" type="text" ng-minlength="5" required/>
+						<span class="input-label">Autor da Imagem*:</span>
+						<input id="author" ng-model="data.author" type="text" ng-minlength="2" required/>
 					</label>
 
 					<label for="country" class="item item-input">
 						<span class="input-label">País*:</span>
-						<input id="country" ng-model="data.country" type="text" ng-minlength="5" required/> 
+						<input id="country" ng-model="data.country" type="text" ng-minlength="2" required/> 
 					</label>
-
-					<!-- <label for="tags" class="item item-input">
-						<span class="input-label">Tags*:</span>
-						<select id="tags" ng-model="data.tags" ng-change="showTags(data.tags)" multiple="true" required>
-							<option ng-repeat="tag in tags" ng-value="tag.name">{{tag.name}}</option>
-						<select>
-					</label> -->
 					
 					<div id="input-tag">
 						<label class="item item-input">
 							<div>
 								<span class="input-label">Tags*:</span>
-								<!-- se eu coloco o grupo de botoes aqui, eles param de responder corretamente-->						
+													
 							</div>						
 						</label>
 						<div id="tag-buttons">
@@ -74,28 +69,28 @@
 								<option value="AC">Acre</option>
 								<option value="AL">Alagoas</option>
 								<option value="AM">Amazonas</option>
-								<option value="AP">Amapa</option>
+								<option value="AP">Amapá</option>
 								<option value="BA">Bahia</option>
-								<option value="CE">Ceara</option>
+								<option value="CE">Ceará</option>
 								<option value="DF">Distrito Federal</option>
-								<option value="ES">Espirito Santo</option>
+								<option value="ES">Espírito Santo</option>
 								<option value="GO">Goias</option>
-								<option value="MA">Maranaho</option>
+								<option value="MA">Maranhão</option>
 								<option value="MG">Minas Gerais</option>
 								<option value="MS">Mato Grosso do Sul</option>
 								<option value="MT">Mato Grosso</option>
-								<option value="PA">Para</option>
-								<option value="PB">Paraiba</option>
+								<option value="PA">Pará</option>
+								<option value="PB">Paraíba</option>
 								<option value="PE">Pernambuco</option>
-								<option value="PI">Piaui</option>
-								<option value="PR">Parana</option>
+								<option value="PI">Piauí</option>
+								<option value="PR">Paraná</option>
 								<option value="RJ">Rio de Janeiro</option>
 								<option value="RN">Rio Grande do Norte</option>
-								<option value="RO">Rondonia</option>
+								<option value="RO">Rondônia</option>
 								<option value="RR">Roraima</option>
 								<option value="RS">Rio Grande do Sul</option>
 								<option value="SC">Santa Catarina</option>
-								<option value="SE">Serguipe</option>
+								<option value="SE">Sergipe</option>
 								<option value="SP">Sao Paulo</option>
 								<option value="TO">Tocantins</option>
 							</select>
@@ -112,7 +107,7 @@
 						</label>
 
 						<label for="address" class="item item-input">
-							<span class="input-label">Endereco:</span>
+							<span class="input-label">Endereço:</span>
 							<input id="address" name="address" ng-model="data.address" type="text"/> 
 						</label>
 
@@ -127,18 +122,18 @@
 						</label>
 
 						<label for="workYear" class="item item-input">
-							<span class="input-label">Ano de conclusao da obra:</span>
+							<span class="input-label">Ano de conclusão da obra:</span>
 							<input id="workYear" name="workYear" ng-model="data.workYear" type="text"/>
 						</label>
 
 						<label for="description" class="item item-input">
-							<span class="input-label">Descricao:</span>
+							<span class="input-label">Descrição:</span>
 							<textarea id="description" name="description" ng-model="data.description"></textarea> 
 						</label>
 					</div>
 					
 					<div class="item item-divider">
-						Escolho a licenca <a id="creative_commons" href="http://creativecommons.org/licenses//?lang=pt-BR" target="_blank" style="text-decoration: undeline; line-height=1.em;">Creative Commons</a>, para publicar a imagem, com as seguintes permissoes:
+						Escolho a licença <a id="creative_commons" href="http://creativecommons.org/licenses//?lang=pt-BR" target="_blank" style="text-decoration: undeline; line-height=1.em;">Creative Commons</a>, para publicar a imagem, com as seguintes permissões:
 					</div>	
 					
 					<div class="item item-divider item-divider-light">
@@ -150,11 +145,11 @@
 					</div>
 
 					<div class="item item-divider item-divider-light">
-						Permitir modificacoes em sua imagem?
+						Permitir modificações em sua imagem?
 					</div>
 					<div>
 						<ion-radio name="modifications" ng-model="data.modifications" ng-value="'yes'" style="margin-top: 15px;">Sim</ion-radio>
-						<ion-radio name="modifications" ng-model="data.modifications" ng-value="'yes_sa'">Sim, contanto que os outros compartilhem de forma semelhante</ion-radio>
+						<ion-radio class="item-text-wrap" name="modifications" ng-model="data.modifications" ng-value="'yes_sa'">Sim, contanto que os outros compartilhem de forma semelhante</ion-radio>
 						<ion-radio name="modifications" ng-model="data.modifications" ng-value="'no'" style="margin-bottom: 15px;">Nao</ion-radio>
 					</div>
 
@@ -166,25 +161,20 @@
 					<div class="item item-divider item-divider-light">
 						&nbsp;
 					</div>
-					<div class="item item-error">* Campos obrigatorios</div>
+					<div class="item item-error">* Campos obrigatórios</div>
 					<div class="item item-error" ng-show="submitPhoto.title.$error.minlength && submitPhoto.title.$touched">
 						<i class="ion-information-circled"></i>
-						Titulo precisa ter 5 ou mais caracteres
+						Título precisa ter 2 ou mais caracteres
 					</div>
 
 					<div class="item item-error" ng-show="submitPhoto.author.$error.minlength && submitPhoto.author.$touched">
 						<i class="ion-information-circled"></i>
-						Nome do autor precisa ter 5 ou mais caracteres
+						Nome do autor precisa ter 2 ou mais caracteres
 					</div>
 
 					<div class="item item-error" ng-show="submitPhoto.country.$error.minlength && submitPhoto.country.$touched">
 						<i class="ion-information-circled"></i>
-						Pais precisa ter 5 ou mais caracteres
-					</div>
-
-					<div class="item item-error" ng-show="submitPhoto.tags.$error.minlength && submitPhoto.tags.$touched">
-						<i class="ion-information-circled"></i>
-						Tags precisam ter 5 ou mais caracteres
+						País precisa ter 2 ou mais caracteres
 					</div>
 
 					<div class="item item-error" ng-show="!(!!imageURI)">
