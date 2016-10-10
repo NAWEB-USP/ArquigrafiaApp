@@ -25,25 +25,25 @@
     </div>
     <div id="photo-info-container">
       <div class="list">
-        <div class="item" ng-if="!!photo['photo'].description">
+        <div class="item item-text-wrap" ng-if="!!photo['photo'].description">
           Descrição: {{photo['photo'].description}}
         </div>
-        <div class="item" ng-if="!!photo['photo'].collection">
+        <div class="item item-text-wrap" ng-if="!!photo['photo'].collection">
           Coleção: {{photo['photo'].collection}}
         </div>
-        <div class="item" ng-if="!!photo['photo'].imageAuthor">
+        <div class="item item-text-wrap" ng-if="!!photo['photo'].imageAuthor">
           Autor da Imagem: {{photo['photo'].imageAuthor}}
         </div>
-        <div class="item" ng-if="!!photo['photo'].dataCriacao">
+        <div class="item item-text-wrap" ng-if="!!photo['photo'].dataCriacao">
           Data da Imagem: {{photo['photo'].dataCriacao}}
         </div>
-        <div class="item" ng-if="!!photo['authors'].length">
+        <div class="item item-text-wrap" ng-if="!!photo['authors'].length">
           Autor da Obra: {{photo['authors']}}
         </div>
-        <div class="item" ng-if="!!photo['photo'].workdate">
+        <div class="item item-text-wrap" ng-if="!!photo['photo'].workdate">
           Data de conclusão da obra: {{photo['photo'].workdate}}
         </div>
-        <div class="item" ng-if="!!photo['photo'].street">
+        <div class="item item-text-wrap" ng-if="!!photo['photo'].street">
           Endereço: {{photo['photo'].street}}
         </div>
         <div class="item">
