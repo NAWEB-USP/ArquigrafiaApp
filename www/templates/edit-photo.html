@@ -35,30 +35,29 @@
 						<input id="country" ng-model="data.country" type="text" ng-minlength="2" required/> 
 					</label>
 
-					<label class="item item-input">
-						<div>
-							<span class="input-label">Tags*:</span>
-							
+					<div id="input-tag">
+						<label class="item item-input">
+							<div>
+								<span class="input-label">Tags*:</span>
+								<!-- se eu coloco o grupo de botoes aqui, eles param de responder corretamente-->						
+							</div>						
+						</label>
+						<div id="tag-buttons">
+							<button class="button button-small button-arq button-shy" modal-select ng-model="teste" options="tags" modal-title="Selecione uma Tag" has-search="true" on-select="getTag(newValue, oldValue)">
+								    Selecionar
+								    <div class="option">
+								        {{option.name}}
+								    </div>
+								</button>
+							<button id="meuNome" class="button button-small button-arq button-shy" ng-click="addTag()">Adicionar</button>
+							<button class="button button-small button-dark icon-right ion-close" ng-repeat="tag in data.tags" ng-click="removeTag(tag)">{{tag}}</button>
 						</div>
-					</label>
-
-					<div>
-						<button class="button button-positive" modal-select ng-model="teste" options="tags" modal-title="Selecione uma Tag" has-search="true" on-select="getTag(newValue, oldValue)">
-						    Selecionar
-						    <div class="option">
-						        {{option.name}}
-						    </div>
-						</button>
-
-						<button class="button button-positive" ng-click="addTag()">Adicionar</button>
-
-						<button class="button button-small button-assertive icon-right ion-close" ng-repeat="tag in data.tags" ng-click="removeTag(tag)">{{tag}}</button>
 					</div>
 					
 					
 
-					<div class="item item-divider" ng-show="!showAditional" ng-click="toggle()"><i class="ion-chevron-down"></i> Mostrar campos opcionais</div>
-					<div class="item item-divider" ng-show="showAditional" ng-click="toggle()"><i class="ion-chevron-up"></i> Ocultar campos adicionais</div>
+					<div class="item item-divider" style="margin-top: 30px;" ng-show="!showAditional" ng-click="toggle()">Informações opcionais<i class="ion-plus"></i></div>
+					<div class="item item-divider" style="margin-top: 30px;" ng-show="showAditional" ng-click="toggle()">Informações opcionais<i class="ion-minus"></i></div>
 					<div id="aditionalInfo" class="slideAnimation" ng-show="showAditional">
 						<label for="state" class="item item-input">
 							<span class="input-label">Estado:</span>
@@ -139,15 +138,15 @@
 					<div class="padding">
 						<div>
 							<label>Permitir o uso comercial da imagem?</label>
-							<ion-radio name="comercialUsage" ng-model="data.commercialUsage" ng-value="true">Sim</ion-radio>
-							<ion-radio name="comercialUsage" ng-model="data.commercialUsage" ng-value="false">Não</ion-radio>
+							<ion-radio name="comercialUsage" ng-model="data.commercialUsage" ng-value="true" style="margin-top: 15px;">Sim</ion-radio>
+							<ion-radio name="comercialUsage" ng-model="data.commercialUsage" ng-value="false" style="margin-bottom: 15px;">Nao</ion-radio>
 						</div>
 
 						<div>
-							<label>Permitir modificações em sua imagem?</label>
-							<ion-radio name="modifications" ng-model="data.modifications" ng-value="'yes'">Sim</ion-radio>
-							<ion-radio class="item-text-wrap" name="modifications" ng-model="data.modifications" ng-value="'yes_sa'">Sim, contanto que os outros compartilhem de forma semelhante</ion-radio>
-							<ion-radio name="modifications" ng-model="data.modifications" ng-value="'no'">Não</ion-radio>
+							<label>Permitir modificacoes em sua imagem?</label>
+							<ion-radio name="modifications" ng-model="data.modifications" ng-value="'yes'" style="margin-top: 15px;">Sim</ion-radio>
+							<ion-radio name="modifications" ng-model="data.modifications" ng-value="'yes_sa'">Sim, contanto que os outros compartilhem de forma semelhante</ion-radio>
+							<ion-radio class="item-text-wrap" name="modifications" ng-model="data.modifications" ng-value="'no'">Nao</ion-radio>
 						</div>
 					</div>
 
@@ -176,7 +175,7 @@
 					</div>
 					
 					<div>
-						<button class="button button-block button-positive" ng-click="postPhoto()" ng-disabled="submitPhoto.$invalid || !(!!imageURI) || data.tags.length == 0">Enviar</button>
+						<button class="button button-block button-arq button-inverted" ng-click="postPhoto()" ng-disabled="submitPhoto.$invalid || !(!!imageURI) || data.tags.length == 0">Enviar</button>
 					</div>
 					
 						

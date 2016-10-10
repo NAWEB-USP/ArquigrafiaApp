@@ -55,12 +55,12 @@
 								    </div>
 								</button>
 							<button id="meuNome" class="button button-small button-arq button-shy" ng-click="addTag()">Adicionar</button>
-							<button class="button button-small button-assertive icon-right ion-close" ng-repeat="tag in data.tags" ng-click="removeTag(tag)">{{tag}}</button>
+							<button class="button button-small button-dark icon-right ion-close" ng-repeat="tag in data.tags" ng-click="removeTag(tag)">{{tag}}</button>
 						</div>
 					</div>
 
-					<div class="item item-divider" ng-show="!showAditional" ng-click="toggle()">Informações opcionais<i class="ion-plus"></i></div>
-					<div class="item item-divider" ng-show="showAditional" ng-click="toggle()">Informações opcionais<i class="ion-minus"></i></div>
+					<div class="item item-divider" style="margin-top: 30px;" ng-show="!showAditional" ng-click="toggle()">Informações opcionais<i class="ion-plus"></i></div>
+					<div class="item item-divider" style="margin-top: 30px;" ng-show="showAditional" ng-click="toggle()">Informações opcionais<i class="ion-minus"></i></div>
 					<div id="aditionalInfo" class="slideAnimation" ng-show="showAditional">
 						<label for="state" class="item item-input">
 							<span class="input-label">Estado:</span>
@@ -140,17 +140,17 @@
 						Permitir o uso comercial da imagem?
 					</div>
 					<div>
-						<ion-radio name="comercialUsage" ng-model="data.commercialUsage" ng-value="true">Sim</ion-radio>
-						<ion-radio name="comercialUsage" ng-model="data.commercialUsage" ng-value="false">Não</ion-radio>
+						<ion-radio name="comercialUsage" ng-model="data.commercialUsage" ng-value="true" style="margin-top: 15px;">Sim</ion-radio>
+						<ion-radio name="comercialUsage" ng-model="data.commercialUsage" ng-value="false" style="margin-bottom: 15px;">Nao</ion-radio>
 					</div>
 
 					<div class="item item-divider item-divider-light">
 						Permitir modificações em sua imagem?
 					</div>
 					<div>
-						<ion-radio name="modifications" ng-model="data.modifications" ng-value="'yes'">Sim</ion-radio>
+						<ion-radio name="modifications" ng-model="data.modifications" ng-value="'yes'" style="margin-top: 15px;">Sim</ion-radio>
 						<ion-radio class="item-text-wrap" name="modifications" ng-model="data.modifications" ng-value="'yes_sa'">Sim, contanto que os outros compartilhem de forma semelhante</ion-radio>
-						<ion-radio name="modifications" ng-model="data.modifications" ng-value="'no'">Não</ion-radio>
+						<ion-radio name="modifications" ng-model="data.modifications" ng-value="'no'" style="margin-bottom: 15px;">Nao</ion-radio>
 					</div>
 
 					<div class="item item-divider item-divider-light">
