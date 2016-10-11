@@ -10099,3 +10099,7 @@ a.button {
   animation-fill-mode: forwards;
   -webkit-animation-duration: 750ms;
   animation-duration: 750ms; }
+
+ion-tabs.tabs-striped.tabs-color-active-positive .tab-item.activated, ion-tabs.tabs-striped.tabs-color-active-positive .tab-item.active, ion-tabs.tabs-striped.tabs-color-active-positive .tab-item.tab-item-active {
+  border-color: #212121;
+  color: #212121; }
