@@ -183,7 +183,7 @@
 					</div>
 
 					<div class="padding">
-						<button class="button button-block button-arq button-inverted" ng-click="postPhoto()" ng-disabled="submitPhoto.$invalid || !(!!imageURI)">Enviar</button>
+						<button class="button button-block button-arq button-inverted" ng-click="postPhoto()" ng-disabled="submitPhoto.$invalid || !(!!imageURI) || (data.tags.length == 0)">Enviar</button>
 					</div>
 				</div>
 			</form>
