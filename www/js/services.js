@@ -10,7 +10,7 @@ angular.module('starter.services', [])
   }
 })
 
-.factory('PopUpService', function($ionicPopup, $ionicLoading, $rootScope) {
+.factory('PopUpService', function($ionicPopup, $ionicLoading, $q, $rootScope) {
   return {
     showSpinner : function (message) {
       $ionicLoading.show({
@@ -27,6 +27,7 @@ angular.module('starter.services', [])
       });
     },
     showReport : function (){
+      var deferred = $q.defer();
       $rootScope.information = {};
       $rootScope.datas = [{
             "id": "typeImage",
@@ -65,7 +66,7 @@ angular.module('starter.services', [])
         '<textarea id="observation" ng-model="information.observation"></textarea>' +
       '</div>';
       
-      $ionicPopup.show({
+      var popup = $ionicPopup.show({
         title: 'Denunciar',
         template: template,
         scope: $rootScope,
@@ -84,14 +85,17 @@ angular.module('starter.services', [])
           onTap: function(e){
             return null;
           }}]
-      });
+      }).then(function(result){
+        deferred.resolve(result);
+      });   
+      return deferred.promise;   
     }
   }
 })
 
 .factory('ReportService',function($http, ServerName){
   return {
-    post: function(photoId, dataTypeReport, typeReport, observationReport ){
+    post: function(photoId, dataTypeReport, typeReport, observationReport){
       return $http.post(ServerName.get() + "/api/photo/" + photoId + "/report" ,
                         { params: {data_type_report : dataTypeReport, type_report : typeReport, 
                           observation_report: observationReport} }).then(function(result){

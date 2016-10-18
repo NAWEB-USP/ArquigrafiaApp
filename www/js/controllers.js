@@ -43,7 +43,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     }
 })
 
-.controller('FeedCtrl', function($scope, $state, Feed, ServerName, LoginService) {
+.controller('FeedCtrl', function($scope, $state, Feed, ServerName, LoginService, PopUpService, ReportService) {
   /* Verifica se o usuário está autorizado */
   $scope.$on('$ionicView.enter', function() {
     LoginService.verifyCredentials();
@@ -83,7 +83,19 @@ angular.module('starter.controllers', ['highcharts-ng'])
     })
     .finally(function() {
       $scope.$broadcast('scroll.refreshComplete');
-    });;
+    });
+    
+  }
+  /* Report */   
+  $scope.report = function(photoId){
+    PopUpService.showReport().then(function(result){
+      if(result != null){
+        ReportService.post(photoId, result.dataTypeReport, result.typeReport, 
+                           result.observationReport).then(function(response){
+          PopUpService.showPopUp('Sucesso', 'Denuncia realizada com sucesso.');
+        });
+      }
+    });
   }
 })
 

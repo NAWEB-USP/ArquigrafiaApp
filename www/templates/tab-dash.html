@@ -7,6 +7,7 @@
     		pulling-text="Puxe e solte para atualizar..."
     		on-refresh="doRefresh()">
   		</ion-refresher>
+     
     	<ion-list>
       		<ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/feed/photos/{{photo['photo'].id}}">
             <div class="list card">
@@ -23,7 +24,8 @@
               <h2 class="item item-icon-left item-text-wrap" href="#">
                 {{photo['photo'].name}}
               </h2>
-            </div>
+              <button type="button"  id="meuNome" class="button button-small" ng-click="report({{photo['photo'].id}})"><img src="img/report.png"></button>
+            </div>          
       		</ion-item>
     	</ion-list>
     	<ion-infinite-scroll
