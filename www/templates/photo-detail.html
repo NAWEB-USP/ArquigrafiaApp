@@ -46,6 +46,9 @@
         <div class="item item-text-wrap" ng-if="!!photo['photo'].street">
           Endereço: {{photo['photo'].street}}
         </div>
+        <div class="item item-text-wrap"  ng-if="!!photo['tags'].length">
+          Tags: {{photo['tags']}}
+        </div>
         <div class="item">
           Licença: <a href="{{'http://creativecommons.org/licenses/' + photo['license'][0] + '/3.0/deed.pt_BR'}}" target="_blank"><img src="{{'img/ccIcons/' + photo['license'][0] + '88x31.png'}}" title="{{photo['license'][1]}}"></a>
         </div>

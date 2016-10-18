@@ -162,6 +162,8 @@ angular.module('starter.controllers', ['highcharts-ng'])
   var photo = Photos.get($stateParams.photoId, window.localStorage.getItem("user_id"));
   photo.then(function(result){
     $scope.photo = result;
+    $scope.photo["tags"] = result["tags"].toString().replace(/\,/g, ", ");
+    $scope.photo["authors"] = result["authors"].toString().replace(/\,/g, ", ");
   })
   /* Retorna para a página anterior */
   $scope.goBack = function() {
