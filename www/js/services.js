@@ -315,6 +315,11 @@ angular.module('starter.services', [])
 
 .factory('Profiles', function($http, ServerName) {
   return {
+    create: function(data) {
+      return $http.post(ServerName.get() + "/api/users", {data}).then(function(result){
+        return result.data;
+      });
+    }, 
     getProfile: function(userId) {
       return $http.get(ServerName.get() + "/api/profile/" + userId).then(function(result){
         return result.data;

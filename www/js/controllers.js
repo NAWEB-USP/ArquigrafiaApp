@@ -22,9 +22,8 @@ angular.module('starter.controllers', ['highcharts-ng'])
     })
     /* Definição de variáveis */
     $scope.data = {};
-    $scope.cadastro= function(){
-      var ref = cordova.InAppBrowser.open(serverName + '/users/account', '_blank', 'location=yes, hardwareback=no');
-      ref.show();
+    $scope.cadastro = function(){
+      $state.go('signup');
     }
 
     /* Faz o login */
@@ -40,6 +39,75 @@ angular.module('starter.controllers', ['highcharts-ng'])
         }).finally(function($ionicLoading) {  
           PopUpService.hideSpinner(); 
         });
+    }
+})
+
+.controller('SignUpCtrl', function($scope, $state, PopUpService, Profiles, ServerName) {
+    $scope.serverName = ServerName.get();
+    $scope.data = {};
+    /* Verifica se o usuário já está logado */
+    $scope.$on('$ionicView.enter', function() {
+      if(window.localStorage.getItem("logged_user") != null) {
+        $state.go('tab.dash');
+      }
+    })
+
+    /* Retorna para a página anterior */
+    $scope.goBack = function() {
+      window.history.back();
+    };
+
+    /* Realiza o cadastro */
+    $scope.signup = function() {
+      var errors = "";
+      if ($scope.data.hasOwnProperty('name') != false) {
+        if ($scope.data.name == '') {
+          errors += "O campo nome não pode ser vazio.<br>";
+        }
+      } else errors += "O campo nome não pode ser vazio.<br>";
+      if ($scope.data.hasOwnProperty('login') != false) {
+        if ($scope.data.login == '') {
+          errors += "O campo login não pode ser vazio.<br>";
+        }
+      } else errors += "O campo login não pode ser vazio.<br>";
+      if ($scope.data.hasOwnProperty('email') != false) {
+        if ($scope.data.email == '') {
+          errors += "Insira um e-mail válido.<br>";
+        }
+      } else errors += "Insira um e-mail válido.<br>";
+      if ($scope.data.hasOwnProperty('password') != false) {
+        if ($scope.data.password == '') {
+          errors += "O campo senha não pode ser vazio.<br>";
+        }
+      } else errors += "O campo senha não pode ser vazio.<br>";
+      if ($scope.data.hasOwnProperty('password2') != false) {
+        if ($scope.data.password2 == '') {
+          errors += "O campo repita a senha não pode ser vazio.<br>";
+        }
+      } else errors += "O campo repita a senha não pode ser vazio.<br>";
+      if ($scope.data.hasOwnProperty('terms') != false) {
+        if ($scope.data.terms == '') {
+          errors += "Você não aceitou os termos de compromisso.<br>";
+        }
+      } else errors += "Você não aceitou os termos de compromisso.<br>";
+      if ($scope.data.password2 != $scope.data.password) {
+        errors += "As senhas não conferem.";
+      }
+      if (errors == "") {
+        PopUpService.showSpinner('Carregando...');
+        Profiles.create($scope.data).then(function(data) {
+            window.localStorage.setItem("logged_user", data.login);
+            window.localStorage.setItem(data.login, data.token);
+            window.localStorage.setItem("user_id", data.id);
+            $state.go('tab.dash');  
+            console.log(data);
+            PopUpService.hideSpinner();
+        });
+      }
+      else {
+        PopUpService.showPopUp("Erro", errors);
+        console.log($scope.data.email);
+      }
     }
 })
 
