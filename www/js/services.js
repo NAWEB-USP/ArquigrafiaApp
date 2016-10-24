@@ -10,7 +10,7 @@ angular.module('starter.services', [])
   }
 })
 
-.factory('PopUpService', function($ionicPopup, $ionicLoading) {
+.factory('PopUpService', function($ionicPopup, $ionicLoading, $q, $rootScope) {
   return {
     showSpinner : function (message) {
       $ionicLoading.show({
@@ -24,6 +24,82 @@ angular.module('starter.services', [])
       $ionicPopup.alert({
         title: title,
         template: message
+      });
+    },
+    showReport : function (){
+      var deferred = $q.defer();
+      $rootScope.information = {};
+      $rootScope.datas = [{
+            "id": "typeImage",
+            "name": "Imagem",
+            "select": false
+        }, {
+            "id": "typeTitle",
+            "name": "Título",
+            "select": false
+        }, {
+            "id": "typeAuthor",
+            "name": "Autor",
+            "select": false
+        }, {
+            "id": "typeDescription",
+            "name": "Descrição",
+            "select": false
+        }, {
+            "id": "typeAddress",
+            "name": "Endereço",
+            "select": false
+        }];
+
+      var template = '<div ng-repeat="data in datas" > ' +
+        '<ion-checkbox ng-model="data.select" style="border:none">{{data.name}}</ion-checkbox>'+
+    '</div>'+
+        '<label for="typeReport">Tipo de denúncia:</label>' +
+        '<select id="typeReport" ng-model="information.typeReport"> ' +
+          '<option value="null">Selecione uma opção</option> ' +
+          '<option value="inapropriate">Conteúdo inapropriado</option> ' +
+          '<option value="repeat">Conteúdo repetido</option>' +
+        '</select> ' +
+      '</div> ' +
+      '<div> ' +
+        '<label for="observation">Observação</label> ' +
+        '<textarea id="observation" ng-model="information.observation"></textarea>' +
+      '</div>';
+      
+      var popup = $ionicPopup.show({
+        title: 'Denunciar',
+        template: template,
+        scope: $rootScope,
+        buttons: [ 
+          {text: "Enviar",
+          type: 'button-arq',
+          onTap: function(e){
+            var results = { dataTypeReport : $rootScope.datas,
+                            typeReport: $rootScope.information.typeReport,
+                            observationReport: $rootScope.information.observation
+             };
+            return results;
+          }},
+          {text: "Cancelar",
+          type: 'button-arq',
+          onTap: function(e){
+            return null;
+          }}]
+      }).then(function(result){
+        deferred.resolve(result);
+      });   
+      return deferred.promise;   
+    }
+  }
+})
+
+.factory('ReportService',function($http, ServerName){
+  return {
+    post: function(photoId, dataTypeReport, typeReport, observationReport){
+      return $http.post(ServerName.get() + "/api/photo/" + photoId + "/report" ,
+                        { params: {data_type_report : dataTypeReport, type_report : typeReport, 
+                          observation_report: observationReport} }).then(function(result){
+        return result.data;
       });
     }
   }

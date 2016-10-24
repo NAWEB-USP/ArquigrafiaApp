@@ -255,14 +255,19 @@
 
 	#user-avatar {
 
-		img {
-			max-width: 100%;
+		#avatar-image {
+			width: 70px;
+			height: 70px;
+			overflow: hidden;
+			margin: 15px 0;
 			border-radius: 100%;
+		}
+
+		img {
+			width: 100%;
 			-webkit-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.3);
 			-moz-box-shadow:    1px 1px 5px 0px rgba(50, 50, 50, 0.3);
 			box-shadow:         1px 1px 5px 0px rgba(50, 50, 50, 0.3);
-			margin-top: 15px;
-			margin-bottom: 30px;
 		}
 
 		p {
@@ -297,9 +302,11 @@
 
 			span {
 				display: inline-block;
-				width: 25px;
-				font-weight: bold;
-				color: $dark-gray-arq;
+				width: 50px;
+				font-weight: 700;
+				color: #1e1e1e;
+				text-align: right;
+				padding-right: 10px;
 			}
 
 			&.first-of-type {

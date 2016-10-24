@@ -9956,14 +9956,17 @@ a.button {
 
 #info-container {
   margin-bottom: 15px; }
+  #info-container #user-avatar #avatar-image {
+    width: 70px;
+    height: 70px;
+    overflow: hidden;
+    margin: 15px 0;
+    border-radius: 100%; }
   #info-container #user-avatar img {
-    max-width: 100%;
-    border-radius: 100%;
+    width: 100%;
     -webkit-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.3);
     -moz-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.3);
-    box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.3);
-    margin-top: 15px;
-    margin-bottom: 30px; }
+    box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.3); }
   #info-container #user-avatar p {
     text-align: center; }
   #info-container #user-avatar a {
@@ -9985,9 +9988,11 @@ a.button {
       font-size: 16px; }
       #info-container #user-info p span {
         display: inline-block;
-        width: 25px;
-        font-weight: bold;
-        color: #1e1e1e; }
+        width: 50px;
+        font-weight: 700;
+        color: #1e1e1e;
+        text-align: right;
+        padding-right: 10px; }
       #info-container #user-info p.first-of-type {
         margin-top: 15px; }
 
