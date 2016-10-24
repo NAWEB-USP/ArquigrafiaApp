@@ -1,8 +1,8 @@
 angular.module('starter.services', [])
 
 .factory('ServerName', function(){
-  //var serverName = "http://localhost:8000";
-  var serverName = "http://valinhos.ime.usp.br:51080";
+  var serverName = "http://localhost:8000";
+  //var serverName = "http://valinhos.ime.usp.br:51080";
   return {
     get: function () { 
       return serverName; 
@@ -237,6 +237,11 @@ angular.module('starter.services', [])
 
 .factory('Profiles', function($http, ServerName) {
   return {
+    create: function(data) {
+      return $http.post(ServerName.get() + "/api/users", {data}).then(function(result){
+        return result.data;
+      });
+    }, 
     getProfile: function(userId) {
       return $http.get(ServerName.get() + "/api/profile/" + userId).then(function(result){
         return result.data;
