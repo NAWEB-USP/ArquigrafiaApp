@@ -1,8 +1,8 @@
 angular.module('starter.services', [])
 
 .factory('ServerName', function(){
-  //var serverName = "http://localhost:8000";
-  var serverName = "http://valinhos.ime.usp.br:51080";
+  var serverName = "http://localhost:8000";
+  //var serverName = "http://valinhos.ime.usp.br:51080";
   return {
     get: function () { 
       return serverName; 
@@ -56,7 +56,6 @@ angular.module('starter.services', [])
     '</div>'+
         '<label for="typeReport">Tipo de denúncia:</label>' +
         '<select id="typeReport" ng-model="information.typeReport"> ' +
-          '<option value="null">Selecione uma opção</option> ' +
           '<option value="inapropriate">Conteúdo inapropriado</option> ' +
           '<option value="repeat">Conteúdo repetido</option>' +
         '</select> ' +
@@ -74,6 +73,8 @@ angular.module('starter.services', [])
           {text: "Enviar",
           type: 'button-arq',
           onTap: function(e){
+            if(!$rootScope.datas || !$rootScope.information.typeReport)
+              e.preventDefault();
             var results = { dataTypeReport : $rootScope.datas,
                             typeReport: $rootScope.information.typeReport,
                             observationReport: $rootScope.information.observation
@@ -96,9 +97,10 @@ angular.module('starter.services', [])
 .factory('ReportService',function($http, ServerName){
   return {
     post: function(photoId, dataTypeReport, typeReport, observationReport){
-      return $http.post(ServerName.get() + "/api/photo/" + photoId + "/report" ,
+      return $http.post(ServerName.get() + "/api/photos/" + photoId + "/report" ,
                         { params: {data_type_report : dataTypeReport, type_report : typeReport, 
-                          observation_report: observationReport} }).then(function(result){
+                          observation_report: observationReport, 
+                          user_id : window.localStorage.getItem("user_id")} }).then(function(result){
         return result.data;
       });
     }
