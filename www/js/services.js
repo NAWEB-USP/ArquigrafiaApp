@@ -1,8 +1,8 @@
 angular.module('starter.services', [])
 
 .factory('ServerName', function(){
-  var serverName = "http://localhost:8000";
-  //var serverName = "http://valinhos.ime.usp.br:51080";
+  //var serverName = "http://localhost:8000";
+  var serverName = "http://valinhos.ime.usp.br:51080";
   return {
     get: function () { 
       return serverName; 
@@ -54,11 +54,14 @@ angular.module('starter.services', [])
       var template = '<div ng-repeat="data in datas" > ' +
         '<ion-checkbox ng-model="data.select" style="border:none">{{data.name}}</ion-checkbox>'+
     '</div>'+
+    '<p ng-if="showErrorData">*Favor inserir campo a ser denunciado</p>' +
+
         '<label for="typeReport">Tipo de denúncia:</label>' +
         '<select id="typeReport" ng-model="information.typeReport"> ' +
           '<option value="inapropriate">Conteúdo inapropriado</option> ' +
           '<option value="repeat">Conteúdo repetido</option>' +
         '</select> ' +
+        '<p ng-if="showErrorType">*Favor inserir tipo de denuncia</p>' +
       '</div> ' +
       '<div> ' +
         '<label for="observation">Observação</label> ' +
@@ -73,8 +76,25 @@ angular.module('starter.services', [])
           {text: "Enviar",
           type: 'button-arq',
           onTap: function(e){
-            if(!$rootScope.datas || !$rootScope.information.typeReport)
+            $rootScope.showErrorData = true;
+            $rootScope.showErrorType = false;
+
+            for(var i = 0; i < $rootScope.datas.length; i++){
+              if($rootScope.datas[i].select == true){
+                $rootScope.showErrorData = false;
+                break;
+              }
+            }
+            
+            if (!$rootScope.information.typeReport){
+              $rootScope.showErrorType = true;
+            }
+
+            if($rootScope.showErrorType || $rootScope.showErrorData){
               e.preventDefault();
+              return null;
+            }
+              
             var results = { dataTypeReport : $rootScope.datas,
                             typeReport: $rootScope.information.typeReport,
                             observationReport: $rootScope.information.observation
