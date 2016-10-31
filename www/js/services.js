@@ -61,7 +61,7 @@ angular.module('starter.services', [])
           '<option value="inapropriate">Conteúdo inapropriado</option> ' +
           '<option value="repeat">Conteúdo repetido</option>' +
         '</select> ' +
-        '<p ng-if="showErrorType">*Favor inserir tipo de denuncia</p>' +
+        '<p ng-if="showErrorType">*Favor inserir tipo de denúncia</p>' +
       '</div> ' +
       '<div> ' +
         '<label for="observation">Observação</label> ' +
