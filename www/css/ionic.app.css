@@ -9818,9 +9818,8 @@ a.button {
     font-weight: 300;
     background-color: #ddd;
     padding: 5px 13px; }
-    .button.button-arq.button-shy:hover, .button.button-arq.button-shy.active,
-    .bar .button.button-arq.button-shy:hover,
-    .bar .button.button-arq.button-shy.active {
+    .button.button-arq.button-shy:hover,
+    .bar .button.button-arq.button-shy:hover {
       color: #1e1e1e;
       background-color: white; }
   .button.button-arq:hover, .button.button-arq.active,
@@ -9888,6 +9887,9 @@ a.button {
  */
 #feed .item {
   border: none; }
+  #feed .item.item-avatar h2 {
+    margin-top: 10px;
+    font-weight: bold; }
 
 #feed .item-content {
   padding: 0;
@@ -9903,6 +9905,13 @@ a.button {
     color: #1e1e1e; }
   #feed .list.card p {
     color: #787878; }
+  #feed .list.card .button-feed {
+    float: right; }
+    #feed .list.card .button-feed button.button-small {
+      background: none;
+      padding: 2px 10px 1px; }
+  #feed .list.card .item-text-wrap {
+    padding: 16px; }
 
 /* 
  * Camera tab. 
@@ -10008,6 +10017,10 @@ a.button {
   #photo-detail .button-bar a.active {
     border-bottom: 3px solid #1e1e1e; }
 
+#personal-info #photo-info-container .list .item.item-text-wrap,
+#photo-detail #photo-info-container .list .item.item-text-wrap {
+  font-size: 14px; }
+
 #uploads {
   width: 100%; }
 
@@ -10034,12 +10047,19 @@ a.button {
   border-bottom: 1px solid #eaeaea;
   padding-bottom: 2px;
   margin-bottom: 10px; }
-  #photo-detail .avatar-row img {
+  #photo-detail .avatar-row .avatar-img {
     width: 50px;
-    border-radius: 100%;
-    margin: 5px 15px 5px 5px; }
+    height: 50px;
+    overflow: hidden;
+    margin: 13px 15px 8px 10px;
+    border-radius: 100%; }
+  #photo-detail .avatar-row img {
+    width: 100%;
+    -webkit-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.3);
+    -moz-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.3);
+    box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.3); }
   #photo-detail .avatar-row h4 {
-    margin-top: 17px; }
+    margin-top: 26px; }
 
 #photo-detail .img-row img {
   width: 100%;
@@ -10047,7 +10067,7 @@ a.button {
   word-wrap: normal; }
 
 #photo-detail .img-row + h3 {
-  margin: 10px 5px;
+  margin: 15px 20px;
   font-size: 18px;
   border-bottom: 1px solid #eaeaea;
   padding-bottom: 10px; }

@@ -9,9 +9,11 @@
 <ion-view view-title="{{photo['photo'].name}}" id="photo-detail">
   <ion-content class="has-header">
     <div class="row avatar-row"> 
+    <div class="avatar-img">
       <img src="{{serverName + photo['sender'].photo}}" ng-if="!!photo['sender'].photo">
       <img src="img/avatar-60.png" ng-if="!photo['sender'].photo&&!photo['photo'].institution_id">
       <img src="img/avatar-institution.png" ng-if="!photo['sender'].photo&&!!photo['photo'].institution_id">
+      </div>
       <h4>{{photo['sender'].name}}</h4>
     </div>
     <div class="row img-row">
@@ -26,31 +28,31 @@
     <div id="photo-info-container">
       <div class="list">
         <div class="item item-text-wrap" ng-if="!!photo['photo'].description">
-          Descrição: {{photo['photo'].description}}
+          <b>Descrição:</b> {{photo['photo'].description}}
         </div>
         <div class="item item-text-wrap" ng-if="!!photo['photo'].collection">
-          Coleção: {{photo['photo'].collection}}
+          <b>Coleção:</b> {{photo['photo'].collection}}
         </div>
         <div class="item item-text-wrap" ng-if="!!photo['photo'].imageAuthor">
-          Autor da Imagem: {{photo['photo'].imageAuthor}}
+          <b>Autor da Imagem:</b> {{photo['photo'].imageAuthor}}
         </div>
         <div class="item item-text-wrap" ng-if="!!photo['photo'].dataCriacao">
-          Data da Imagem: {{photo['photo'].dataCriacao}}
+          <b>Data da Imagem:</b> {{photo['photo'].dataCriacao}}
         </div>
         <div class="item item-text-wrap" ng-if="!!photo['authors'].length">
-          Autor da Obra: {{photo['authors']}}
+          <b>Autor da Obra:</b> {{photo['authors']}}
         </div>
         <div class="item item-text-wrap" ng-if="!!photo['photo'].workdate">
-          Data de conclusão da obra: {{photo['photo'].workdate}}
+          <b>Data de conclusão da obra:</b> {{photo['photo'].workdate}}
         </div>
         <div class="item item-text-wrap" ng-if="!!photo['photo'].street">
-          Endereço: {{photo['photo'].street}}
+          <b>Endereço:</b> {{photo['photo'].street}}
         </div>
         <div class="item item-text-wrap"  ng-if="!!photo['tags'].length">
-          Tags: {{photo['tags']}}
+          <b>Tags:</b> {{photo['tags']}}
         </div>
-        <div class="item">
-          Licença: <a href="{{'http://creativecommons.org/licenses/' + photo['license'][0] + '/3.0/deed.pt_BR'}}" target="_blank"><img src="{{'img/ccIcons/' + photo['license'][0] + '88x31.png'}}" title="{{photo['license'][1]}}"></a>
+        <div class="item item-text-wrap">
+          <b>Licença:</b> <a href="{{'http://creativecommons.org/licenses/' + photo['license'][0] + '/3.0/deed.pt_BR'}}" target="_blank"><img src="{{'img/ccIcons/' + photo['license'][0] + '88x31.png'}}" title="{{photo['license'][1]}}"></a>
         </div>
       </div>
     </div>

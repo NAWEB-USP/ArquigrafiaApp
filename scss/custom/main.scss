@@ -32,8 +32,7 @@
 		background-color: #ddd;
 		padding: 5px 13px;
 
-		&:hover,
-		&.active {
+		&:hover {
 			color: $dark-gray-arq;
 			background-color: white;
 		}
@@ -139,6 +138,12 @@
 	.item {
 		border: none;
 
+
+		&.item-avatar h2 {
+			margin-top: 10px;
+			font-weight: bold;
+		}
+
 	}
 
 	.item-content {
@@ -164,6 +169,20 @@
 		p {
 			color: $light-gray-arq;
 		}
+
+		.button-feed {
+			float: right;
+
+			& button.button-small {
+				background: none;
+				padding: 2px 10px 1px;
+			}
+		}
+		
+
+		.item-text-wrap {
+			padding: 16px;
+		}	
 	}
 
  }
@@ -336,6 +355,14 @@
 		}
 	}
 
+	#photo-info-container {
+
+		.list .item.item-text-wrap {
+			font-size: 14px;
+		}
+
+	}
+
  }
 
  #uploads {
@@ -376,14 +403,23 @@
 
 	.avatar-row {
 		
-		img {
+		.avatar-img {
 			width: 50px;
-			border-radius: 100%;
-			margin: 5px 15px 5px 5px;
+			height: 50px;
+			overflow: hidden;
+			margin: 13px 15px 8px 10px;
+			border-radius: 100%
+		}
+
+		img {
+			width: 100%;
+			-webkit-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.3);
+			-moz-box-shadow:    1px 1px 5px 0px rgba(50, 50, 50, 0.3);
+			box-shadow:         1px 1px 5px 0px rgba(50, 50, 50, 0.3);
 		}
 
 		h4 {
-			margin-top: 17px;
+			margin-top: 26px;
 		}
 
 		border-bottom: 1px solid $border-gray;
@@ -400,7 +436,7 @@
 		}
 
 		&+h3 {
-			margin: 10px 5px;
+			margin: 15px 20px;
 			font-size: 18px;
 			border-bottom: 1px solid $border-gray;
 			padding-bottom: 10px;
