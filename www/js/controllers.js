@@ -160,7 +160,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
       if(result != null){
         ReportService.post(photoId, result.dataTypeReport, result.typeReport, 
                            result.observationReport).then(function(response){
-          PopUpService.showPopUp('Sucesso', 'Denuncia realizada com sucesso.');
+          PopUpService.showPopUp('Sucesso', 'Denúncia realizada com sucesso.');
         });
       }
     });
@@ -217,7 +217,8 @@ angular.module('starter.controllers', ['highcharts-ng'])
   }
 })
 
-.controller('PhotoDetailCtrl', function($scope, $stateParams, $state, Photos, ServerName, PopUpService, LoginService) {
+.controller('PhotoDetailCtrl', function($scope, $stateParams, $state, Photos, ServerName, 
+                                        PopUpService, LoginService, ReportService) {
   /* Verifica se o usuário está autorizado */
   $scope.$on('$ionicView.enter', function() {
     LoginService.verifyCredentials();
@@ -419,6 +420,17 @@ angular.module('starter.controllers', ['highcharts-ng'])
 
   $scope.editPhoto = function(id) {
     $state.go('tab.edit-photo', {photoId: id});
+  }
+
+  $scope.report = function(photoId){
+    PopUpService.showReport().then(function(result){
+      if(result != null){
+        ReportService.post(photoId, result.dataTypeReport, result.typeReport, 
+                           result.observationReport).then(function(response){
+          PopUpService.showPopUp('Sucesso', 'Denúncia realizada com sucesso.');
+        });
+      }
+    });
   }
 })
 
