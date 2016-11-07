@@ -33,8 +33,8 @@
 		padding: 5px 13px;
 
 		&:hover {
-			color: $dark-gray-arq;
-			background-color: white;
+			color: white;
+			background-color: $dark-gray-arq;;
 		}
 	}
 
@@ -45,6 +45,19 @@
 	}
 
  }
+
+
+.button.button-positive {
+    border-color: transparent;
+    background-color: #000;
+    color: #fff;
+
+    &:hover,
+    &.active {
+    	color: #ddd;
+    }
+}
+
 
  .item-arq {
  	border: 1px solid $dark-gray-arq;
