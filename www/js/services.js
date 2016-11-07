@@ -2,8 +2,8 @@ angular.module('starter.services', [])
 
 .factory('ServerName', function(){
 
-  var serverName = "http://localhost:8000";
-  //var serverName = "http://valinhos.ime.usp.br:51080";
+  //var serverName = "http://localhost:8000";
+  var serverName = "http://valinhos.ime.usp.br:51080";
 
   return {
     get: function () { 
