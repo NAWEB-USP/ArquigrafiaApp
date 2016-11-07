@@ -29,11 +29,17 @@
         </div>
         <div class="row" id="photos-container">
             <ion-list id="uploads">
+                <div class="row" ng-if="photos.length == 0">
+                    <div class="col text-center">Você não enviou fotos ainda.</div>
+                </div>
                 <ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/account/photos/{{photo.id}}">
                     <img src="{{serverName + '/arquigrafia-images/' + photo.id + '_home.jpg'}}">
                 </ion-item>
             </ion-list>
             <ion-list id="evaluations" style="display: none">
+                <div class="row" ng-if="evaluations.length == 0">
+                    <div class="col">Você não registrou impressões ainda.</div>
+                </div>
                 <ion-item class="item-remove-animate feed-item" ng-repeat="photo in evaluations" type="item-text-wrap" href="#/tab/account/photos/{{photo.id}}">
                     <img src="{{serverName + '/arquigrafia-images/' + photo.id + '_home.jpg'}}">
                 </ion-item>
