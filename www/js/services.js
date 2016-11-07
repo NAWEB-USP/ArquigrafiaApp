@@ -2,8 +2,8 @@ angular.module('starter.services', [])
 
 .factory('ServerName', function(){
 
-  //var serverName = "http://localhost:8000";
-  var serverName = "http://valinhos.ime.usp.br:51080";
+  var serverName = "http://localhost:8000";
+  //var serverName = "http://valinhos.ime.usp.br:51080";
 
   return {
     get: function () { 
@@ -339,12 +339,27 @@ angular.module('starter.services', [])
   };
 })
 
-.factory('Profiles', function($http, ServerName) {
+.factory('Profiles', function($q, $http, ServerName) {
   return {
     create: function(data) {
-      return $http.post(ServerName.get() + "/api/users", {data}).then(function(result){
-        return result.data;
+      var deferred = $q.defer();
+      var promise = deferred.promise;
+      $http.post(ServerName.get() + "/api/users", {data}).then(function(result){
+        if (result.data.valid == 'true') {
+          deferred.resolve(result.data);
+        } else {
+          deferred.reject(result.data);
+        }
       });
+      promise.success = function(fn) {
+        promise.then(fn);
+        return promise;
+      }
+      promise.error = function(fn) {
+        promise.then(null, fn);
+        return promise;
+      }
+      return promise;
     }, 
     getProfile: function(userId) {
       return $http.get(ServerName.get() + "/api/profile/" + userId).then(function(result){

@@ -95,12 +95,21 @@ angular.module('starter.controllers', ['highcharts-ng'])
       }
       if (errors == "") {
         PopUpService.showSpinner('Carregando...');
-        Profiles.create($scope.data).then(function(data) {
+        Profiles.create($scope.data).success(function(data) {
             window.localStorage.setItem("logged_user", data.login);
             window.localStorage.setItem(data.login, data.token);
             window.localStorage.setItem("user_id", data.id);
             $state.go('tab.dash');  
-            PopUpService.hideSpinner();
+        }).error(function(data) {
+            var errors = "";
+            for (var property in data.errors) {
+              if (data.errors.hasOwnProperty(property)) {
+                errors = errors + data.errors[property] + "<br> ";
+              }
+            }
+            PopUpService.showPopUp('Falha no cadastro!', errors);
+        }).finally(function($ionicLoading) {  
+          PopUpService.hideSpinner(); 
         });
       }
       else {
