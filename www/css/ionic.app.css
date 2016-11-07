@@ -9820,13 +9820,20 @@ a.button {
     padding: 5px 13px; }
     .button.button-arq.button-shy:hover,
     .bar .button.button-arq.button-shy:hover {
-      color: #1e1e1e;
-      background-color: white; }
+      color: white;
+      background-color: #1e1e1e; }
   .button.button-arq:hover, .button.button-arq.active,
   .bar .button.button-arq:hover,
   .bar .button.button-arq.active {
     color: white;
     background-color: #1e1e1e; }
+
+.button.button-positive {
+  border-color: transparent;
+  background-color: #000;
+  color: #fff; }
+  .button.button-positive:hover, .button.button-positive.active {
+    color: #ddd; }
 
 .item-arq {
   border: 1px solid #1e1e1e;
@@ -9941,6 +9948,9 @@ a.button {
     z-index: 999;
     right: 10px;
     top: 7px; }
+  #input-tag .button-shy:hover {
+    color: #1e1e1e;
+    background-color: #000; }
 
 #photoArea button {
   display: inline-block;
