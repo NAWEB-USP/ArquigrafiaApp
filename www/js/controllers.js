@@ -429,12 +429,12 @@ angular.module('starter.controllers', ['highcharts-ng'])
     $state.go('tab.edit-photo', {photoId: id});
   }
 
-  $scope.report = function(photoId){
+  $scope.report = function(){
     PopUpService.showReport().then(function(result){
       if(result != null){
-        ReportService.post(photoId, result.dataTypeReport, result.typeReport, 
+        ReportService.post($stateParams.photoId, result.dataTypeReport, result.typeReport, 
                            result.observationReport).then(function(response){
-          PopUpService.showPopUp('Sucesso', 'Denúncia realizada com sucesso.');
+          PopUpService.showPopUp('Denúncia', response.message);
         });
       }
     });
