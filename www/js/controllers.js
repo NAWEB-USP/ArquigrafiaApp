@@ -100,13 +100,11 @@ angular.module('starter.controllers', ['highcharts-ng'])
             window.localStorage.setItem(data.login, data.token);
             window.localStorage.setItem("user_id", data.id);
             $state.go('tab.dash');  
-            console.log(data);
             PopUpService.hideSpinner();
         });
       }
       else {
         PopUpService.showPopUp("Erro", errors);
-        console.log($scope.data.email);
       }
     }
 })
