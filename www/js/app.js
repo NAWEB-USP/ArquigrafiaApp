@@ -100,6 +100,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     })
 
   .state('tab.account', {
+    cache: false,
     url: '/account',
     views: {
       'tab-account': {
