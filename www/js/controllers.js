@@ -99,7 +99,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
             window.localStorage.setItem("logged_user", data.login);
             window.localStorage.setItem(data.login, data.token);
             window.localStorage.setItem("user_id", data.id);
-            $state.go('tab.dash');
+            $state.go('tab.dash', {}, {reload: true});
         }).error(function(data) {
             var errors = "";
             for (var property in data.errors) {
