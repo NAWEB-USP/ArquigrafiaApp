@@ -94,8 +94,15 @@ angular.module('starter.services', [])
               e.preventDefault();
               return null;
             }
+
+            var dataTypeReport = [];
+            for(var i = 0; i < $rootScope.datas.length; i++){
+              if($rootScope.datas[i].select == true){
+                dataTypeReport.push($rootScope.datas[i].name);
+              }
+            }
               
-            var results = { dataTypeReport : $rootScope.datas,
+            var results = { dataTypeReport : dataTypeReport,
                             typeReport: $rootScope.information.typeReport,
                             observationReport: $rootScope.information.observation
              };
@@ -117,10 +124,14 @@ angular.module('starter.services', [])
 .factory('ReportService',function($http, ServerName){
   return {
     post: function(photoId, dataTypeReport, typeReport, observationReport){
-      return $http.post(ServerName.get() + "/api/photos/" + photoId + "/report" ,
-                        { params: {data_type_report : dataTypeReport, type_report : typeReport, 
+      return $http.post(ServerName.get() + "/api/photos/report" ,
+                        { params: {
+                          data_type_report : dataTypeReport, 
+                          type_report : typeReport, 
                           observation_report: observationReport, 
-                          user_id : window.localStorage.getItem("user_id")} }).then(function(result){
+                          user_id : window.localStorage.getItem("user_id"),
+                          photo_id: photoId }
+                        }).then(function(result){
         return result.data;
       });
     }
