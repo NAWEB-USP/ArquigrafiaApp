@@ -9905,11 +9905,6 @@ a.button {
     color: #1e1e1e; }
   #feed .list.card p {
     color: #787878; }
-  #feed .list.card .button-feed {
-    float: right; }
-    #feed .list.card .button-feed button.button-small {
-      background: none;
-      padding: 2px 10px 1px; }
   #feed .list.card .item-text-wrap {
     padding: 16px; }
 
@@ -10021,6 +10016,14 @@ a.button {
 #photo-detail #photo-info-container .list .item.item-text-wrap {
   font-size: 14px; }
 
+#personal-info .button-feed,
+#photo-detail .button-feed {
+  float: right; }
+  #personal-info .button-feed button.button-small,
+  #photo-detail .button-feed button.button-small {
+    background: none;
+    padding: 16px 10px 1px; }
+
 #uploads {
   width: 100%; }
 
@@ -10070,7 +10073,8 @@ a.button {
   margin: 15px 20px;
   font-size: 18px;
   border-bottom: 1px solid #eaeaea;
-  padding-bottom: 10px; }
+  padding-bottom: 10px;
+  float: left; }
 
 #photo-detail .list {
   margin-bottom: 0; }
@@ -10128,3 +10132,23 @@ a.button {
 ion-tabs.tabs-striped.tabs-color-active-positive .tab-item.activated, ion-tabs.tabs-striped.tabs-color-active-positive .tab-item.active, ion-tabs.tabs-striped.tabs-color-active-positive .tab-item.tab-item-active {
   border-color: #212121;
   color: #212121; }
+
+.popup .popup-head {
+  padding: 15px 10px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+  font-weight: bold; }
+
+.popup .item-checkbox {
+  font-size: 14px; }
+
+.popup #opcoes-denunciar {
+  margin-top: 10px; }
+  .popup #opcoes-denunciar p {
+    margin-bottom: 5px; }
+
+label.item.item-checkbox.ng-not-empty.ng-valid {
+  background: none; }
+
+select#typeReport.ng-pristine.ng-valid.ng-empty.ng-touched button {
+  border: none; }

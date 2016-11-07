@@ -169,15 +169,6 @@
 		p {
 			color: $light-gray-arq;
 		}
-
-		.button-feed {
-			float: right;
-
-			& button.button-small {
-				background: none;
-				padding: 2px 10px 1px;
-			}
-		}
 		
 
 		.item-text-wrap {
@@ -363,6 +354,15 @@
 
 	}
 
+	.button-feed {
+			float: right;
+
+			& button.button-small {
+				background: none;
+				padding: 16px 10px 1px;
+			}
+		}
+
  }
 
  #uploads {
@@ -440,6 +440,7 @@
 			font-size: 18px;
 			border-bottom: 1px solid $border-gray;
 			padding-bottom: 10px;
+			float: left;
 		}
 
 	}
@@ -523,4 +524,40 @@
 ion-tabs.tabs-striped.tabs-color-active-positive .tab-item.activated, ion-tabs.tabs-striped.tabs-color-active-positive .tab-item.active, ion-tabs.tabs-striped.tabs-color-active-positive .tab-item.tab-item-active {
 	border-color: #212121;
 	color: #212121;
+}
+
+
+//* modal de denunciar //
+
+.popup {
+
+.popup-head {
+	padding: 15px 10px;
+	border-bottom:1px solid #eee;
+	text-align:center;
+	font-weight: bold;
+}
+
+.item-checkbox {
+	font-size: 14px;
+}
+
+#opcoes-denunciar {
+	margin-top: 10px;
+
+	p {
+		margin-bottom: 5px;
+	}
+}
+}
+
+label.item.item-checkbox.ng-not-empty.ng-valid {
+	background: none;
+}
+
+select#typeReport.ng-pristine.ng-valid.ng-empty.ng-touched {
+
+	button {
+		border: none;
+	}
 }

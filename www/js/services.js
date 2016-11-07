@@ -57,21 +57,25 @@ angular.module('starter.services', [])
         '<ion-checkbox ng-model="data.select" style="border:none">{{data.name}}</ion-checkbox>'+
     '</div>'+
     '<p ng-if="showErrorData">*Favor inserir campo a ser denunciado</p>' +
-
-        '<label for="typeReport">Tipo de denúncia:</label>' +
-        '<select id="typeReport" ng-model="information.typeReport"> ' +
+      '<div id="opcoes-denunciar"> ' +
+        '<p><label for="typeReport">Tipo de denúncia</label></p>' +
+        '<select id="typeReport" ng-model="information.typeReport" style="border: none;"> ' +
           '<option value="inapropriate">Conteúdo inapropriado</option> ' +
           '<option value="repeat">Conteúdo repetido</option>' +
         '</select> ' +
         '<p ng-if="showErrorType">*Favor inserir tipo de denúncia</p>' +
       '</div> ' +
       '<div> ' +
-        '<label for="observation">Observação</label> ' +
+      '</div> ' +
+      '<div id="opcoes-denunciar"> ' +
+              '<p><label for="observation">Observação</label></p> ' +
         '<textarea id="observation" ng-model="information.observation"></textarea>' +
+
+      '</div>' + 
       '</div>';
       
       var popup = $ionicPopup.show({
-        title: 'Denunciar',
+        title: 'Denunciar foto',
         template: template,
         scope: $rootScope,
         buttons: [ 

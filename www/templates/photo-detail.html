@@ -20,7 +20,11 @@
       <img src="{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_home.jpg'}}">
     </div>
     <h3>{{photo['photo'].name}}</h3>
-    <button type="button"  id="meuNome" class="button button-small icon-right" ng-click="report({{photo['photo'].id}})"><img src="img/report.png"></button>
+       <div class="button-feed">
+        <button type="button"  id="meuNome" class="button button-small" ng-click="report({{photo['photo'].id}})"><img src="img/report.png"></button>
+      </div>
+  
+
     <div class="button-bar button-light">
       <a class="button active" id="showInformation" ng-click="showInformation()">Info</a>
       <a class="button" id="showEvaluation" ng-click="showEvaluation()">Análise</a>
