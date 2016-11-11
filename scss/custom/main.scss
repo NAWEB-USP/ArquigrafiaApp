@@ -102,6 +102,10 @@
  	top: 50px;
  }
 
+
+.item {
+	font-size: 14px;
+}
 /* 
  * Welcome page. 
  */
@@ -247,7 +251,7 @@
  	}
 
  	.button-shy:hover {
-			color: $dark-gray-arq;
+			color: #fff;
 			background-color: #000;
 		}
  }
@@ -370,6 +374,12 @@
 			font-size: 14px;
 		}
 
+		.license-cc {
+			img {
+				width: 75px;
+				margin-left: 5px;
+			}
+		}
 	}
 
 	.button-feed {
@@ -380,6 +390,23 @@
 				padding: 16px 10px 1px;
 			}
 		}
+
+	#evaluation-container {
+		.range {
+			padding: 2px 25px;
+
+			input {
+				height: 40px;
+			}
+		}
+
+		.item {
+			font-size: 14px;
+		}
+
+	}
+
+
 
  }
 
