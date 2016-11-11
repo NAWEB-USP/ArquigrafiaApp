@@ -9863,6 +9863,9 @@ a.button {
 .has-header {
   top: 50px; }
 
+.item {
+  font-size: 14px; }
+
 /* 
  * Welcome page. 
  */
@@ -9949,7 +9952,7 @@ a.button {
     right: 10px;
     top: 7px; }
   #input-tag .button-shy:hover {
-    color: #1e1e1e;
+    color: #fff;
     background-color: #000; }
 
 #photoArea button {
@@ -10026,6 +10029,11 @@ a.button {
 #photo-detail #photo-info-container .list .item.item-text-wrap {
   font-size: 14px; }
 
+#personal-info #photo-info-container .license-cc img,
+#photo-detail #photo-info-container .license-cc img {
+  width: 75px;
+  margin-left: 5px; }
+
 #personal-info .button-feed,
 #photo-detail .button-feed {
   float: right; }
@@ -10033,6 +10041,17 @@ a.button {
   #photo-detail .button-feed button.button-small {
     background: none;
     padding: 16px 10px 1px; }
+
+#personal-info #evaluation-container .range,
+#photo-detail #evaluation-container .range {
+  padding: 2px 25px; }
+  #personal-info #evaluation-container .range input,
+  #photo-detail #evaluation-container .range input {
+    height: 40px; }
+
+#personal-info #evaluation-container .item,
+#photo-detail #evaluation-container .item {
+  font-size: 14px; }
 
 #uploads {
   width: 100%; }
