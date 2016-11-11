@@ -252,6 +252,7 @@ angular.module('starter.services', [])
         PopUpService.hideSpinner();
         $state.go('tab.account');
         $ionicHistory.clearCache();
+        PopUpService.showPopUp('Sucesso', 'Foto incluída com sucesso');
       };
 
       var onFail = function(error){ 
@@ -301,6 +302,7 @@ angular.module('starter.services', [])
         PopUpService.hideSpinner();
         $state.go('tab.account');
         $ionicHistory.clearCache();
+        PopUpService.showPopUp('Sucesso', 'Foto incluída com sucesso');
       };
 
       var onFail = function(error){ 
