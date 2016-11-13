@@ -9789,8 +9789,8 @@ a.button {
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
 
-/* 
- * Base styles. 
+/*
+ * Base styles.
  */
 .button.button-arq,
 .bar .button.button-arq {
@@ -9866,15 +9866,15 @@ a.button {
 .item {
   font-size: 14px; }
 
-/* 
- * Welcome page. 
+/*
+ * Welcome page.
  */
 #welcome-content .row,
 #welcome-content .scroll {
   height: 100%; }
 
-/* 
- * Login page. 
+/*
+ * Login page.
  */
 #login {
   max-width: 550px;
@@ -9892,8 +9892,8 @@ a.button {
     transform: translateY(-60%);
     width: 100%; }
 
-/* 
- * Feed tab. 
+/*
+ * Feed tab.
  */
 #feed .item {
   border: none; }
@@ -9918,8 +9918,8 @@ a.button {
   #feed .list.card .item-text-wrap {
     padding: 16px; }
 
-/* 
- * Camera tab. 
+/*
+ * Camera tab.
  */
 #camera .scroll {
   background-color: #fafafa;
@@ -9965,8 +9965,8 @@ a.button {
   #photoArea button:first-of-type {
     margin-right: 15px; }
 
-/* 
- * Account tab. 
+/*
+ * Account tab.
  */
 #account {
   background-color: #fafafa; }
@@ -10044,10 +10044,15 @@ a.button {
 
 #personal-info #evaluation-container .range,
 #photo-detail #evaluation-container .range {
-  padding: 2px 25px; }
+  padding: 2px 10px; }
   #personal-info #evaluation-container .range input,
   #photo-detail #evaluation-container .range input {
-    height: 40px; }
+    width: 100%;
+    height: 25px; }
+  #personal-info #evaluation-container .range input::-webkit-slider-thumb,
+  #photo-detail #evaluation-container .range input::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px; }
 
 #personal-info #evaluation-container .item,
 #photo-detail #evaluation-container .item {
@@ -10075,8 +10080,8 @@ a.button {
     width: 100%;
     background-color: #fafafa; }
 
-/* 
- * Photo detail tab. 
+/*
+ * Photo detail tab.
  */
 #photo-detail .avatar-row {
   border-bottom: 1px solid #eaeaea;
@@ -10098,6 +10103,7 @@ a.button {
 
 #photo-detail .img-row img {
   width: 100%;
+  height: 100%;
   display: block;
   word-wrap: normal; }
 
@@ -10118,8 +10124,8 @@ a.button {
   background: #1e1e1e;
   border-color: #1e1e1e; }
 
-/* 
- * Search tab. 
+/*
+ * Search tab.
  */
 #search-placeholder {
   margin: auto;

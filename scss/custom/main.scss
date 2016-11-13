@@ -1,5 +1,5 @@
-/* 
- * Base styles. 
+/*
+ * Base styles.
  */
 
  .button.button-arq,
@@ -91,7 +91,7 @@
  	.tab-item {
  		color: $light-gray-arq;
 
- 		&.tab-item-active, 
+ 		&.tab-item-active,
  		&.activated {
  			color: $dark-gray-arq;
  		}
@@ -106,8 +106,8 @@
 .item {
 	font-size: 14px;
 }
-/* 
- * Welcome page. 
+/*
+ * Welcome page.
  */
 
 #welcome-content {
@@ -116,11 +116,11 @@
 	.scroll {
 		height: 100%;
 	}
-	
+
 }
 
-/* 
- * Login page. 
+/*
+ * Login page.
  */
 
  #login {
@@ -130,7 +130,7 @@
 	img {
 		width: 100%;
 		max-width: 70px;
-		margin: 0 0 15px;	
+		margin: 0 0 15px;
 	}
 
 	.scroll {
@@ -146,12 +146,12 @@
 	}
  }
 
- /* 
- * Feed tab. 
+ /*
+ * Feed tab.
  */
 
  #feed {
-	
+
 	.item {
 		border: none;
 
@@ -186,21 +186,21 @@
 		p {
 			color: $light-gray-arq;
 		}
-		
+
 
 		.item-text-wrap {
 			padding: 16px;
-		}	
+		}
 	}
 
  }
 
- /* 
- * Camera tab. 
+ /*
+ * Camera tab.
  */
 
  #camera {
-	
+
 	.scroll {
 		background-color: $background-gray;
 		position: relative;
@@ -274,8 +274,8 @@
  	}
  }
 
- /* 
- * Account tab. 
+ /*
+ * Account tab.
  */
 
  #account {
@@ -393,17 +393,22 @@
 
 	#evaluation-container {
 		.range {
-			padding: 2px 25px;
+			padding: 2px 10px;
 
 			input {
-				height: 40px;
+        width: 100%;
+				height: 25px;
 			}
+
+      input::-webkit-slider-thumb {
+        width: 20px;
+        height: 20px;
+      }
 		}
 
 		.item {
 			font-size: 14px;
 		}
-
 	}
 
 
@@ -444,14 +449,14 @@
 
  }
 
- /* 
- * Photo detail tab. 
+ /*
+ * Photo detail tab.
  */
 
  #photo-detail {
 
 	.avatar-row {
-		
+
 		.avatar-img {
 			width: 50px;
 			height: 50px;
@@ -480,6 +485,7 @@
 
 		img {
 			width: 100%;
+      height: 100%;
 			display: block;
 			word-wrap: normal;
 		}
@@ -509,12 +515,12 @@
 
  }
 
- /* 
- * Search tab. 
+ /*
+ * Search tab.
  */
 
  #search-placeholder {
-	
+
 	margin: auto;
 	display: table;
 	height: 100vh;
@@ -562,7 +568,7 @@
 }
 
 .slideAnimation {
-  -webkit-animation: slideInSmooth ease-in 1; 
+  -webkit-animation: slideInSmooth ease-in 1;
   animation: slideInSmooth ease-in 1;
   -webkit-animation-fill-mode: forwards;
   animation-fill-mode: forwards;

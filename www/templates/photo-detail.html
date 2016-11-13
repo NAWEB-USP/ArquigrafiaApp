@@ -8,7 +8,7 @@
 </div>
 <ion-view view-title="{{photo['photo'].name}}" id="photo-detail">
   <ion-content class="has-header">
-    <div class="row avatar-row"> 
+    <div class="row avatar-row">
     <div class="avatar-img">
       <img src="{{serverName + photo['sender'].photo}}" ng-if="!!photo['sender'].photo">
       <img src="img/avatar-60.png" ng-if="!photo['sender'].photo&&!photo['photo'].institution_id">
@@ -62,9 +62,16 @@
     <div id="evaluation-container" style="display: none;">
       <div class="list">
         <div class="item range range-positive" ng-repeat="binomial in binomials">
-          <i>{{binomial["firstOption"]}}</i>
-          <input type="range" name="volume" min="0" max="100" value="{{binomial['value']}}" id="{{binomial['id']}}">
-          <i>{{binomial["secondOption"]}}</i>
+
+          <div style="width: 160px; text-align: right;">
+            <i>{{binomial["firstOption"]}}</i>
+          </div>
+          <div style="width: 100%; padding-right: 20px;">
+            <input type="range" name="volume" min="0" max="100" value="{{binomial['value']}}" id="{{binomial['id']}}">
+          </div>
+          <div style="width: 160px; padding: 0; margin: 0; text-align: left">
+            <i>{{binomial["secondOption"]}}</i>
+          </div>
         </div>
       </div>
       <ion-list>
