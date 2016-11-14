@@ -489,7 +489,7 @@ angular.module('starter.services', [])
         longitude = EXIF.getTag(image, "GPSLongitude");
         latitude = EXIF.getTag(image, "GPSLatitude");
 
-        if(latitude !== null || longitude !== null){
+        if(latitude !== null && longitude !== null && latitude !== undefined && longitude !== undefined){
           latitude = convertDegToDec(latitude);
           longitude = convertDegToDec(longitude);
 
