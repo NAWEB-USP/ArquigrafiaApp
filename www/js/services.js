@@ -6,10 +6,10 @@ angular.module('starter.services', [])
   var serverName = "http://valinhos.ime.usp.br:51080";
 
   return {
-    get: function () { 
-      return serverName; 
+    get: function () {
+      return serverName;
     }
-  }
+  };
 })
 
 .factory('PopUpService', function($ionicPopup, $ionicLoading, $q, $rootScope) {
@@ -18,10 +18,10 @@ angular.module('starter.services', [])
       $ionicLoading.show({
         template: '<p>' + message + '</p><ion-spinner></ion-spinner>'
       });
-    }, 
+    },
     hideSpinner : function () {
       $ionicLoading.hide();
-    }, 
+    },
     showPopUp : function (title, message) {
       $ionicPopup.alert({
         title: title,
@@ -71,14 +71,14 @@ angular.module('starter.services', [])
               '<p><label for="observation">Observação</label></p> ' +
         '<textarea id="observation" ng-model="information.observation"></textarea>' +
 
-      '</div>' + 
+      '</div>' +
       '</div>';
-      
+
       var popup = $ionicPopup.show({
         title: 'Denunciar foto',
         template: template,
         scope: $rootScope,
-        buttons: [ 
+        buttons: [
           {text: "Enviar",
           type: 'button-arq',
           onTap: function(e){
@@ -86,12 +86,12 @@ angular.module('starter.services', [])
             $rootScope.showErrorType = false;
 
             for(var i = 0; i < $rootScope.datas.length; i++){
-              if($rootScope.datas[i].select == true){
+              if($rootScope.datas[i].select === true){
                 $rootScope.showErrorData = false;
                 break;
               }
             }
-            
+
             if (!$rootScope.information.typeReport){
               $rootScope.showErrorType = true;
             }
@@ -102,12 +102,12 @@ angular.module('starter.services', [])
             }
 
             var dataTypeReport = [];
-            for(var i = 0; i < $rootScope.datas.length; i++){
-              if($rootScope.datas[i].select == true){
+            for(var j = 0; j < $rootScope.datas.length; i++){
+              if($rootScope.datas[j].select === true){
                 dataTypeReport.push($rootScope.datas[i].name);
               }
             }
-              
+
             var results = { dataTypeReport : dataTypeReport,
                             typeReport: $rootScope.information.typeReport,
                             observationReport: $rootScope.information.observation
@@ -121,10 +121,10 @@ angular.module('starter.services', [])
           }}]
       }).then(function(result){
         deferred.resolve(result);
-      });   
-      return deferred.promise;   
+      });
+      return deferred.promise;
     }
-  }
+  };
 })
 
 .factory('ReportService',function($http, ServerName){
@@ -132,16 +132,16 @@ angular.module('starter.services', [])
     post: function(photoId, dataTypeReport, typeReport, observationReport){
       return $http.post(ServerName.get() + "/api/photos/report" ,
                         { params: {
-                          data_type_report : dataTypeReport, 
-                          type_report : typeReport, 
-                          observation_report: observationReport, 
+                          data_type_report : dataTypeReport,
+                          type_report : typeReport,
+                          observation_report: observationReport,
                           user_id : window.localStorage.getItem("user_id"),
                           photo_id: photoId }
                         }).then(function(result){
         return result.data;
       });
     }
-  }
+  };
 })
 
 .factory('LoginService', function($q, $http, $ionicHistory, $state, ServerName) {
@@ -159,35 +159,35 @@ angular.module('starter.services', [])
             promise.success = function(fn) {
                 promise.then(fn);
                 return promise;
-            }
+            };
             promise.error = function(fn) {
                 promise.then(null, fn);
                 return promise;
-            }
-            return promise; 
-        }, 
+            };
+            return promise;
+        },
         logoutUser: function(name, token) {
           return $http.post(ServerName.get() + "/api/logout", {login : name, token : token}).then(function(result){
             return result.data;
           });
-        }, 
+        },
         verifyCredentials: function() {
-          if(window.localStorage.getItem("logged_user") == null) {
+          if(window.localStorage.getItem("logged_user") === null) {
             $state.go('login');
           }
           else {
             return $http.post(ServerName.get() + "/api/auth", {login : window.localStorage.getItem("logged_user"), token : window.localStorage.getItem(window.localStorage.getItem("logged_user")), id : window.localStorage.getItem("user_id")}).then(function(result){
-              if (result.data["auth"] != true) {
+              if (result.data.auth !== true) {
                 window.localStorage.removeItem(window.localStorage.getItem("logged_user"));
                 window.localStorage.removeItem("logged_user");
                 window.localStorage.removeItem("user_id");
                 $ionicHistory.clearHistory();
-                $ionicHistory.clearCache().then(function(){ $state.go('login', {}, {reload: true}) });     
+                $ionicHistory.clearCache().then(function(){ $state.go('login', {}, {reload: true}); });
               }
             });
           }
         }
-    }
+    };
 })
 
 .factory('Feed', function($http, ServerName){
@@ -206,12 +206,12 @@ angular.module('starter.services', [])
       return $http.get(ServerName.get() + "/api/loadMore/" + userId, { params: {max_id : maxId} }).then(function(result){
         return result.data;
       });
-    }, 
+    },
     getMostRecent: function() {
       return $http.get(ServerName.get() + "/api/recent/").then(function(result){
         return result.data;
       });
-    }, 
+    },
     getMoreMostRecent: function(maxId) {
       return $http.get(ServerName.get() + "/api/moreRecent/", { params: {max_id : maxId} }).then(function(result){
         return result.data;
@@ -234,13 +234,13 @@ angular.module('starter.services', [])
       params.user_id                   = window.localStorage.getItem("user_id");
       return $http.delete(ServerName.get() + "/api/photos/" + photoId, {params: params}).then(function(result){
         return result.data;
-      })
+      });
     },
     get: function(photoId, userId) {
       return $http.get(ServerName.get() + "/api/photos/" + photoId, { params: {user_id : userId} }).then(function(result){
         return result.data;
       });
-    }, 
+    },
     sendWithPhoto: function(image, data, isNewPhoto) {
       PopUpService.showSpinner('Enviando...');
       var address = ServerName.get() + "/api/photos";
@@ -255,7 +255,7 @@ angular.module('starter.services', [])
         PopUpService.showPopUp('Sucesso', 'Foto incluída com sucesso');
       };
 
-      var onFail = function(error){ 
+      var onFail = function(error){
         console.log("Error code = " + error.responseCode);
         console.log("Error source = " + error.source);
         console.log("error target = " + error.target);
@@ -264,7 +264,7 @@ angular.module('starter.services', [])
       };
 
       var options = new FileUploadOptions();
-    
+
       var params = {};
       var logged_user = window.localStorage.getItem("logged_user");
       params.token                     = window.localStorage.getItem(logged_user);
@@ -305,7 +305,7 @@ angular.module('starter.services', [])
         PopUpService.showPopUp('Sucesso', 'Foto incluída com sucesso');
       };
 
-      var onFail = function(error){ 
+      var onFail = function(error){
         console.log("Error code = " + error.responseCode);
         console.log("Error source = " + error.source);
         console.log("error target = " + error.target);
@@ -338,12 +338,12 @@ angular.module('starter.services', [])
       return $http.get(ServerName.get() + "/api/photos/" + photoId + "/evaluation/" + userId).then(function(result){
         return result.data;
       });
-    }, 
+    },
     postEvaluation: function(photoId, userId, data) {
       return $http.post(ServerName.get() + "/api/photos/" + photoId + "/evaluation/" + userId, { params: {data : data} }).then(function(result){
         return result.data;
       });
-    }, 
+    },
     averageEvaluation: function(photoId, userId) {
       return $http.get(ServerName.get() + "/api/photos/" + photoId + "/averageEvaluation/" + userId).then(function(result){
         return result.data;
@@ -357,7 +357,7 @@ angular.module('starter.services', [])
     create: function(data) {
       var deferred = $q.defer();
       var promise = deferred.promise;
-      $http.post(ServerName.get() + "/api/users", {data}).then(function(result){
+      $http.post(ServerName.get() + "/api/users", data).then(function (result) {
         if (result.data.valid == 'true') {
           deferred.resolve(result.data);
         } else {
@@ -367,49 +367,49 @@ angular.module('starter.services', [])
       promise.success = function(fn) {
         promise.then(fn);
         return promise;
-      }
+      };
       promise.error = function(fn) {
         promise.then(null, fn);
         return promise;
-      }
+      };
       return promise;
-    }, 
+    },
     getProfile: function(userId) {
       return $http.get(ServerName.get() + "/api/profile/" + userId).then(function(result){
         return result.data;
       });
-    }, 
+    },
     getPhotos: function(userId) {
       return $http.get(ServerName.get() + "/api/userPhotos/" + userId).then(function(result){
         return result.data;
       });
-    }, 
+    },
     getMorePhotos: function(userId, maxId) {
       return $http.get(ServerName.get() + "/api/moreUserPhotos/" + userId, { params: {max_id : maxId} }).then(function(result){
         return result.data;
       });
-    }, 
+    },
     getFollowers: function(userId) {
       return $http.get(ServerName.get() + "/api/profile/" + userId + "/followers").then(function(result){
         return result.data;
       });
-    }, 
+    },
     getFollowing: function(userId) {
       return $http.get(ServerName.get() + "/api/profile/" + userId + "/following").then(function(result){
         return result.data;
       });
-    }, 
+    },
     getEvaluatedPhotos: function(userId) {
       return $http.get(ServerName.get() + "/api/profile/" + userId + "/evaluatedPhotos").then(function(result){
         return result.data;
-      });  
-    }, 
+      });
+    },
     getMoreEvaluatedPhotos: function(userId, maxId) {
       return $http.get(ServerName.get() + "/api/profile/" + userId + "/moreEvaluatedPhotos", { params: {max_id : maxId} }).then(function(result){
         return result.data;
       });
     }
-  }
+  };
 })
 
 .factory('Search', function($http, ServerName) {
@@ -418,13 +418,13 @@ angular.module('starter.services', [])
       return $http.post(ServerName.get() + "/api/search", {q : query, user_id : userId}).then(function(result){
         return result.data;
       });
-    }, 
+    },
     getMoreSearch: function(query, maxId) {
       return $http.post(ServerName.get() + "/api/moreSearch", {q : query, max_id : maxId}).then(function(result){
         return result.data;
       });
-    } 
-  }
+    }
+  };
 })
 
 .factory('Tags', function($http, ServerName){
@@ -436,7 +436,7 @@ angular.module('starter.services', [])
     },
     remove: function(id) {},
     get: function(id) {}
-  }
+  };
 })
 
 .factory('Camera', function($q) {
@@ -447,7 +447,7 @@ angular.module('starter.services', [])
     takePicture: function(option){
       return null;
     }
-  }
+  };
 })
 
 .factory('Geolocation', function($http, $q, PopUpService){
@@ -489,7 +489,7 @@ angular.module('starter.services', [])
         longitude = EXIF.getTag(image, "GPSLongitude");
         latitude = EXIF.getTag(image, "GPSLatitude");
 
-        if(latitude != null || longitude != null){
+        if(latitude !== null || longitude !== null){
           latitude = convertDegToDec(latitude);
           longitude = convertDegToDec(longitude);
 
@@ -512,11 +512,11 @@ angular.module('starter.services', [])
             PopUpService.showPopUp("Sua imagem não possui dados de localização",  "Não foi possivel preencher o endereço automaticamente");
           }, {timeout: 5000} );
         }
-        
-        
+
+
       });
 
       return deferred.promise;
     }
-  }
+  };
 });
