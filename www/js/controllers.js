@@ -692,8 +692,12 @@ angular.module('starter.controllers', ['highcharts-ng'])
               $scope.data.state     = address.state;
               $scope.data.address   = address.address;
               PopUpService.hideSpinner();
+              PopUpService.showPopUp("Sucesso", "Imagem carregada");
             });
-          } else { PopUpService.hideSpinner(); }
+          } else { 
+            PopUpService.hideSpinner(); 
+            PopUpService.showPopUp("Sucesso", "Imagem carregada");
+          }
         });
       }
 
@@ -701,7 +705,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
         $scope.imageURI = imageURI;
         geoImage.src = imageURI;
         $scope.hideData = false;
-        PopUpService.showPopUp("Sucesso", "Imagem carregada");
       });
 
     }, function(error) {
@@ -739,8 +742,12 @@ angular.module('starter.controllers', ['highcharts-ng'])
               $scope.data.state     = address.state;
               $scope.data.address   = address.address;
               PopUpService.hideSpinner();
+              PopUpService.showPopUp("Sucesso", "Imagem carregada");
             });
-          } else { PopUpService.hideSpinner(); }
+          } else { 
+            PopUpService.hideSpinner();
+            PopUpService.showPopUp("Sucesso", "Imagem carregada");
+          }
         });
       }
 
@@ -748,7 +755,6 @@ angular.module('starter.controllers', ['highcharts-ng'])
         $scope.imageURI = imageURI;
         geoImage.src = imageURI;
         $scope.hideData = false;
-        PopUpService.showPopUp("Sucesso", "Imagem carregada");
       });
 
     }, function(error) {
