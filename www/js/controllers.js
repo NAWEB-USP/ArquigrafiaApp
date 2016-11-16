@@ -275,8 +275,9 @@ angular.module('starter.controllers', ['highcharts-ng'])
     Photos.postEvaluation($stateParams.photoId, window.localStorage.getItem("user_id"), data).then(function(result) {
       PopUpService.hideSpinner();
       PopUpService.showPopUp('Sucesso', 'Impressões registradas com sucesso.');
+      $state.reload();
     });
-    $state.reload();
+    
   }
   /* Exibe informações da foto */
   $scope.showInformation = function() {
@@ -415,7 +416,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   }
   /*Operacoes de foto */
   $scope.deletePhoto = function(id) {
-    if(confirm("Deseja mesmo deletar esta foto? " + id)) {
+    if(confirm("Deseja mesmo deletar esta foto? " + $scope.photo['photo'].name)) {
       PopUpService.showSpinner('Processando');
       Photos.remove(id).then(function(data) {
         PopUpService.hideSpinner();
