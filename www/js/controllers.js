@@ -700,6 +700,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
         $scope.imageURI = imageURI;
         geoImage.src = imageURI;
         $scope.hideData = false;
+        PopUpService.showPopUp("Sucesso", "Imagem carregada");
       });
 
     }, function(error) {
@@ -746,6 +747,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
         $scope.imageURI = imageURI;
         geoImage.src = imageURI;
         $scope.hideData = false;
+        PopUpService.showPopUp("Sucesso", "Imagem carregada");
       });
 
     }, function(error) {
