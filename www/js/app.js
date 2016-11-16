@@ -5,9 +5,21 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ionic-modal-select'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ionic-modal-select']).directive('ngEnter', function() {
+        return function(scope, element, attrs) {
+            element.bind("keydown keypress", function(event) {
+                if(event.which === 13) {
+                    scope.$apply(function(){
+                        scope.$eval(attrs.ngEnter, {'event': event});
+                    });
 
-.run(function($ionicPlatform) {
+                    event.preventDefault();
+                }
+            });
+        };
+    })
+
+.run(function($ionicPlatform, $state) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -20,6 +32,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+    // Disable BACK button on home
+    $ionicPlatform.registerBackButtonAction(function (event) {
+      if($state.current.name=="tab.dash" || $state.current.name=="login"){
+        navigator.app.exitApp();
+      }
+      else {
+        navigator.app.backHistory();
+      }
+    }, 100);
   });
 })
 
@@ -41,6 +62,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       url: '/login',
       templateUrl: 'templates/login.html', 
       controller: 'LoginCtrl'
+  })
+
+  .state('signup', {
+      url: 'signup', 
+      templateUrl: 'templates/signup.html', 
+      controller: 'SignUpCtrl'
   })
 
   // setup an abstract state for the tabs directive
@@ -73,6 +100,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     })
 
   .state('tab.account', {
+    cache: false,
     url: '/account',
     views: {
       'tab-account': {

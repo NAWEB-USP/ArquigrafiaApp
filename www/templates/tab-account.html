@@ -1,51 +1,45 @@
-<div class="bar bar-header bar-stable">
-    <h1 class="title"><img class="title-image" src="img/logo-mini.png" height="18"/>  {{account.login}}</h1>
+<div class="bar bar-header">
+    <img src="img/logo.svg">
 </div>
 <ion-view view-title="Perfil">
-  <ion-content class="has-header">
+  <ion-content class="has-header" id="account">
     <ion-refresher
         pulling-text="Puxe e solte para atualizar..."
         on-refresh="doRefresh()">
     </ion-refresher>
     <div id="personal-info">
         <div class="row" id="info-container">
-            <div id="user-avatar" class="col col-40">
-                <h4 id="account-name">{{account.name}}</h4>
-                <img src="{{serverName + account.photo}}" ng-if="!!account.photo">
-                <img src="img/avatar-60.png" ng-if="!account.photo">
+            <div id="user-avatar" class="col col-20">
+                <div id="avatar-image">
+                    <img src="{{serverName + account.photo}}" ng-if="!!account.photo">
+                    <img src="img/avatar-60.png" ng-if="!account.photo">
+                </div>
+                <p><a id="logout-button" ng-click="logout()">Sair</a></p>
             </div>
-            <div id="user-info" class="col col-60">
-                <a href="#/tab/account/#">
-                    <button class="button button-full button-positive button-clear">
-                        <h4>Fotos publicadas: {{account.photos}}</h4>
-                    </button>
-                </a>
-                <a href="#/tab/users/{{account.id}}/following">
-                    <button class="button button-full button-positive button-clear">
-                        <h4>Seguindo: {{account.following}}</h4>
-                    </button>
-                </a>
-                <a href="#/tab/users/{{account.id}}/followers">
-                    <button class="button button-full button-positive button-clear">
-                        <h4>Seguidores: {{account.followers}}</h4>
-                    </button>
-                </a>
-                <button id="logout-button" class="button-block button button-positive" ng-click="logout()">
-                    Logout
-                </button>
+            <div id="user-info" class="col col-80">
+                <h4 id="account-name">{{account.name}}</h4>
+                <p><span>{{account.photos}}</span> fotos</p>
+                <p><span>{{account.following}}</span> seguindo</p>
+                <p><span>{{account.followers}}</span> seguidores</p>
             </div>
         </div>
         <div class="button-bar button-light">
-            <a class="button" ng-click="showUploads()">Fotos</a>
-            <a class="button" ng-click="showEvaluations()">Impressões</a>
+            <a class="button active" id="showUploads" ng-click="showUploads()">Fotos</a>
+            <a class="button" id="showEvaluations" ng-click="showEvaluations()">Impressões</a>
         </div>
         <div class="row" id="photos-container">
             <ion-list id="uploads">
+                <div class="row" ng-if="!photos.length">
+                    <div class="col text-center">Você não enviou fotos ainda.</div>
+                </div>
                 <ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/account/photos/{{photo.id}}">
                     <img src="{{serverName + '/arquigrafia-images/' + photo.id + '_home.jpg'}}">
                 </ion-item>
             </ion-list>
-            <ion-list id="evaluations">
+            <ion-list id="evaluations" style="display: none">
+                <div class="row" ng-if="!evaluations.length">
+                    <div class="col text-center">Você não registrou impressões ainda.</div>
+                </div>
                 <ion-item class="item-remove-animate feed-item" ng-repeat="photo in evaluations" type="item-text-wrap" href="#/tab/account/photos/{{photo.id}}">
                     <img src="{{serverName + '/arquigrafia-images/' + photo.id + '_home.jpg'}}">
                 </ion-item>

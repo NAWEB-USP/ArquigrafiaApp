@@ -1,0 +1,28 @@
+<div class="bar bar-header">
+  <a class="button icon-left ion-chevron-left button-clear button-dark" ng-click="goBack()" style="margin-top: -4px; margin-left: - 5px;"></a>
+  <div class="h1 title"></div>
+</div>
+<ion-view view-title="Cadastre-se">
+	<ion-content class="has-header">
+    <div class="list">
+      <label class="item item-input">
+        <input type="text" placeholder="Nome" ng-model="data.name">
+      </label>
+      <label class="item item-input">
+        <input type="text" placeholder="Login" autocapitalize="off" ng-model="data.login">
+      </label>
+      <label class="item item-input">
+        <input type="email" placeholder="E-Mail" ng-model="data.email">
+      </label>
+      <label class="item item-input">
+        <input type="password" placeholder="Senha" ng-model="data.password">
+      </label>
+      <label class="item item-input">
+        <input type="password" placeholder="Repita a senha" ng-model="data.password2">
+      </label>
+      <ion-checkbox ng-model="data.terms">Li e aceito os termos de compromisso</ion-checkbox>
+    </div>
+    <div style="text-align: center"><a href="{{serverName + '/termos'}}" target="_blank">Termos de compromisso</a></div>
+    <button class="button button-arq button-inverted button-block" ng-click="signup()">Enviar</button>
+  </ion-content>
+</ion-view>

@@ -1,8 +1,10 @@
 angular.module('starter.services', [])
 
 .factory('ServerName', function(){
+
   //var serverName = "http://localhost:8000";
   var serverName = "http://valinhos.ime.usp.br:51080";
+
   return {
     get: function () { 
       return serverName; 
@@ -10,7 +12,7 @@ angular.module('starter.services', [])
   }
 })
 
-.factory('PopUpService', function($ionicPopup, $ionicLoading) {
+.factory('PopUpService', function($ionicPopup, $ionicLoading, $q, $rootScope) {
   return {
     showSpinner : function (message) {
       $ionicLoading.show({
@@ -24,6 +26,119 @@ angular.module('starter.services', [])
       $ionicPopup.alert({
         title: title,
         template: message
+      });
+    },
+    showReport : function (){
+      var deferred = $q.defer();
+      $rootScope.information = {};
+      $rootScope.datas = [{
+            "id": "typeImage",
+            "name": "Imagem",
+            "select": false
+        }, {
+            "id": "typeTitle",
+            "name": "Título",
+            "select": false
+        }, {
+            "id": "typeAuthor",
+            "name": "Autor",
+            "select": false
+        }, {
+            "id": "typeDescription",
+            "name": "Descrição",
+            "select": false
+        }, {
+            "id": "typeAddress",
+            "name": "Endereço",
+            "select": false
+        }];
+
+      var template = '<div ng-repeat="data in datas" > ' +
+        '<ion-checkbox ng-model="data.select" style="border:none">{{data.name}}</ion-checkbox>'+
+    '</div>'+
+    '<p ng-if="showErrorData">*Favor inserir campo a ser denunciado</p>' +
+      '<div id="opcoes-denunciar"> ' +
+        '<p><label for="typeReport">Tipo de denúncia</label></p>' +
+        '<select id="typeReport" ng-model="information.typeReport" style="border: none;"> ' +
+          '<option value="inapropriate">Conteúdo inapropriado</option> ' +
+          '<option value="repeat">Conteúdo repetido</option>' +
+        '</select> ' +
+        '<p ng-if="showErrorType">*Favor inserir tipo de denúncia</p>' +
+      '</div> ' +
+      '<div> ' +
+      '</div> ' +
+      '<div id="opcoes-denunciar"> ' +
+              '<p><label for="observation">Observação</label></p> ' +
+        '<textarea id="observation" ng-model="information.observation"></textarea>' +
+
+      '</div>' + 
+      '</div>';
+      
+      var popup = $ionicPopup.show({
+        title: 'Denunciar foto',
+        template: template,
+        scope: $rootScope,
+        buttons: [ 
+          {text: "Enviar",
+          type: 'button-arq',
+          onTap: function(e){
+            $rootScope.showErrorData = true;
+            $rootScope.showErrorType = false;
+
+            for(var i = 0; i < $rootScope.datas.length; i++){
+              if($rootScope.datas[i].select == true){
+                $rootScope.showErrorData = false;
+                break;
+              }
+            }
+            
+            if (!$rootScope.information.typeReport){
+              $rootScope.showErrorType = true;
+            }
+
+            if($rootScope.showErrorType || $rootScope.showErrorData){
+              e.preventDefault();
+              return null;
+            }
+
+            var dataTypeReport = [];
+            for(var i = 0; i < $rootScope.datas.length; i++){
+              if($rootScope.datas[i].select == true){
+                dataTypeReport.push($rootScope.datas[i].name);
+              }
+            }
+              
+            var results = { dataTypeReport : dataTypeReport,
+                            typeReport: $rootScope.information.typeReport,
+                            observationReport: $rootScope.information.observation
+             };
+            return results;
+          }},
+          {text: "Cancelar",
+          type: 'button-arq',
+          onTap: function(e){
+            return null;
+          }}]
+      }).then(function(result){
+        deferred.resolve(result);
+      });   
+      return deferred.promise;   
+    }
+  }
+})
+
+.factory('ReportService',function($http, ServerName){
+  return {
+    post: function(photoId, dataTypeReport, typeReport, observationReport){
+      return $http.post(ServerName.get() + "/api/photos/report" ,
+                        { params: {
+                          data_type_report : dataTypeReport, 
+                          type_report : typeReport, 
+                          observation_report: observationReport, 
+                          user_id : window.localStorage.getItem("user_id"),
+                          photo_id: photoId }
+                        }).then(function(result){
+        return result.data;
       });
     }
   }
@@ -105,7 +220,7 @@ angular.module('starter.services', [])
   };
 })
 
-.factory('Photos', function($http, $state, $stateParams, ServerName, PopUpService) {
+.factory('Photos', function($http, $state, $stateParams, $ionicHistory, ServerName, PopUpService) {
   return {
     all: function() {
       return $http.get(ServerName.get() + "/api/photos").then(function(result){
@@ -135,7 +250,9 @@ angular.module('starter.services', [])
         console.log("Response = " + response.response);
         console.log("Sent = " + response.bytesSent);
         PopUpService.hideSpinner();
-        $state.go('tab.photo-account-detail', {'photoId': response.response});
+        $state.go('tab.account');
+        $ionicHistory.clearCache();
+        PopUpService.showPopUp('Sucesso', 'Foto incluída com sucesso');
       };
 
       var onFail = function(error){ 
@@ -183,7 +300,9 @@ angular.module('starter.services', [])
         console.log("Response = " + response.response);
         console.log("Sent = " + response.bytesSent);
         PopUpService.hideSpinner();
-        $state.go('tab.photo-account-detail', {'photoId': response.response});
+        $state.go('tab.account');
+        $ionicHistory.clearCache();
+        PopUpService.showPopUp('Sucesso', 'Foto incluída com sucesso');
       };
 
       var onFail = function(error){ 
@@ -233,8 +352,28 @@ angular.module('starter.services', [])
   };
 })
 
-.factory('Profiles', function($http, ServerName) {
+.factory('Profiles', function($q, $http, ServerName) {
   return {
+    create: function(data) {
+      var deferred = $q.defer();
+      var promise = deferred.promise;
+      $http.post(ServerName.get() + "/api/users", {data}).then(function(result){
+        if (result.data.valid == 'true') {
+          deferred.resolve(result.data);
+        } else {
+          deferred.reject(result.data);
+        }
+      });
+      promise.success = function(fn) {
+        promise.then(fn);
+        return promise;
+      }
+      promise.error = function(fn) {
+        promise.then(null, fn);
+        return promise;
+      }
+      return promise;
+    }, 
     getProfile: function(userId) {
       return $http.get(ServerName.get() + "/api/profile/" + userId).then(function(result){
         return result.data;
@@ -311,7 +450,7 @@ angular.module('starter.services', [])
   }
 })
 
-.factory('Geolocation', function($http, $q){
+.factory('Geolocation', function($http, $q, PopUpService){
   return {
     getAddress: function(latitude, longitude) {
       return $http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + latitude + ',' + longitude).then(function(data){
@@ -368,7 +507,10 @@ angular.module('starter.services', [])
             result.latitude = latitude;
             result.longitude = longitude;
             deferred.resolve(result);
-          });
+          }, function (error) {
+            PopUpService.hideSpinner();
+            PopUpService.showPopUp("Sua imagem não possui dados de localização",  "Não foi possivel preencher o endereço automaticamente");
+          }, {timeout: 5000} );
         }
         
         
