@@ -36,8 +36,8 @@ angular.module('starter.controllers', ['highcharts-ng'])
             $state.go('tab.dash', {}, {reload: true});
         }).error(function(data) {
             PopUpService.showPopUp('Falha no login!', 'Usuário ou senha incorretos!');
-        }).finally(function($ionicLoading) {  
-          PopUpService.hideSpinner(); 
+        }).finally(function($ionicLoading) {
+          PopUpService.hideSpinner();
         });
     }
 })
@@ -108,8 +108,8 @@ angular.module('starter.controllers', ['highcharts-ng'])
               }
             }
             PopUpService.showPopUp('Falha no cadastro!', errors);
-        }).finally(function($ionicLoading) {  
-          PopUpService.hideSpinner(); 
+        }).finally(function($ionicLoading) {
+          PopUpService.hideSpinner();
         });
       }
       else {
@@ -159,13 +159,13 @@ angular.module('starter.controllers', ['highcharts-ng'])
     .finally(function() {
       $scope.$broadcast('scroll.refreshComplete');
     });
-    
+
   }
-  /* Report */   
+  /* Report */
   $scope.report = function(photoId){
     PopUpService.showReport().then(function(result){
       if(result != null){
-        ReportService.post(photoId, result.dataTypeReport, result.typeReport, 
+        ReportService.post(photoId, result.dataTypeReport, result.typeReport,
                            result.observationReport).then(function(response){
           PopUpService.showPopUp('Sucesso', 'Denúncia realizada com sucesso.');
         });
@@ -209,7 +209,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
       }
       $ionicScrollDelegate.scrollTop();
       PopUpService.hideSpinner();
-    }); 
+    });
   }
 
   /* Recupera mais resultados da busca */
@@ -225,7 +225,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   }
 })
 
-.controller('PhotoDetailCtrl', function($scope, $stateParams, $state, Photos, ServerName, 
+.controller('PhotoDetailCtrl', function($scope, $stateParams, $state, Photos, ServerName,
                                         PopUpService, LoginService, ReportService) {
   /* Verifica se o usuário está autorizado */
   $scope.$on('$ionicView.enter', function() {
@@ -406,12 +406,12 @@ angular.module('starter.controllers', ['highcharts-ng'])
     },
     {
       data: userData,
-      yAxis: 0,              
+      yAxis: 0,
       name: 'Sua impressão',
       marker: {
         symbol: 'circle',
         enabled: true
-      },              
+      },
       color: '#000000',
     }]
   }
@@ -434,7 +434,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   $scope.report = function(){
     PopUpService.showReport().then(function(result){
       if(result != null){
-        ReportService.post($stateParams.photoId, result.dataTypeReport, result.typeReport, 
+        ReportService.post($stateParams.photoId, result.dataTypeReport, result.typeReport,
                            result.observationReport).then(function(response){
           PopUpService.showPopUp('Denúncia', response.message);
         });
@@ -457,7 +457,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   $scope.evaluationsShowing = false;
   var maxIdUpload = 0;
   var maxIdEvaluation = 0;
-  
+
   /* Pega os dados do usuário */
   var account = Profiles.getProfile(window.localStorage.getItem("user_id"));
   account.then(function(result){
@@ -487,7 +487,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     $scope.evaluationsShowing = false;
     $scope.uploadsShowing = true;
   }
-  
+
   /* Pega as fotos do usuário */
   var user_photos = Profiles.getPhotos(window.localStorage.getItem("user_id"));
   user_photos.then(function(result){
@@ -599,7 +599,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   })
 })
 
-.controller('CameraCtrl', function($scope, $http, $state, ServerName, Tags, Camera, 
+.controller('CameraCtrl', function($scope, $http, $state, ServerName, Tags, Camera,
                                    Geolocation, PopUpService, LoginService, Photos, Profiles) {
   /* Verifica se o usuário está autorizado */
   $scope.$on('$ionicView.enter', function() {
@@ -672,7 +672,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
       saveToPhotoAlbum: false //para testes nao ocuparem mta memoria, para release colocar true
     };
 
-    navigator.camera.getPicture(function (imageURI) {      
+    navigator.camera.getPicture(function (imageURI) {
       var geoImage = new Image();
       geoImage.onload = function(){
         PopUpService.showSpinner('Carregando...');
@@ -692,9 +692,9 @@ angular.module('starter.controllers', ['highcharts-ng'])
               $scope.data.state     = address.state;
               $scope.data.address   = address.address;
               PopUpService.hideSpinner();
-            }); 
+            });
           } else { PopUpService.hideSpinner(); }
-        });               
+        });
       }
 
       $scope.$apply(function() {
@@ -705,7 +705,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
       });
 
     }, function(error) {
-      console.log(error) 
+      console.log(error)
     }, optionsTake);
   };
 
@@ -739,9 +739,9 @@ angular.module('starter.controllers', ['highcharts-ng'])
               $scope.data.state     = address.state;
               $scope.data.address   = address.address;
               PopUpService.hideSpinner();
-            }); 
+            });
           } else { PopUpService.hideSpinner(); }
-        });               
+        });
       }
 
       $scope.$apply(function() {
@@ -757,12 +757,12 @@ angular.module('starter.controllers', ['highcharts-ng'])
   };
 
   /* Envio de foto */
-  $scope.postPhoto = function(){ 
-    Photos.sendWithPhoto($scope.imageURI, $scope.data, true); 
+  $scope.postPhoto = function(){
+    Photos.sendWithPhoto($scope.imageURI, $scope.data, true);
   };
 })
 
-.controller('EditPhotoCtrl', function($scope, $http, $state, $stateParams, 
+.controller('EditPhotoCtrl', function($scope, $http, $state, $stateParams,
                                       ServerName, Photos, Tags, Camera, Geolocation, PopUpService, LoginService) {
   /* Verifica se o usuário está autorizado */
   $scope.$on('$ionicView.enter', function() {
@@ -866,9 +866,9 @@ angular.module('starter.controllers', ['highcharts-ng'])
               $scope.data.state     = address.state;
               $scope.data.address   = address.address;
               PopUpService.hideSpinner();
-            }); 
+            });
           } else { PopUpService.hideSpinner(); }
-        });               
+        });
       }
 
       $scope.$apply(function() {
@@ -878,7 +878,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
       });
 
     }, function(error) {
-      console.log(error) 
+      console.log(error)
     }, optionsTake);
   };
 
@@ -912,9 +912,9 @@ angular.module('starter.controllers', ['highcharts-ng'])
               $scope.data.state     = address.state;
               $scope.data.address   = address.address;
               PopUpService.hideSpinner();
-            }); 
+            });
           } else { PopUpService.hideSpinner(); }
-        });               
+        });
       }
 
       $scope.$apply(function() {
@@ -931,7 +931,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   /* Envio de foto */
   $scope.postPhoto = function(){
     if(editedPhoto) {
-      Photos.sendWithPhoto($scope.imageURI, $scope.data, false); 
+      Photos.sendWithPhoto($scope.imageURI, $scope.data, false);
     }
     else {
       Photos.put($scope.data);
