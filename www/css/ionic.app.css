@@ -10029,10 +10029,16 @@ a.button {
 #photo-detail #photo-info-container .list .item.item-text-wrap {
   font-size: 14px; }
 
-#personal-info #photo-info-container .license-cc img,
-#photo-detail #photo-info-container .license-cc img {
-  width: 75px;
-  margin-left: 5px; }
+#personal-info #photo-info-container .license-cc,
+#photo-detail #photo-info-container .license-cc {
+  height: 55px; }
+  #personal-info #photo-info-container .license-cc div,
+  #photo-detail #photo-info-container .license-cc div {
+    float: left; }
+  #personal-info #photo-info-container .license-cc img,
+  #photo-detail #photo-info-container .license-cc img {
+    width: 60px;
+    margin-left: 5px; }
 
 #personal-info .button-feed,
 #photo-detail .button-feed {
@@ -10044,15 +10050,15 @@ a.button {
 
 #personal-info #evaluation-container .range,
 #photo-detail #evaluation-container .range {
-  padding: 2px 10px; }
+  padding: 2px 5px; }
   #personal-info #evaluation-container .range input,
   #photo-detail #evaluation-container .range input {
     width: 100%;
     height: 25px; }
   #personal-info #evaluation-container .range input::-webkit-slider-thumb,
   #photo-detail #evaluation-container .range input::-webkit-slider-thumb {
-    width: 20px;
-    height: 20px; }
+    width: 18px;
+    height: 18px; }
 
 #personal-info #evaluation-container .item,
 #photo-detail #evaluation-container .item {
