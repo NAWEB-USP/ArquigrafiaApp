@@ -8,7 +8,7 @@
 	<ion-content class="has-header" scroll="true" overflow-scroll="true" id="camera">
 		<div class="list">
 			<form name="submitPhoto">
-				<div id="photoArea" ng-show="hideData">				
+				<div id="photoArea" ng-show="hideData">
 					<div class="padding clearfix">
 						<button class="button button-arq icon ion-camera" ng-click="takePicture()">
 						</button>
@@ -19,7 +19,7 @@
 					</div>
 					<div><p class="padding">Favor habilitar o serviço de GPS para preencher a localização automaticamente.</p></div>
 				</div>
-				
+
 				<div id="data" class="list" ng-show="!hideData">
 
 					<div class="item item-divider">
@@ -37,24 +37,23 @@
 
 					<label for="country" class="item item-input">
 						<span class="input-label">País*:</span>
-						<input id="country" ng-model="data.country" type="text" ng-minlength="2" required/> 
+						<input id="country" ng-model="data.country" type="text" ng-minlength="2" required/>
 					</label>
-					
-					<div id="input-tag">
-						<label class="item item-input">
-							<div>
-								<span class="input-label">Tags*:</span>
-													
-							</div>						
-						</label>
-						<div id="tag-buttons">
+
+					<div class="item">
+						<div style="width: 20%; float: left;">
+							<span class="input-label">Tags*:</span>
+						</div>
+						<div style="width: 80%; float: right;">
 							<button class="button button-small button-arq button-shy" modal-select ng-model="teste" options="tags" modal-title="Selecione uma Tag" has-search="true" on-select="getTag(newValue, oldValue)">
-								    Selecionar
-								    <div class="option">
-								        {{option.name}}
-								    </div>
+										Selecionar
+										<div class="option">
+												{{option.name}}
+										</div>
 								</button>
 							<button id="meuNome" class="button button-small button-arq button-shy" ng-click="addTag()">Adicionar</button>
+						</div>
+						<div style="clear: both; white-space: normal; padding-top: 10px" >
 							<button class="button button-small button-dark icon-right ion-close" ng-repeat="tag in data.tags" ng-click="removeTag(tag)">{{tag}}</button>
 						</div>
 					</div>
@@ -98,17 +97,17 @@
 
 						<label for="city" class="item item-input">
 							<span class="input-label">Cidade:</span>
-							<input id="city" ng-model="data.city" type="text"/> 
+							<input id="city" ng-model="data.city" type="text"/>
 						</label>
 
 						<label for="district" class="item item-input">
 							<span class="input-label">Bairro:</span>
-							<input id="district" ng-model="data.district" type="text"/> 
+							<input id="district" ng-model="data.district" type="text"/>
 						</label>
 
 						<label for="address" class="item item-input">
 							<span class="input-label">Endereço:</span>
-							<input id="address" name="address" ng-model="data.address" type="text"/> 
+							<input id="address" name="address" ng-model="data.address" type="text"/>
 						</label>
 
 						<label for="imageDate" class="item item-input">
@@ -128,14 +127,14 @@
 
 						<label for="description" class="item item-input">
 							<span class="input-label">Descrição:</span>
-							<textarea id="description" name="description" ng-model="data.description"></textarea> 
+							<textarea id="description" name="description" ng-model="data.description"></textarea>
 						</label>
 					</div>
-					
+
 					<div class="item item-divider item-text-wrap">
 						Escolho a licença <a id="creative_commons" href="http://creativecommons.org/licenses//?lang=pt-BR" target="_blank" style="text-decoration: undeline; line-height=1.em;">Creative Commons</a>, para publicar a imagem, com as seguintes permissões:
-					</div>	
-					
+					</div>
+
 					<div class="item item-divider item-divider-light">
 						Permitir o uso comercial da imagem?
 					</div>
@@ -188,5 +187,5 @@
 				</div>
 			</form>
 		</div>
-	</ion-content> 
+	</ion-content>
 </ion-view>
