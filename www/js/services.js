@@ -102,9 +102,9 @@ angular.module('starter.services', [])
             }
 
             var dataTypeReport = [];
-            for(var j = 0; j < $rootScope.datas.length; i++){
+            for(var j = 0; j < $rootScope.datas.length; j++){
               if($rootScope.datas[j].select === true){
-                dataTypeReport.push($rootScope.datas[i].name);
+                dataTypeReport.push($rootScope.datas[j].name);
               }
             }
 
