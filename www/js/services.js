@@ -300,7 +300,7 @@ angular.module('starter.services', [])
         console.log("Response = " + response.response);
         console.log("Sent = " + response.bytesSent);
         PopUpService.hideSpinner();
-        $state.go('tab.account');
+        $state.go('tab.camera');
         $ionicHistory.clearCache();
         PopUpService.showPopUp('Sucesso', 'Foto incluída com sucesso');
       };

@@ -133,6 +133,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   .state('tab.edit-photo', {
+    cache: false,
     url: '/photos/:photoId/edit',
     views: {
       'tab-camera': {
@@ -187,6 +188,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   .state('tab.camera', {
+    cache: false,
     url: '/camera',
     views: {
       'tab-camera': {
