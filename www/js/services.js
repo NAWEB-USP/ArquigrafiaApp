@@ -299,9 +299,10 @@ angular.module('starter.services', [])
         console.log("Code = " + response.responseCode);
         console.log("Response = " + response.response);
         console.log("Sent = " + response.bytesSent);
-        PopUpService.hideSpinner();
-        $state.go('tab.camera');
+        PopUpService.hideSpinner(); 
         $ionicHistory.clearCache();
+        $state.go('tab.account');
+        $ionicHistory.clearHistory();
         PopUpService.showPopUp('Sucesso', 'Foto incluída com sucesso');
       };
 
