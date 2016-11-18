@@ -269,7 +269,7 @@ angular.module('starter.services', [])
       var logged_user = window.localStorage.getItem("logged_user");
       params.token                     = window.localStorage.getItem(logged_user);
       params.user_id                   = window.localStorage.getItem("user_id");
-      params.photo_allowCommercialUses = data.commercialUsage;
+      params.photo_allowCommercialUses = data.commercialUsage.toString();
       params.photo_allowModifications  = data.modifications;
       params.photo_name                = data.title;
       params.photo_imageAuthor         = data.author;
@@ -319,7 +319,7 @@ angular.module('starter.services', [])
       var logged_user = window.localStorage.getItem("logged_user");
       params.token                     = window.localStorage.getItem(logged_user);
       params.user_id                   = window.localStorage.getItem("user_id");
-      params.photo_allowCommercialUses = data.commercialUsage;
+      params.photo_allowCommercialUses = data.commercialUsage.toString();
       params.photo_allowModifications  = data.modifications;
       params.photo_name                = data.title;
       params.photo_imageAuthor         = data.author;
