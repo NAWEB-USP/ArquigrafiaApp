@@ -283,7 +283,7 @@ angular.module('starter.services', [])
       params.authorized                = data.authorized;
       params.work_authors              = data.workAuthor;
       params.workDate                  = data.workYear;
-      if (data.imageDate != null) params.photo_imageDate = data.imageDate;
+      if (data.imageDate != null) params.photo_imageDate = moment(data.imageDate).format("DD/MM/YYYY");
 
       options.params = params;
       options.fileKey = "photo";
@@ -337,7 +337,7 @@ angular.module('starter.services', [])
       params.authorized                = data.authorized;
       params.work_authors              = data.workAuthor;
       params.workDate                 = data.workYear;
-      params.photo_imageDate           = data.imageDate;
+      if (data.imageDate != null) params.photo_imageDate = moment(data.imageDate).format("DD/MM/YYYY");
 
       $http.put(address, params).then(onSuccess, onFail);
     },
