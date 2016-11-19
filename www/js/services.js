@@ -282,7 +282,7 @@ angular.module('starter.services', [])
       params.photo_street              = data.address;
       params.authorized                = data.authorized;
       params.work_authors              = data.workAuthor;
-      params.work_date                 = data.workYear;
+      params.workDate                  = data.workYear;
       params.photo_imageDate           = data.imageDate;
 
       options.params = params;
