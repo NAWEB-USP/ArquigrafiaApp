@@ -786,6 +786,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   var photo = Photos.get($stateParams.photoId, window.localStorage.getItem("user_id"));
   photo.then(function(result) {
     var photo = result['photo'];
+    var authors = result['authors'].toString();
     $scope.imageURI = ServerName.get() + "/arquigrafia-images/" + result['photo'].id + "_home.jpg";
 
     $scope.data.commercialUsage = (photo.allowCommercialUses == "YES") ? true : false;
@@ -799,7 +800,9 @@ angular.module('starter.controllers', ['highcharts-ng'])
     $scope.data.description = photo.description;
     $scope.data.district = photo.district;
     $scope.data.state = photo.state;
-    $scope.data.address = photo.address;
+    $scope.data.address = photo.street;
+    $scope.data.workYear = photo.workdate;
+    $scope.data.workAuthor = authors;
     $scope.data.authorized = (photo.authorized == "1") ? true : false;
   })
 
