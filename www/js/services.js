@@ -281,6 +281,9 @@ angular.module('starter.services', [])
       params.photo_state               = data.state;
       params.photo_street              = data.address;
       params.authorized                = data.authorized;
+      params.work_autors               = data.workAuthor;
+      params.work_date                 = data.workYear;
+      params.photo_imageDate           = data.imageDate;
 
       options.params = params;
       options.fileKey = "photo";
@@ -332,6 +335,9 @@ angular.module('starter.services', [])
       params.photo_state               = data.state;
       params.photo_street              = data.address;
       params.authorized                = data.authorized;
+      params.work_autors               = data.workAuthor;
+      params.work_date                 = data.workYear;
+      params.photo_imageDate           = data.imageDate;
 
       $http.put(address, params).then(onSuccess, onFail);
     },
