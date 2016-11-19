@@ -283,7 +283,7 @@ angular.module('starter.services', [])
       params.authorized                = data.authorized;
       params.work_authors              = data.workAuthor;
       params.workDate                  = data.workYear;
-      params.photo_imageDate           = data.imageDate;
+      if (data.imageDate != null) params.photo_imageDate = data.imageDate;
 
       options.params = params;
       options.fileKey = "photo";
@@ -302,7 +302,7 @@ angular.module('starter.services', [])
         console.log("Code = " + response.responseCode);
         console.log("Response = " + response.response);
         console.log("Sent = " + response.bytesSent);
-        PopUpService.hideSpinner(); 
+        PopUpService.hideSpinner();
         $ionicHistory.clearCache();
         $state.go('tab.account');
         $ionicHistory.clearHistory();
