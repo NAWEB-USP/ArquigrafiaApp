@@ -285,7 +285,10 @@ angular.module('starter.services', [])
       params.authorized                = data.authorized;
       params.work_authors              = data.workAuthor;
       params.work_date                 = data.workYear;
-      params.authorized                = data.authorized;
+      if(data.authorized == false) 
+            params.authorized = 0; 
+      else 
+            params.authorized = 1;
       if (data.imageDate != null) 
         params.photo_imageDate         = moment(data.imageDate).format("DD/MM/YYYY");
 
