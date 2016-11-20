@@ -786,7 +786,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   var photo = Photos.get($stateParams.photoId, window.localStorage.getItem("user_id"));
   photo.then(function(result) {
     var photo = result['photo'];
-    var authors = result['authors'].toString();
+    var authors = result['authors'].toString();    
     $scope.imageURI = ServerName.get() + "/arquigrafia-images/" + result['photo'].id + "_home.jpg";
 
     $scope.data.commercialUsage = (photo.allowCommercialUses == "YES") ? true : false;
@@ -801,7 +801,14 @@ angular.module('starter.controllers', ['highcharts-ng'])
     $scope.data.district = photo.district;
     $scope.data.state = photo.state;
     $scope.data.address = photo.street;
-    $scope.data.workYear = photo.workdate;
+
+    if(photo.workDateType == 'year'){
+       if(photo.workdate != null || photo.workdate !='') 
+          $scope.data.workYear = parseInt(photo.workdate);
+    }else{
+      $scope.data.workYear = null; 
+    }
+    
     $scope.data.workAuthor = authors;
     $scope.data.authorized = (photo.authorized == "1") ? true : false;
     if (photo.dataCriacao != null) $scope.data.imageDate = moment(photo.dataCriacao, "YYYY-MM-DD").toDate();
