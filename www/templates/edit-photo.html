@@ -11,11 +11,11 @@
 						<img style="max-height:150px" ng-if="!!imageURI" ng-src="{{imageURI}}">
 					</div>
 
-					<div class="padding buttons clearfix" style="margin-bottom: 20px;">
+					<!--<div class="padding buttons clearfix" style="margin-bottom: 20px;">
 						<button class="button button-arq icon ion-camera" ng-click="takePicture()">
 						</button>
 						<button class="button button-arq icon ion-images" ng-click="getPicture()"></button>
-					</div>
+					</div>-->
 				</div>
 
 				<div id="data">
@@ -117,7 +117,8 @@
 
 						<label for="workYear" class="item item-input">
 							<span class="input-label">Ano de conclusão da obra:</span>
-							<input id="workYear" name="workYear" ng-model="data.workYear" type="text"/>
+							<input id="workYear" name="workYear" ng-model="data.workYear" type="number" max="2018" maxlength="4" />
+							
 						</label>
 
 						<label for="description" class="item item-input">
@@ -126,7 +127,7 @@
 						</label>
 					</div>
 
-					<ion-checkbox class="item-text-wrap" ng-model="data.authorized">* Sou o autor da imagem ou possuo permissão expressa do autor para disponibilizá-la no Arquigrafia</ion-checkbox>
+
 
 					<div class="padding">
 						<p>Escolho a licença <a id="creative_commons" href="http://creativecommons.org/licenses//?lang=pt-BR" target="_blank" style="text-decoration: undeline; line-height=1.em;">Creative Commons</a>, para publicar a imagem, com as seguintes permissões:</p>

@@ -282,10 +282,9 @@ angular.module('starter.services', [])
       params.photo_district            = data.district;
       params.photo_state               = data.state;
       params.photo_street              = data.address;
-      params.authorized                = data.authorized;
       params.work_authors              = data.workAuthor;
-      params.work_date                 = data.workYear;
-      if(data.authorized == false) 
+      params.workDate                = data.workYear;
+      if(data.authorized == false || data.authorized == null) 
             params.authorized = 0; 
       else 
             params.authorized = 1;
@@ -343,7 +342,7 @@ angular.module('starter.services', [])
       params.photo_street              = data.address;
       params.authorized                = data.authorized;
       params.work_authors              = data.workAuthor;
-      params.work_date                 = data.workYear;
+      params.workDate                 = data.workYear;
       params.authorized                = data.authorized;
       if (data.imageDate != null) 
         params.photo_imageDate         = moment(data.imageDate).format("DD/MM/YYYY");
