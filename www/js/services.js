@@ -283,8 +283,9 @@ angular.module('starter.services', [])
       params.authorized                = data.authorized;
       params.work_authors              = data.workAuthor;
       params.work_date                 = data.workYear;
-      params.photo_imageDate           = data.imageDate;
       params.authorized                = data.authorized;
+      if (data.imageDate != null) 
+        params.photo_imageDate         = moment(data.imageDate).format("DD/MM/YYYY");
 
       options.params = params;
       options.fileKey = "photo";
@@ -303,7 +304,7 @@ angular.module('starter.services', [])
         console.log("Code = " + response.responseCode);
         console.log("Response = " + response.response);
         console.log("Sent = " + response.bytesSent);
-        PopUpService.hideSpinner(); 
+        PopUpService.hideSpinner();
         $ionicHistory.clearCache();
         $state.go('tab.account');
         $ionicHistory.clearHistory();
@@ -338,8 +339,9 @@ angular.module('starter.services', [])
       params.authorized                = data.authorized;
       params.work_authors              = data.workAuthor;
       params.work_date                 = data.workYear;
-      params.photo_imageDate           = data.imageDate;
       params.authorized                = data.authorized;
+      if (data.imageDate != null) 
+        params.photo_imageDate         = moment(data.imageDate).format("DD/MM/YYYY");
 
       $http.put(address, params).then(onSuccess, onFail);
     },
