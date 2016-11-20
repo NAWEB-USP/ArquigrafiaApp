@@ -278,7 +278,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
       PopUpService.showPopUp('Sucesso', 'Impressões registradas com sucesso.');
       $state.reload();
     });
-    
+
   }
   /* Exibe informações da foto */
   $scope.showInformation = function() {
@@ -694,8 +694,8 @@ angular.module('starter.controllers', ['highcharts-ng'])
               PopUpService.hideSpinner();
               PopUpService.showPopUp("Sucesso", "Imagem carregada");
             });
-          } else { 
-            PopUpService.hideSpinner(); 
+          } else {
+            PopUpService.hideSpinner();
             PopUpService.showPopUp("Sucesso", "Imagem carregada");
           }
         });
@@ -744,7 +744,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
               PopUpService.hideSpinner();
               PopUpService.showPopUp("Sucesso", "Imagem carregada");
             });
-          } else { 
+          } else {
             PopUpService.hideSpinner();
             PopUpService.showPopUp("Sucesso", "Imagem carregada");
           }
@@ -804,6 +804,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     $scope.data.workYear = photo.workdate;
     $scope.data.workAuthor = authors;
     $scope.data.authorized = (photo.authorized == "1") ? true : false;
+    if (photo.dataCriacao != null) $scope.data.imageDate = moment(photo.dataCriacao, "YYYY-MM-DD").toDate();
   })
 
   /* Tags */
