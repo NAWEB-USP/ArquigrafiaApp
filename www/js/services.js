@@ -244,6 +244,7 @@ angular.module('starter.services', [])
     sendWithPhoto: function(image, data, isNewPhoto) {
       PopUpService.showSpinner('Enviando...');
       var address = ServerName.get() + "/api/photos";
+      if (!isNewPhoto) address = address + "/" + $stateParams.photoId;
 
       var onSuccess = function(response){
         console.log("Code = " + response.responseCode);
@@ -256,6 +257,7 @@ angular.module('starter.services', [])
       };
 
       var onFail = function(error){
+        console.log(error);
         console.log("Error code = " + error.responseCode);
         console.log("Error source = " + error.source);
         console.log("error target = " + error.target);
