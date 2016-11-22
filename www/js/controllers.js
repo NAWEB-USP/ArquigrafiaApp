@@ -669,7 +669,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
       sourceType: navigator.camera.PictureSourceType.CAMERA,
       encodingType: navigator.camera.EncodingType.JPEG,
       correctOrientation: true,
-      saveToPhotoAlbum: false //para testes nao ocuparem mta memoria, para release colocar true
+      saveToPhotoAlbum: true //para testes nao ocuparem mta memoria, para release colocar true
     };
 
     navigator.camera.getPicture(function (imageURI) {
