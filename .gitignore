@@ -1,11 +1,9 @@
-<<<<<<< HEAD
 # Specifies intentionally untracked files to ignore when using Git
 # http://git-scm.com/docs/gitignore
 
 node_modules/
 platforms/
 plugins/
-=======
 # Built application files
 *.apk
 *.ap_
@@ -38,4 +36,4 @@ proguard/
 
 # Android Studio captures folder
 captures/
->>>>>>> fa415a4648e851f1305ea54097c0856028bdf358
+.DS_Store
