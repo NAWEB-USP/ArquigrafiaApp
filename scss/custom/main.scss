@@ -54,7 +54,9 @@
 
     &:hover,
     &.active {
-    	color: #ddd;
+    	color: #fff;
+    	background: $dark-gray-arq;
+
     }
 }
 

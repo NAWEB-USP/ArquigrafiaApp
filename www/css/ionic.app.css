@@ -9833,7 +9833,8 @@ a.button {
   background-color: #000;
   color: #fff; }
   .button.button-positive:hover, .button.button-positive.active {
-    color: #ddd; }
+    color: #fff;
+    background: #1e1e1e; }
 
 .item-arq {
   border: 1px solid #1e1e1e;
