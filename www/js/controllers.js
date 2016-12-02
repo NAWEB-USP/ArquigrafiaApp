@@ -235,6 +235,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   $scope.serverName = ServerName.get();
   $scope.detail = {};
   $scope.user_id = window.localStorage.getItem("user_id");
+  $scope.imgSize = window.screen.width;
   /* Carrega informações da foto */
   var photo = Photos.get($stateParams.photoId, window.localStorage.getItem("user_id"));
   photo.then(function(result){
