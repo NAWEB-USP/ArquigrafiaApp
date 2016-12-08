@@ -17,9 +17,9 @@
       <h4>{{photo['sender'].name}}</h4>
     </div>
     <div class="row img-row">
-      <img style="{{'max-width: ' + imgSize + 'px !important; height: auto !important;'}}" src="{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_view.jpg'}}">
+      <img style="{{imgStyle}}" src="{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_view.jpg'}}">
     </div>
-    <h3>{{photo['photo'].name}}</h3>
+    <h3 class="text-wrap">{{photo['photo'].name}}</h3>
        <div class="button-feed">
         <button type="button"  id="meuNome" class="button button-small" ng-click="report()"><img src="img/report.png"></button>
       </div>

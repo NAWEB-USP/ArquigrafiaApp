@@ -9,7 +9,7 @@
   		</ion-refresher>
      
     	<ion-list>
-      		<ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/feed/photos/{{photo['photo'].id}}">
+      		<ion-item class="item-remove-animate feed-item item-text-wrap" ng-repeat="photo in photos" href="#/tab/feed/photos/{{photo['photo'].id}}">
             <div class="list card">
               <div class="item item-avatar">
                 <img src="{{serverName + photo['sender'].photo}}" ng-if="!!photo['sender'].photo">
@@ -19,7 +19,7 @@
                 <p>{{photo['sender'].country}}</p>
               </div>
               <div class="item item-image">
-                <img src="{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_home.jpg'}}">
+                <img src="{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_view.jpg'}}">
               </div>
               <h2 class="item item-icon-left item-text-wrap" href="#">
                 {{photo['photo'].name}}
