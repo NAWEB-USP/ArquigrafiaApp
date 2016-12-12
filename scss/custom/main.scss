@@ -195,6 +195,21 @@
 		}
 	}
 
+
+/** ajuste para imagens verticais no feed da home
+	.item.item-image {
+		height: 300px;
+		position: relative;
+
+
+		img {
+			margin: -50% 0 0 -50%;
+			position: absolute;
+		}
+	}
+
+	**/
+
  }
 
  /*

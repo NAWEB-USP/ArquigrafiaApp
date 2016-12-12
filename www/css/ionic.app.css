@@ -9896,28 +9896,40 @@ a.button {
 /*
  * Feed tab.
  */
-#feed .item {
-  border: none; }
-  #feed .item.item-avatar h2 {
-    margin-top: 10px;
-    font-weight: bold; }
+#feed {
+  /** ajuste para imagens verticais no feed da home
+	.item.item-image {
+		height: 300px;
+		position: relative;
 
-#feed .item-content {
-  padding: 0;
-  background-color: #fafafa; }
-  #feed .item-content.activated {
-    background-color: white; }
-    #feed .item-content.activated .list.card {
-      opacity: .8; }
 
-#feed .list.card {
-  margin: 10px 10px 5px 10px; }
-  #feed .list.card h2 {
-    color: #1e1e1e; }
-  #feed .list.card p {
-    color: #787878; }
-  #feed .list.card .item-text-wrap {
-    padding: 16px; }
+		img {
+			margin: -50% 0 0 -50%;
+			position: absolute;
+		}
+	}
+
+	**/ }
+  #feed .item {
+    border: none; }
+    #feed .item.item-avatar h2 {
+      margin-top: 10px;
+      font-weight: bold; }
+  #feed .item-content {
+    padding: 0;
+    background-color: #fafafa; }
+    #feed .item-content.activated {
+      background-color: white; }
+      #feed .item-content.activated .list.card {
+        opacity: .8; }
+  #feed .list.card {
+    margin: 10px 10px 5px 10px; }
+    #feed .list.card h2 {
+      color: #1e1e1e; }
+    #feed .list.card p {
+      color: #787878; }
+    #feed .list.card .item-text-wrap {
+      padding: 16px; }
 
 /*
  * Camera tab.

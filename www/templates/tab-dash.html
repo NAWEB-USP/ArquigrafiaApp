@@ -18,8 +18,8 @@
                 <h2>{{photo['sender'].name}}</h2>
                 <p>{{photo['sender'].country}}</p>
               </div>
-              <div class="item item-image">
-                <img src="{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_home.jpg'}}">
+              <div class="item item-image" style="background: url('{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_view.jpg'}}'); height: 300px; background-size: cover; background-position: 50% 50%;">
+                <!-- <img src="{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_view.jpg'}}"> -->
               </div>
               <h2 class="item item-icon-left item-text-wrap" href="#">
                 {{photo['photo'].name}}
