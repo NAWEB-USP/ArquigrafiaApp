@@ -2,7 +2,7 @@ angular.module('starter.services', [])
 
 .factory('ServerName', function(){
 
-  var serverName = "http://www.arquigrafia.org.br";
+  var serverName = "http://localhost:8000"; // Production: http://www.arquigrafia.org.br
 
   return {
     get: function () {
@@ -165,6 +165,26 @@ angular.module('starter.services', [])
             };
             return promise;
         },
+        loginFacebook: function(fbID, email, name) {
+          var deferred = $q.defer();
+          var promise = deferred.promise;
+          $http.post(ServerName.get() + "/api/login_facebook", {id_facebook : fbID, email : email, name : name}).then(function(result){
+            if (result.data.valid == 'true') {
+              deferred.resolve(result.data);
+            } else {
+              deferred.reject(result.data);
+            }
+          });
+          promise.success = function(fn) {
+              promise.then(fn);
+              return promise;
+          };
+          promise.error = function(fn) {
+              promise.then(null, fn);
+              return promise;
+          };
+          return promise;
+        },
         logoutUser: function(name, token) {
           return $http.post(ServerName.get() + "/api/logout", {login : name, token : token}).then(function(result){
             return result.data;
@@ -283,11 +303,11 @@ angular.module('starter.services', [])
       params.photo_street              = data.address;
       params.work_authors              = data.workAuthor;
       params.workDate                = data.workYear;
-      if(data.authorized == false || data.authorized == null) 
-            params.authorized = 0; 
-      else 
+      if(data.authorized == false || data.authorized == null)
+            params.authorized = 0;
+      else
             params.authorized = 1;
-      if (data.imageDate != null) 
+      if (data.imageDate != null)
         params.photo_imageDate         = moment(data.imageDate).format("DD/MM/YYYY");
 
       options.params = params;
@@ -343,7 +363,7 @@ angular.module('starter.services', [])
       params.work_authors              = data.workAuthor;
       params.workDate                 = data.workYear;
       params.authorized                = data.authorized;
-      if (data.imageDate != null) 
+      if (data.imageDate != null)
         params.photo_imageDate         = moment(data.imageDate).format("DD/MM/YYYY");
 
       $http.put(address, params).then(onSuccess, onFail);

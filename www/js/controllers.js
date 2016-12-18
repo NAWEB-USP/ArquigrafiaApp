@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['highcharts-ng'])
+angular.module('starter.controllers', ['highcharts-ng', 'ngOpenFB'])
 
 .controller('WelcomeCtrl', function($scope, $state) {
     /* Verifica se o usuário está logado */
@@ -12,7 +12,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
     })
 })
 
-.controller('LoginCtrl', function($scope, $state, PopUpService, LoginService, ServerName) {
+.controller('LoginCtrl', function($scope, $state, PopUpService, LoginService, ServerName, ngFB) {
     var serverName = ServerName.get();
     /* Verifica se o usuário já está logado */
     $scope.$on('$ionicView.enter', function() {
@@ -40,6 +40,65 @@ angular.module('starter.controllers', ['highcharts-ng'])
           PopUpService.hideSpinner();
         });
     }
+
+    // Login com o Facebook
+    $scope.fbLogin = function () {
+      // Logando com o Facebook e pegando a permissão de email
+      ngFB.login({scope: 'email'}).then(
+        function (response) {
+            // Entrará aqui caso o login com o Facebook foi bem sucedido
+            if (response.status === 'connected') {
+              console.log("Conectado ao Facebook");
+
+              let accessToken = response.authResponse.accessToken;
+
+              PopUpService.showSpinner('Carregando...');
+
+              // Pegando dados do Facebook utilizando o accessToken gerado
+              getFacebookData(accessToken, function(data) {
+                console.log("Sucesso ao pegar as informações com o Facebook");
+                console.log(data);
+
+                // Logando com o Facebook na API
+                LoginService.loginFacebook(data.id, data.email, data.name).success(function(data) {
+                    window.localStorage.setItem("logged_user", data.login);
+                    window.localStorage.setItem(data.login, data.token);
+                    window.localStorage.setItem("user_id", data.id);
+                    $state.go('tab.dash', {}, {reload: true});
+                }).error(function(data) {
+                    console.log("Erro ao conectar na API com o Facebook");
+                    PopUpService.showPopUp('Falha no login!', 'Por favor, tente novamente.');
+                }).finally(function($ionicLoading) {
+                  PopUpService.hideSpinner();
+                });
+
+              }).error(function(data) {
+                console.log("Erro ao pegar as informações com o Facebook");
+                console.log(data);
+                PopUpService.hideSpinner();
+              });
+            } else {
+                // Entra aqui em caso de erro no Login com o Facebook
+                console.log("Não foi possível conectar ao Facebook");
+                PopUpService.showPopUp('Falha no login!', 'Não foi possível conectar ao Facebook.');
+            }
+        });
+    };
+
+    // A função callback tem o formato callback(data, error)
+    function getFacebookData(accessToken, callback) {
+      openFB.api({
+          path: '/me',
+          params: { "access_token": accessToken, "fields":"name, email" },
+          success: function(data) {
+            callback(data, null);
+          },
+          error: function(error) {
+            callback(null, error);
+          }
+      });
+    }
+
 })
 
 .controller('SignUpCtrl', function($scope, $state, PopUpService, Profiles, ServerName) {
@@ -786,7 +845,7 @@ angular.module('starter.controllers', ['highcharts-ng'])
   var photo = Photos.get($stateParams.photoId, window.localStorage.getItem("user_id"));
   photo.then(function(result) {
     var photo = result['photo'];
-    var authors = result['authors'].toString();    
+    var authors = result['authors'].toString();
     $scope.imageURI = ServerName.get() + "/arquigrafia-images/" + result['photo'].id + "_home.jpg";
 
     $scope.data.commercialUsage = (photo.allowCommercialUses == "YES") ? true : false;
@@ -803,12 +862,12 @@ angular.module('starter.controllers', ['highcharts-ng'])
     $scope.data.address = photo.street;
 
     if(photo.workDateType == 'year'){
-       if(photo.workdate != null || photo.workdate !='') 
+       if(photo.workdate != null || photo.workdate !='')
           $scope.data.workYear = parseInt(photo.workdate);
     }else{
-      $scope.data.workYear = null; 
+      $scope.data.workYear = null;
     }
-    
+
     $scope.data.workAuthor = authors;
     $scope.data.authorized = (photo.authorized == "1") ? true : false;
     if (photo.dataCriacao != null) $scope.data.imageDate = moment(photo.dataCriacao, "YYYY-MM-DD").toDate();
