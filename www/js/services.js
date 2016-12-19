@@ -2,7 +2,7 @@ angular.module('starter.services', [])
 
 .factory('ServerName', function(){
 
-  var serverName = "http://localhost:8000"; // Production: http://www.arquigrafia.org.br
+  var serverName = "http://www.arquigrafia.org.br";
 
   return {
     get: function () {

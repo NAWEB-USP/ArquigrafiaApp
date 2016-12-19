@@ -305,6 +305,19 @@ angular.module('starter.controllers', ['highcharts-ng', 'ngOpenFB'])
   $scope.goBack = function() {
     window.history.back();
   };
+  $scope.sliderActive = false;
+  var slider = document.getElementById("slider");
+  var image = document.getElementById("image");
+  $scope.sliderToggle = function () {
+    slider.style.display = "block";
+    $scope.sliderActive = !$scope.sliderActive;
+    if ($scope.sliderActive) {
+      slider.style.height = "95%";
+    }
+    else {
+      slider.style.height = "0%";
+    }
+  }
   /* Carrega avaliação do usuário atual da foto */
   var evaluation = Photos.getEvaluation($stateParams.photoId, window.localStorage.getItem("user_id"));
   evaluation.then(function(result){
