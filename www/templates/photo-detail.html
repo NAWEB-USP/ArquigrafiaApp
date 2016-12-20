@@ -8,6 +8,83 @@
 </div>
 <ion-view view-title="{{photo['photo'].name}}" id="photo-detail">
   <ion-content class="has-header">
+
+    <div id="slider" style="position:fixed; height: 0; width: 100%; z-index: 1; transition: 0.5s; background-color: rgba(0,0,0,0.1) ; left:0; bottom:0; display: none;">
+      <div class="button-bar button-light">
+        <a class="button active" id="showInformation" ng-click="showInformation()">Info</a>
+        <a class="button" id="showEvaluation" ng-click="showEvaluation()">Análise</a>
+        <a class="button" id="showAverage" ng-click="showAverage()" >Média</a>
+      </div>
+      <div id="photo-info-container">
+        <div class="list">
+          <div class="item item-text-wrap" ng-if="!!photo['photo'].description">
+            <b>Descrição:</b> {{photo['photo'].description}}
+          </div>
+          <div class="item item-text-wrap" ng-if="!!photo['photo'].collection">
+            <b>Coleção:</b> {{photo['photo'].collection}}
+          </div>
+          <div class="item item-text-wrap" ng-if="!!photo['photo'].imageAuthor">
+            <b>Autor da Imagem:</b> {{photo['photo'].imageAuthor}}
+          </div>
+          <div class="item item-text-wrap" ng-if="!!photo['photo'].dataCriacao">
+            <b>Data da Imagem:</b> {{photo['photo'].dataCriacao}}
+          </div>
+          <div class="item item-text-wrap" ng-if="!!photo['authors'].length">
+            <b>Autor da Obra:</b> {{photo['authors']}}
+          </div>
+          <div class="item item-text-wrap" ng-if="!!photo['photo'].workdate">
+            <b>Data de conclusão da obra:</b> {{photo['photo'].workdate}}
+          </div>
+          <div class="item item-text-wrap" ng-if="!!photo['photo'].street">
+            <b>Endereço:</b> {{photo['photo'].street}}
+          </div>
+          <div class="item item-text-wrap"  ng-if="!!photo['tags'].length">
+            <b>Tags:</b> {{photo['tags']}}
+          </div>
+          <div class="item license-cc item-text-wrap">
+            <div>
+              <b>Licença:</b>
+            </div>
+            <div>
+              <a href="{{'http://creativecommons.org/licenses/' + photo['license'][0] + '/3.0/deed.pt_BR'}}" target="_blank" >
+                <img src="{{'img/ccIcons/' + photo['license'][0] + '88x31.png'}}" title="{{photo['license'][1]}}">
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="evaluation-container" style="display: none;">
+        <div class="list">
+          <div class="item range range-positive" ng-repeat="binomial in binomials">
+
+            <div style="width: 160px; text-align: right;">
+              <i>{{binomial["firstOption"]}}</i>
+            </div>
+            <div style="width: 100%; padding-right: 20px;">
+              <input type="range" name="volume" min="0" max="100" value="{{binomial['value']}}" id="{{binomial['id']}}">
+            </div>
+            <div style="width: 160px; padding: 0; margin: 0; text-align: left">
+              <i>{{binomial["secondOption"]}}</i>
+            </div>
+          </div>
+        </div>
+        <ion-list>
+          <ion-checkbox ng-model="detail.personal" ng-true-value="'yes'" ng-false-value="'no'">
+            Eu conheço pessoalmente esta arquitetura.
+          </ion-checkbox>
+          <ion-checkbox ng-model="detail.local" ng-true-value="'yes'" ng-false-value="'no'">
+            Estou no local.
+          </ion-checkbox>
+        </ion-list>
+        <button class="button button-arq button-block button-inverted" ng-click="postEvaluation()">
+          Enviar
+        </button>
+      </div>
+      <div id="evaluation-average-container" style="display: none;">
+        <highchart id="evaluation-average-chart" config="chartConfig" class="span10" style="width:100% !important;"></highchart>
+      </div>
+    </div>
+    <div id="image">
     <div class="row avatar-row">
     <div class="avatar-img">
       <img src="{{serverName + photo['sender'].photo}}" ng-if="!!photo['sender'].photo">
@@ -19,82 +96,17 @@
     <div class="row img-row">
       <img style="{{imgStyle}}" src="{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_view.jpg'}}">
     </div>
+
+
+    <div id="imgInfo" ng-show="!sliderActive">
     <h3 class="text-wrap">{{photo['photo'].name}}</h3>
        <div class="button-feed">
         <button type="button"  id="meuNome" class="button button-small" ng-click="report()"><img src="img/report.png"></button>
       </div>
-    <div class="button-bar button-light">
-      <a class="button active" id="showInformation" ng-click="showInformation()">Info</a>
-      <a class="button" id="showEvaluation" ng-click="showEvaluation()">Análise</a>
-      <a class="button" id="showAverage" ng-click="showAverage()" >Média</a>
     </div>
-    <div id="photo-info-container">
-      <div class="list">
-        <div class="item item-text-wrap" ng-if="!!photo['photo'].description">
-          <b>Descrição:</b> {{photo['photo'].description}}
-        </div>
-        <div class="item item-text-wrap" ng-if="!!photo['photo'].collection">
-          <b>Coleção:</b> {{photo['photo'].collection}}
-        </div>
-        <div class="item item-text-wrap" ng-if="!!photo['photo'].imageAuthor">
-          <b>Autor da Imagem:</b> {{photo['photo'].imageAuthor}}
-        </div>
-        <div class="item item-text-wrap" ng-if="!!photo['photo'].dataCriacao">
-          <b>Data da Imagem:</b> {{photo['photo'].dataCriacao}}
-        </div>
-        <div class="item item-text-wrap" ng-if="!!photo['authors'].length">
-          <b>Autor da Obra:</b> {{photo['authors']}}
-        </div>
-        <div class="item item-text-wrap" ng-if="!!photo['photo'].workdate">
-          <b>Data de conclusão da obra:</b> {{photo['photo'].workdate}}
-        </div>
-        <div class="item item-text-wrap" ng-if="!!photo['photo'].street">
-          <b>Endereço:</b> {{photo['photo'].street}}
-        </div>
-        <div class="item item-text-wrap"  ng-if="!!photo['tags'].length">
-          <b>Tags:</b> {{photo['tags']}}
-        </div>
-        <div class="item license-cc item-text-wrap">
-          <div>
-            <b>Licença:</b>
-          </div>
-          <div>
-            <a href="{{'http://creativecommons.org/licenses/' + photo['license'][0] + '/3.0/deed.pt_BR'}}" target="_blank" >
-              <img src="{{'img/ccIcons/' + photo['license'][0] + '88x31.png'}}" title="{{photo['license'][1]}}">
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="evaluation-container" style="display: none;">
-      <div class="list">
-        <div class="item range range-positive" ng-repeat="binomial in binomials">
-
-          <div style="width: 160px; text-align: right;">
-            <i>{{binomial["firstOption"]}}</i>
-          </div>
-          <div style="width: 100%; padding-right: 20px;">
-            <input type="range" name="volume" min="0" max="100" value="{{binomial['value']}}" id="{{binomial['id']}}">
-          </div>
-          <div style="width: 160px; padding: 0; margin: 0; text-align: left">
-            <i>{{binomial["secondOption"]}}</i>
-          </div>
-        </div>
-      </div>
-      <ion-list>
-        <ion-checkbox ng-model="detail.personal" ng-true-value="'yes'" ng-false-value="'no'">
-          Eu conheço pessoalmente esta arquitetura.
-        </ion-checkbox>
-        <ion-checkbox ng-model="detail.local" ng-true-value="'yes'" ng-false-value="'no'">
-          Estou no local.
-        </ion-checkbox>
-      </ion-list>
-      <button class="button button-arq button-block button-inverted" ng-click="postEvaluation()">
-        Enviar
-      </button>
-    </div>
-    <div id="evaluation-average-container" style="display: none;">
-      <highchart id="evaluation-average-chart" config="chartConfig" class="span10" style="width:100% !important;"></highchart>
     </div>
   </ion-content>
+  <ion-footer-bar style=".scroll{height:100%;}";>
+    <button class="button button-block button-arq" ng-click="sliderToggle()"> ^ Teste ^ </button>
+  </ion-footer-bar>
 </ion-view>

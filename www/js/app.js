@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ionic-modal-select']).directive('ngEnter', function() {
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ionic-modal-select', 'ngOpenFB']).directive('ngEnter', function() {
         return function(scope, element, attrs) {
             element.bind("keydown keypress", function(event) {
                 if(event.which === 13) {
@@ -19,8 +19,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         };
     })
 
-.run(function($ionicPlatform, $state) {
+.run(function($ionicPlatform, $state, ngFB) {
   $ionicPlatform.ready(function() {
+
+    // Initializing OpenFB
+    $FB_APP_ID = '782809301858352' // TODO: Add correct app ID
+    ngFB.init({appId: $FB_APP_ID});
+
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -54,19 +59,19 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
   .state('welcome', {
       url: '/welcome',
-      templateUrl: 'templates/welcome.html', 
+      templateUrl: 'templates/welcome.html',
       controller: 'WelcomeCtrl'
   })
 
   .state('login', {
       url: '/login',
-      templateUrl: 'templates/login.html', 
+      templateUrl: 'templates/login.html',
       controller: 'LoginCtrl'
   })
 
   .state('signup', {
-      url: 'signup', 
-      templateUrl: 'templates/signup.html', 
+      url: 'signup',
+      templateUrl: 'templates/signup.html',
       controller: 'SignUpCtrl'
   })
 
@@ -111,8 +116,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   .state('tab.photo-search-detail', {
-    cache: false, 
-    url: '/search/photos/:photoId', 
+    cache: false,
+    url: '/search/photos/:photoId',
     views: {
       'tab-search': {
         templateUrl: 'templates/photo-detail.html',
@@ -122,8 +127,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   .state('tab.photo-account-detail', {
-    cache: false, 
-    url: '/account/photos/:photoId', 
+    cache: false,
+    url: '/account/photos/:photoId',
     views: {
       'tab-account': {
         templateUrl: 'templates/photo-detail.html',
@@ -144,8 +149,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   })
 
   .state('tab.photo-feed-detail', {
-    cache: false, 
-    url: '/feed/photos/:photoId', 
+    cache: false,
+    url: '/feed/photos/:photoId',
     views: {
       'tab-dash': {
         templateUrl: 'templates/photo-detail.html',
@@ -156,32 +161,32 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
   .state('tab.users', {
     url: '/users',
-    abstract: true,  
-    templateUrl: 'templates/users.html', 
+    abstract: true,
+    templateUrl: 'templates/users.html',
     controller: 'UsersCtrl'
   })
 
   .state('tab.user-detail', {
-    url: '/users/:userId', 
-    templateUrl: 'templates/user-detail.html', 
+    url: '/users/:userId',
+    templateUrl: 'templates/user-detail.html',
     controller: 'UserDetailCtrl'
   })
 
   .state('tab.users-following', {
-    url: '/users/:userId/following', 
+    url: '/users/:userId/following',
     views: {
       'tab-account': {
-        templateUrl: 'templates/user-following.html', 
+        templateUrl: 'templates/user-following.html',
         controller: 'UserFollowingCtrl'
       }
     }
   })
 
   .state('tab.users-followers', {
-    url: '/users/:userId/followers', 
+    url: '/users/:userId/followers',
     views: {
       'tab-account': {
-        templateUrl: 'templates/user-followers.html', 
+        templateUrl: 'templates/user-followers.html',
         controller: 'UserFollowersCtrl'
       }
     }
