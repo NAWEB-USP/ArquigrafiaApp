@@ -23,7 +23,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
   $ionicPlatform.ready(function() {
 
     // Initializing OpenFB
-    $FB_APP_ID = '782809301858352' // TODO: Add correct app ID
+    $FB_APP_ID = '198480610194863';
     ngFB.init({appId: $FB_APP_ID});
 
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
