@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['highcharts-ng', 'ngOpenFB'])
+angular.module('starter.controllers', ['ngOpenFB'])
 
 .controller('WelcomeCtrl', function($scope, $state) {
     /* Verifica se o usuário está logado */

@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ionic-modal-select', 'ngOpenFB']).directive('ngEnter', function() {
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ionic-modal-select', 'ngOpenFB', 'highcharts-ng']).directive('ngEnter', function() {
         return function(scope, element, attrs) {
             element.bind("keydown keypress", function(event) {
                 if(event.which === 13) {
