@@ -50,7 +50,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
             if (response.status === 'connected') {
               console.log("Conectado ao Facebook");
 
-              let accessToken = response.authResponse.accessToken;
+              var accessToken = response.authResponse.accessToken;
 
               PopUpService.showSpinner('Carregando...');
 
@@ -115,6 +115,10 @@ angular.module('starter.controllers', ['ngOpenFB'])
     $scope.goBack = function() {
       window.history.back();
     };
+
+    $scope.GotoLink = function (url) {
+      window.open(url, '_system');
+    }
 
     /* Realiza o cadastro */
     $scope.signup = function() {

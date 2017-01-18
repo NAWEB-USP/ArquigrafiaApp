@@ -22,7 +22,11 @@
       </label>
       <ion-checkbox ng-model="data.terms">Li e aceito os termos de compromisso</ion-checkbox>
     </div>
-    <div style="text-align: center"><a href="{{serverName + '/termos'}}" target="_blank">Termos de compromisso</a></div>
+    <div style="text-align: center">
+      <a ng-click="GotoLink('{{serverName + '/termos'}}')" target="_blank">
+        Termos de compromisso
+      </a>
+    </div>
     <button class="button button-arq button-inverted button-block" ng-click="signup()">Enviar</button>
   </ion-content>
 </ion-view>
