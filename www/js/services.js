@@ -2,7 +2,7 @@ angular.module('starter.services', [])
 
 .factory('ServerName', function(){
 
-  var serverName = "http://valinhos.ime.usp.br:51080"; // Production: http://www.arquigrafia.org.br
+  var serverName = "http://143.107.45.126:45051/"; // Production: http://www.arquigrafia.org.br
 
   return {
     get: function () {
