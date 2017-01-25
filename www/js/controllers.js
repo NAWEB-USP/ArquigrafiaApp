@@ -288,7 +288,7 @@ angular.module('starter.controllers', ['ngOpenFB'])
   }
 })
 
-.controller('PhotoDetailCtrl', function($scope, $stateParams, $state, Photos, ServerName,
+.controller('PhotoDetailCtrl', function($scope, $sce, $stateParams, $state, Photos, ServerName,
                                         PopUpService, LoginService, ReportService) {
   /* Verifica se o usuário está autorizado */
   $scope.$on('$ionicView.enter', function() {
@@ -309,6 +309,10 @@ angular.module('starter.controllers', ['ngOpenFB'])
   $scope.goBack = function() {
     window.history.back();
   };
+  /* Autoriza carregar URLs do YouTube e Vimeo */
+  $scope.trustSrc = function(src) {
+    return $sce.trustAsResourceUrl(src);
+  }
   /* Carrega avaliação do usuário atual da foto */
   var evaluation = Photos.getEvaluation($stateParams.photoId, window.localStorage.getItem("user_id"));
   evaluation.then(function(result){

@@ -7,7 +7,7 @@
     		pulling-text="Puxe e solte para atualizar..."
     		on-refresh="doRefresh()">
   		</ion-refresher>
-     
+
     	<ion-list>
       		<ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/feed/photos/{{photo['photo'].id}}">
             <div class="list card">
@@ -18,14 +18,18 @@
                 <h2>{{photo['sender'].name}}</h2>
                 <p>{{photo['sender'].country}}</p>
               </div>
-              <div class="item item-image">
-                <img src="{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_home.jpg'}}">
+              <div ng-if=" photo['photo'].type === null || photo['photo'].type === 'photo' " class="item item-image">
+                <img src="{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_home.jpg'}}" />
+              </div>
+              <div ng-if=" photo['photo'].type === 'video' " style="position: relative"  class="item item-image">
+                <img src="/img/play.png" class="play-button" />
+                <img src="{{photo['photo'].nome_arquivo}}" style="width: 100%" />
               </div>
               <h2 class="item item-icon-left item-text-wrap" href="#">
                 {{photo['photo'].name}}
               </h2>
                           </div>
-            </div>          
+            </div>
       		</ion-item>
     	</ion-list>
     	<ion-infinite-scroll
