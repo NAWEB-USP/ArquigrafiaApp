@@ -32,8 +32,12 @@
                 <div class="row" ng-if="!photos.length">
                     <div class="col text-center">Você não enviou fotos ainda.</div>
                 </div>
-                <ion-item class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/account/photos/{{photo.id}}">
-                    <img src="{{serverName + '/arquigrafia-images/' + photo.id + '_home.jpg'}}">
+                <ion-item ng-if=" photo.type === null || photo.type === 'photo' " class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/account/photos/{{photo.id}}">
+                  <img src="{{serverName + '/arquigrafia-images/' + photo.id + '_home.jpg'}}">
+                </ion-item>
+                <ion-item style="position: relative;" ng-if=" photo.type === 'video' " class="item-remove-animate feed-item" ng-repeat="photo in photos" type="item-text-wrap" href="#/tab/account/photos/{{photo.id}}">
+                  <img src="/img/play.png" class="play-button-small" />
+                  <img src="{{photo.nome_arquivo}}" style="width: 100%; height: 125px" />
                 </ion-item>
             </ion-list>
             <ion-list id="evaluations" style="display: none">
@@ -41,7 +45,13 @@
                     <div class="col text-center">Você não registrou impressões ainda.</div>
                 </div>
                 <ion-item class="item-remove-animate feed-item" ng-repeat="photo in evaluations" type="item-text-wrap" href="#/tab/account/photos/{{photo.id}}">
+                  <div ng-if=" photo.type === 'image' ">
                     <img src="{{serverName + '/arquigrafia-images/' + photo.id + '_home.jpg'}}">
+                  </div>
+                  <div ng-if=" photo.type === 'video' ">
+                    <img src="/img/play.png" class="play-button" />
+                    <img src="{{ photo.nome_arquivo }}" />
+                  </div>
                 </ion-item>
             </ion-list>
         </div>

@@ -623,3 +623,25 @@ select#typeReport.ng-pristine.ng-valid.ng-empty.ng-touched {
 		border: none;
 	}
 }
+
+.play-button {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top:0;
+  bottom:0;
+  margin: auto;
+  width: 80px !important;
+  height: 80px;
+}
+
+.play-button-small {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top:0;
+  bottom:0;
+  margin: auto;
+  width: 40px;
+  height: 40px;
+}
