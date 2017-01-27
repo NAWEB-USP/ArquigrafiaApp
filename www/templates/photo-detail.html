@@ -17,7 +17,7 @@
       <h4>{{photo['sender'].name}}</h4>
     </div>
     <div ng-if=" photo['photo'].type === 'photo' ||  photo['photo'].type === null" class="row img-row">
-      <img src="{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_home.jpg'}}" />
+      <img src="{{serverName + '/arquigrafia-images/' + photo['photo'].id + '_view.jpg'}}" />
     </div>
     <div ng-if=" photo['photo'].type === 'video' " class="row img-row">
       <iframe id="ytplayer" type="text/html" style="width: 100%; height: 320px;"
